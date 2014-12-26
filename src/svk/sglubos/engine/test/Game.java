@@ -39,7 +39,7 @@ public class Game implements Runnable{
 		mainFrame.setVisible(true);
 		
 		debugFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		debugFrame.setResizable(true);
+		debugFrame.setResizable(false);
 		debugFrame.add(debugCanvas);
 		debugFrame.pack();
 		
