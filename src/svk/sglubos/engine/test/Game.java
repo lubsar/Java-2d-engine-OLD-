@@ -1,6 +1,5 @@
 package svk.sglubos.engine.test;
 
-import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
 
