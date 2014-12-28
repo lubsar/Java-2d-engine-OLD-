@@ -31,7 +31,7 @@ public class Game implements Runnable{
 		debugCanvas.setSize(640,300);
 		
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setResizable(false);
+		mainFrame.setResizable(true);
 		mainFrame.add(mainCanvas);
 		mainFrame.pack();
 		
@@ -53,8 +53,6 @@ public class Game implements Runnable{
 	public void init(){
 		mainScreen = new Screen(mainCanvas,3,Color.GREEN);
 		debugScreen = new Screen(debugCanvas,3,new Color(0,0,168));
-		
-		debugScreen.setWith(800);
 	}
 	
 	public void start(){
@@ -107,13 +105,12 @@ public class Game implements Runnable{
 	
 	/**
 	 * Renders game content. 
-	 * 
 	 */
 	public void render(){
 		mainScreen.ClearToDefaultColor();
 		debugScreen.ClearToDefaultColor();
 		
-		mainScreen.renderSquare(300, 300,0,0);
+		mainScreen.renderRectangle(300, 300,0,0,new Color(168,168,168));
 		debugScreen.renderString(render, 0, 15);
 		
 		
