@@ -1,4 +1,4 @@
-package svk.sglubos.engine.gfx;
+package svk.sglubos.engine.gfx.sprite;
 
 import java.awt.image.BufferedImage;
 
@@ -12,7 +12,7 @@ public class Sprite {
 	private BufferedImage renderable;
 	
 	/**
-	 * Constructs a Sprite object from pixels which can be rendered by rendering BufferedImage renderable.
+	 * Constructs a Sprite object from integer array of pixels which can be rendered by rendering BufferedImage renderable.
 	 * 
 	 * @param width 
 	 * @param height
@@ -21,11 +21,15 @@ public class Sprite {
 	
 	public Sprite(int width, int height, int[] pixels){
 		renderable = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
-		renderable.setRGB(0, 0, width, height, pixels, 0, width);
+		updateRenderable();
 		
 		this.width = width;
 		this.height = height;
 		this.pixels = pixels;
+	}
+	
+	public void updateRenderable(){
+		renderable.setRGB(0, 0, width, height, pixels, 0, width);
 	}
 	
 	/**
@@ -36,7 +40,7 @@ public class Sprite {
 	}
 	
 	/**
-	 * @return with of sprite
+	 * @return width of sprite
 	 */
 	public int getWidth(){
 		return width;

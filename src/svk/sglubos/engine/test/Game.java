@@ -1,10 +1,10 @@
 package svk.sglubos.engine.test;
 
-import java.awt.Canvas;
 import java.awt.Color;
 
 import javax.swing.JFrame;
 
+import svk.sglubos.engine.gfx.RenderCanvas;
 import svk.sglubos.engine.gfx.Screen;
 
 /**
@@ -19,8 +19,8 @@ public class Game implements Runnable{
 	private JFrame mainFrame = new JFrame("Game");
 	private JFrame debugFrame = new JFrame("DEBUG");
 	
-	private Canvas mainCanvas = new Canvas();
-	private Canvas debugCanvas = new Canvas();
+	private RenderCanvas mainCanvas = new RenderCanvas(Color.GREEN);
+	private RenderCanvas debugCanvas = new RenderCanvas(Color.blue);;
 	
 	private Screen mainScreen;
 	private Screen debugScreen;
@@ -51,8 +51,11 @@ public class Game implements Runnable{
 	 * Initializes game content before starting game loop; 
 	 */
 	public void init(){
-		mainScreen = new Screen(mainCanvas,3,Color.GREEN);
-		debugScreen = new Screen(debugCanvas,3,new Color(0,0,168));
+		mainCanvas.init(2);
+		debugCanvas.init(2);
+		
+		mainScreen = new Screen(mainCanvas.getWidth(),mainCanvas.getHeight(),Color.GREEN);
+		debugScreen = new Screen(debugCanvas.getWidth(),debugCanvas.getHeight(),Color.blue);
 	}
 	
 	public void start(){
@@ -95,7 +98,6 @@ public class Game implements Runnable{
 	}
 	
 	
-	
 	/**
 	 * Updates game content.
 	 */
@@ -107,15 +109,24 @@ public class Game implements Runnable{
 	 * Renders game content. 
 	 */
 	public void render(){
-		mainScreen.ClearToDefaultColor();
-		debugScreen.ClearToDefaultColor();
+		mainCanvas.clearToDefaultcolor();
+		debugCanvas.clearToDefaultcolor();
+		
+		mainScreen.prepare();
+		debugScreen.prepare();
 		
 		mainScreen.renderRectangle(300, 300,0,0,new Color(168,168,168));
+		debugScreen.setColor(Color.white);
 		debugScreen.renderString(render, 0, 15);
 		
+		debugCanvas.drawRenderLayer(mainScreen.getRenderLayer());
+		debugCanvas.drawRenderLayer(debugScreen.getRenderLayer());
 		
-		mainScreen.show();
-		debugScreen.show();
+		mainScreen.disposeGraphics();
+		debugScreen.disposeGraphics();
+		
+		mainCanvas.showRenderedContent();
+		debugCanvas.showRenderedContent();
 	}
 	
 }
