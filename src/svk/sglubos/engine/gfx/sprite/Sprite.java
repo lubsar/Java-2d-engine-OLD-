@@ -1,35 +1,43 @@
 package svk.sglubos.engine.gfx.sprite;
 
-import java.awt.image.BufferedImage;
-
-// TODO documentation
-
+/**
+ * Class which contains integer array of pixels which can be rendered on {@link svk.sglubos.engine.gfx.Screen Screen}. <br>
+ * 
+ * This class provides methods which can change this pixels.
+ *
+ *@see svk.sglubos.engine.gfx.Screen
+ */
 
 public class Sprite {
-	
-	private int width,height;
-	private int[] pixels;
-	private BufferedImage renderable;
+	/**
+	 * Width of sprite in pixels initialized in {@link #Sprite(int, int, int[]) constructor} to value passed as parameter.
+	 */
+	protected int width;
 	
 	/**
-	 * Constructs a Sprite object from integer array of pixels which can be rendered by rendering BufferedImage renderable.
+	 * Height of sprite int pixels initialized in {@link #Sprite(int, int, int[]) constructor} to value passed as parameter.
+	 */
+	protected int height;
+	
+	/**
+	 * Contains pixels which can be rendered on Screen.
+	 */
+	protected int[] pixels;
+	
+	/**
+	 * Constructs a Sprite object which contains integer array of pixels which can be rendered on {@link svk.sglubos.engine.gfx.Screen Screen}.
 	 * 
-	 * @param width 
-	 * @param height
-	 * @param pixels
+	 * @param width determines width of sprite
+	 * @param height determines height of sprite
+	 * @param pixels actual pixels of sprite
+	 * 
+	 * @see svk.sglubos.engine.gfx.Screen
 	 */
 	
 	public Sprite(int width, int height, int[] pixels){
-		renderable = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
-		updateRenderable();
-		
 		this.width = width;
 		this.height = height;
 		this.pixels = pixels;
-	}
-	
-	public void updateRenderable(){
-		renderable.setRGB(0, 0, width, height, pixels, 0, width);
 	}
 	
 	/**
@@ -51,12 +59,5 @@ public class Sprite {
 	 */
 	public int getHeight(){
 		return height;
-	}
-	
-	/**
-	 * @return BufferedImage created from pixels
-	 */
-	public BufferedImage getRenderable() {
-		return renderable;
 	}
 }

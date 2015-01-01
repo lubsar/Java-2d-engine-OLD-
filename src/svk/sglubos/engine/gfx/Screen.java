@@ -13,7 +13,7 @@ import svk.sglubos.engine.gfx.sprite.Sprite;
  * <code>BufferedImage</code> renderLayer contains all rendered graphics
  * and this <code>BufferedImage</code> is returned by method <code>getRenderLayer()</code>.
  *<p>
- * A java.awt.Graphics object which can draw on renderLayer is returned by method <code>getGraphics()</code>.
+ * A java.awt.Graphics object which can drawn on renderLayer is returned by method <code>getGraphics()</code>.
  * </p>
  * <p>
  * Before rendering game content every frame you need to call <code>prepare()</code> method, which creates new Graphics object
@@ -54,6 +54,22 @@ public class Screen {
 	 * Screen height in pixels.
 	 */
 	protected int height;
+	
+	/**
+	 * Horizontal offset of screen in pixels. Default value 0.<br>
+	 * Offset can be set by {@link #setOffset(int, int) setOffset(xOffset, yOffset)} method.
+	 * 
+	 * @see {@link #setOffset(int xOffset,int yOffset)}
+	 */
+	protected int xOffset = 0;
+	
+	/**
+	 * Vertical offset of screen in pixels. Default value 0.<br>
+	 * Offset can be set by {@link #setOffset(int, int) setOffset(xOffset, yOffset)} method.
+	 * 
+	 * @see {@link #setOffset(int xOffset,int yOffset)}
+	 */
+	protected int yOffset = 0;
 	
 	/**
 	 * Color used in {@link #prepare()} method, entire screen is filled with this color when {@link #prepare()} is called.<br>
@@ -172,7 +188,7 @@ public class Screen {
 	 * 
 	 * @see {@link #setColor(Color)}
 	 */
-	public void renderRectangle(int width, int height, int x, int y) {
+	public void renderRectangle(int x, int y, int width, int height) {
 		g.drawRect(x, y, width, height);
 	}
 
@@ -436,7 +452,7 @@ public class Screen {
 	 * 
 	 */
 	public void prepare(){
-		g = renderLayer.createGraphics();
+		g = renderLayer.getGraphics();
 		g.setColor(defaultScreenColor);
 		g.fillRect(0, 0, width, height);
 	}
@@ -499,5 +515,18 @@ public class Screen {
 	 */
 	public BufferedImage getRenderLayer() {
 		return renderLayer;
+	}
+	
+	//TODO better documentation
+	/**
+	 * Sets horizontal and vertical offset of screen to specified values. <br>
+	 * Offseting screen can be used to "move" screen. <br>
+	 * 
+	 * @param xOffset Horizontal offset of screen (offset on x axis)
+	 * @param yOffset Vertical offset of screen (offset on y axis)
+	 */
+	public void setOffset(int xOffset, int yOffset){
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
 	}
 }

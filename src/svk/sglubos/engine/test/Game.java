@@ -19,30 +19,20 @@ public class Game implements Runnable{
 	private JFrame mainFrame = new JFrame("Game");
 	private JFrame debugFrame = new JFrame("DEBUG");
 	
-	private RenderCanvas mainCanvas = new RenderCanvas(Color.GREEN);
-	private RenderCanvas debugCanvas = new RenderCanvas(Color.blue);;
+	private RenderCanvas mainCanvas;
+	private RenderCanvas debugCanvas;
 	
 	private Screen mainScreen;
 	private Screen debugScreen;
 	
 	//Constructor
 	public Game(){
-		mainCanvas.setSize(1280,720);
-		debugCanvas.setSize(640,300);
-		
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setResizable(true);
-		mainFrame.add(mainCanvas);
-		mainFrame.pack();
 		
-		mainFrame.setVisible(true);
 		
 		debugFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		debugFrame.setResizable(false);
-		debugFrame.add(debugCanvas);
-		debugFrame.pack();
-		
-		debugFrame.setVisible(true);
 		
 		start();
 	}
@@ -51,11 +41,24 @@ public class Game implements Runnable{
 	 * Initializes game content before starting game loop; 
 	 */
 	public void init(){
+		mainScreen = new Screen(1280,720,Color.BLACK);
+		debugScreen = new Screen(640,300,Color.blue);
+		
+		mainScreen.setOffset(500, 0);
+		
+		mainCanvas = new RenderCanvas(mainScreen,1.0);
+		debugCanvas = new RenderCanvas(debugScreen,1.0);
+		
+		mainFrame.add(mainCanvas);
+		mainFrame.pack();
+		mainFrame.setVisible(true);
+		
+		debugFrame.add(debugCanvas);
+		debugFrame.pack();
+		debugFrame.setVisible(true);
+		
 		mainCanvas.init(2);
 		debugCanvas.init(2);
-		
-		mainScreen = new Screen(mainCanvas.getWidth(),mainCanvas.getHeight(),Color.GREEN);
-		debugScreen = new Screen(debugCanvas.getWidth(),debugCanvas.getHeight(),Color.blue);
 	}
 	
 	public void start(){
@@ -84,9 +87,9 @@ public class Game implements Runnable{
 				delta--;
 				tick();
 				ticks++;
-				render();
-				fps++;
 			}
+			render();
+			fps++;
 				
 			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
 				render = "[DEBUG] ticks: " + ticks + "fps: " + fps;
@@ -109,18 +112,24 @@ public class Game implements Runnable{
 	 * Renders game content. 
 	 */
 	public void render(){
-		mainCanvas.clearToDefaultcolor();
-		debugCanvas.clearToDefaultcolor();
-		
 		mainScreen.prepare();
 		debugScreen.prepare();
 		
-		mainScreen.renderRectangle(300, 300,0,0,new Color(168,168,168));
+		mainScreen.setColor(Color.RED);
+		
+		mainScreen.renderArc(0, 0, 50, 50, 90, 180);
+		mainScreen.renderFilledArc(50, 0, 50, 50, 90, 180);
+		
+		mainScreen.renderOval(100, 0, 50, 50);
+		mainScreen.renderFiledOval(150, 0, 50, 50);
+		
+		mainScreen.renderRectangle(200, 0, 50, 50);
+		mainScreen.renderFilledRectangle(250, 0, 50, 50);
+		
+		mainScreen.renderLine(300, 0, 349, 0);
+		
 		debugScreen.setColor(Color.white);
 		debugScreen.renderString(render, 0, 15);
-		
-		debugCanvas.drawRenderLayer(mainScreen.getRenderLayer());
-		debugCanvas.drawRenderLayer(debugScreen.getRenderLayer());
 		
 		mainScreen.disposeGraphics();
 		debugScreen.disposeGraphics();
