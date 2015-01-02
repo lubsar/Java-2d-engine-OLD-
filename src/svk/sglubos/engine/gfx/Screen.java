@@ -71,7 +71,14 @@ public class Screen {
 	 */
 	protected int yOffset = 0;
 	
-	//TODO documentation
+	/**
+	 * If true offsets are ignored when rendering some content, else position of rendered content is offset. <br>
+	 * Can be set by {@link #setIngoreOffset(boolean) setIgnoreOffset(boolean ignoreOffset)} method.
+	 * 
+	 *  @see {@link #xOffset xOffset}
+	 *  @see {@link #yOffset yOffset}
+	 *  @see {@link #setOffset(int, int) setOffset(xOffset, yOffset)}
+	 */
 	protected boolean ignoreOffset;
 	
 	/**
@@ -402,7 +409,6 @@ public class Screen {
 		g.fillArc(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height, startAngle, arcAngle);
 	}
 	
-	
 	/**
 	 * Draws arc of specified position, size, angles and color.<br>
 	 * Uses {@link #renderArc(int, int, int, int, int, int) renderArc(x, y, width, height, startAngle, arcAngle)} method.
@@ -460,8 +466,18 @@ public class Screen {
 		g.fillRect(0, 0, width, height);
 	}
 	
-	
-	//TODO documentation
+	/**
+	 * Offsets specified coordinate by specified value. <br>
+	 * Offseting coordinate means that coordinate is subtracted by offset.
+	 * 
+	 * @param coord coordinate which will be offset
+	 * @param offset value which is coordinate offset
+	 * @return coord - offset 
+	 * 
+	 * @see {@link #xOffset}
+	 * @see {@link #yOffset}
+	 * @see {@link #ignoreOffset}
+	 */
 	protected int offsetCoordinate(int coord, int offset){
 		return coord - offset;
 	}
@@ -491,13 +507,26 @@ public class Screen {
 	 * 
 	 * @param xOffset Horizontal offset of screen (offset on x axis)
 	 * @param yOffset Vertical offset of screen (offset on y axis)
+	 * 
+	 * @see {@link #xOffset}
+	 * @see {@link #yOffset}
+	 * @see {@link #ignoreOffset}
 	 */
 	public void setOffset(int xOffset, int yOffset){
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 	}
 	
-	//TODO documentation
+	/**
+	 * Sets {@link #ignoreOffset} value. <br>
+	 * Sets if screen offset is ignored while rendering content.
+	 * 
+	 * @param ignore if true offset of screen is ignored else position of rendered content is recalculated with screen offset
+	 * 
+	 * @see {@link #xOffset}
+	 * @see {@link #yOffset}
+	 * @see {@link #setOffset(int,int) setOffset(xOffset, yOffset)}
+	 */
 	public void setIngoreOffset(boolean ignore){
 		this.ignoreOffset = ignore;
 	}
@@ -533,6 +562,20 @@ public class Screen {
 	 */
 	public int getHeight() {
 		return height;
+	}
+	
+	/**
+	 * @return horizontal screen offset
+	 */
+	public int getXOffset(){
+		return xOffset;
+	}
+	
+	/**
+	 * @return vertical screen offset
+	 */
+	public int getYOffset(){
+		return yOffset;
 	}
 	
 	/**
