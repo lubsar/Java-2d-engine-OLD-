@@ -1,11 +1,14 @@
 package svk.sglubos.engine.test;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 
 import svk.sglubos.engine.gfx.RenderCanvas;
 import svk.sglubos.engine.gfx.Screen;
+import svk.sglubos.engine.gfx.GameWindow;
+import svk.sglubos.engine.gfx.sprite.Sprite;
 
 /**
  * Temporary class.
@@ -16,23 +19,16 @@ public class Game implements Runnable{
 	
 	String render = "null";
 	
-	private JFrame mainFrame = new JFrame("Game");
-	private JFrame debugFrame = new JFrame("DEBUG");
-	
-	private RenderCanvas mainCanvas;
-	private RenderCanvas debugCanvas;
+	private Sprite test;
 	
 	private Screen mainScreen;
 	private Screen debugScreen;
 	
+	private GameWindow mainWindow;
+	private GameWindow debugWindow;
+	
 	//Constructor
 	public Game(){
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setResizable(true);
-		
-		debugFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		debugFrame.setResizable(false);
-		
 		start();
 	}
 	
@@ -40,30 +36,25 @@ public class Game implements Runnable{
 	 * Initializes game content before starting game loop; 
 	 */
 	public void init(){
-		mainScreen = new Screen(500,500,Color.BLACK);
-		debugScreen = new Screen(640,300,Color.blue);
+		int[] pixels = new int[50*50];
+		for(int i = 0; i < pixels.length;i++){
+			pixels[i] = 0xFF00FF;
+		}
 		
-		mainScreen.setIngoreOffset(true);
+		test = new Sprite(50,50,pixels);
 		
-		mainCanvas = new RenderCanvas(mainScreen,1.0);
-		debugCanvas = new RenderCanvas(debugScreen,1.0);
+		mainWindow = new GameWindow(500,500,"Game",2.0);
+		debugWindow = new GameWindow(640,300,"Debug",Color.BLUE);
 		
-		mainFrame.add(mainCanvas);
-		mainFrame.pack();
-		mainFrame.setVisible(true);
+		mainScreen = mainWindow.getScreen();
+		debugScreen = debugWindow.getScreen();
 		
-		debugFrame.add(debugCanvas);
-		debugFrame.pack();
-		debugFrame.setVisible(true);
-		
-		mainCanvas.init(2);
-		debugCanvas.init(2);
+//		mainScreen.setIngoreOffset(true);
 	}
 	
 	public void start(){
 		new Thread(this,"game").start();
 	}
-	
 	
 	//Game loop
 	@Override
@@ -130,14 +121,20 @@ public class Game implements Runnable{
 		
 		mainScreen.renderLine(300, 0, 349, 0);
 		
+		mainScreen.renderSprite(test, 350, 0);
+		
+		mainScreen.renderString("auto", 400, 10);
+		
+		
+		
 		debugScreen.setColor(Color.white);
 		debugScreen.renderString(render, 0, 15);
 		
 		mainScreen.disposeGraphics();
 		debugScreen.disposeGraphics();
 		
-		mainCanvas.showRenderedContent();
-		debugCanvas.showRenderedContent();
+		mainWindow.showContent();
+		debugWindow.showContent();
 	}
 	
 }

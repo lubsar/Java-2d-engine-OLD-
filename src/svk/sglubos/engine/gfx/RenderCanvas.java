@@ -33,6 +33,8 @@ public class RenderCanvas extends Canvas {
 	public RenderCanvas(Screen screen,double scale){
 		renderContent = screen.getRenderLayer();
 		setSize((int)(screen.getWidth()*scale), (int)(screen.getHeight()*scale));
+		
+		this.scale = scale;
 	}
 	
 	public void init(int buffers){

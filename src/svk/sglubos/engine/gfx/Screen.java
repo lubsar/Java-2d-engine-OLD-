@@ -169,7 +169,11 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderFilledRectangle(int x, int y, int width, int height) {
-		g.fillRect(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height);
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+		}
+		g.fillRect(x, y, width, height);
 	}
 	
 	/**
@@ -199,12 +203,16 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderRectangle(int x, int y, int width, int height) {
-		g.drawRect(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height);
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+		}
+		g.drawRect(x, y, width, height);
 	}
 
 	/**
 	 * Draws BufferedImage of specified position and size. <br>
-	 * Uses {@link #renderImage(BufferedImage, int, int) renderImage(img,x,y,width,height,null)} method.
+	 * Uses {@link java.awt.Graphics#drawImage(java.awt.Image, int, int,int,int, java.awt.image.ImageObserver) g.drawImage(img, x, y, width, height,null)} method.
 	 * 
 	 * @param img image which will be drawn
 	 * @param x horizontal coordinate
@@ -215,6 +223,10 @@ public class Screen {
 	 * @see java.awt.image.BufferedImage
 	 */
 	public void renderImage(BufferedImage img, int x, int y, int width, int height) {
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+		}
 		g.drawImage(img, x, y, width, height, null);
 	}
 	
@@ -229,7 +241,11 @@ public class Screen {
 	 * @see java.awt.image.BufferedImage
 	 */
 	public void renderImage(BufferedImage img, int x, int y) {
-		g.drawImage(img, ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), img.getWidth(), img.getHeight(), null);
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+		}
+		g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
 	}
 	
 	/**
@@ -278,7 +294,11 @@ public class Screen {
 	 * @see {@link #setFont(Font)}
 	 */
 	public void renderString(String text, int x, int y) {
-		g.drawString(text, ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset));
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+		}
+		g.drawString(text, x,y);
 	}
 	
 	/**
@@ -308,7 +328,11 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderOval(int x, int y, int width, int height) {
-		g.drawOval(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height);
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+		}
+		g.drawOval(x,y, width, height);
 	}
 	
 	/**
@@ -339,7 +363,11 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderFiledOval(int x, int y, int width, int height) {
-		g.fillOval(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height);
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+		}
+		g.fillOval(x, y, width, height);
 	}
 
 	/**
@@ -369,7 +397,13 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderLine(int x, int y, int xa, int ya) {
-		g.drawLine(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), ignoreOffset ? xa : offsetCoordinate(xa,xOffset), ignoreOffset ? ya : offsetCoordinate(ya,yOffset));
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+			xa = offsetCoordinate(xa,xOffset);
+			ya = offsetCoordinate(ya,yOffset);
+		}
+		g.drawLine(x, y, xa, ya);
 	}
 	
 	/**
@@ -406,7 +440,11 @@ public class Screen {
 	 * @see {@link java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle){
-		g.fillArc(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height, startAngle, arcAngle);
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+		}
+		g.fillArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
 	/**
@@ -443,12 +481,40 @@ public class Screen {
 	 * @see {@link java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
 	 */
 	public void renderArc(int x, int y, int width, int height, int startAngle,	int arcAngle) {
-		g.drawArc(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height, startAngle, arcAngle);
+		if(!ignoreOffset){
+			x = offsetCoordinate(x,xOffset);
+			y = offsetCoordinate(y,yOffset);
+		}
+		g.drawArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
 	//TODO
-	public void renderSprite(Sprite sprite, int x, int y){
+	public void renderSprite(Sprite sprite, int xCoord, int yCoord){
+		int[] spritePixels = sprite.getPixels();
 		
+		if(!ignoreOffset){
+			xCoord = offsetCoordinate(xCoord,xOffset);
+			yCoord = offsetCoordinate(yCoord,yOffset);
+		}
+		
+		int spriteWidth = sprite.getWidth();
+		int spriteHeight = sprite.getHeight();
+		
+		int pixelX;
+		int pixelY;
+		
+		for(int y = 0; y < spriteHeight; y++){
+			pixelY = y + yCoord;
+			for(int x = 0; x < spriteWidth; x++){
+				pixelX = x + xCoord;
+				if(spritePixels[x + y * spriteWidth] == 0){
+					continue;
+				}
+				if(pixelY > 0 && pixelY < this.height && pixelX > 0 && pixelX < this.width ){
+					this.pixels[pixelX + pixelY * this.width] = spritePixels[x + y * spriteWidth];
+				}
+			}
+		}
 	}
 	
 	/**
