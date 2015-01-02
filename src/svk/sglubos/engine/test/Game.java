@@ -30,7 +30,6 @@ public class Game implements Runnable{
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setResizable(true);
 		
-		
 		debugFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		debugFrame.setResizable(false);
 		
@@ -41,10 +40,10 @@ public class Game implements Runnable{
 	 * Initializes game content before starting game loop; 
 	 */
 	public void init(){
-		mainScreen = new Screen(1280,720,Color.BLACK);
+		mainScreen = new Screen(500,500,Color.BLACK);
 		debugScreen = new Screen(640,300,Color.blue);
 		
-		mainScreen.setOffset(500, 0);
+		mainScreen.setIngoreOffset(true);
 		
 		mainCanvas = new RenderCanvas(mainScreen,1.0);
 		debugCanvas = new RenderCanvas(debugScreen,1.0);
@@ -104,8 +103,10 @@ public class Game implements Runnable{
 	/**
 	 * Updates game content.
 	 */
+	
+	int x = 0;
 	public void tick(){
-		
+		mainScreen.setOffset(x++, 0);
 	}
 	
 	/**
@@ -116,6 +117,7 @@ public class Game implements Runnable{
 		debugScreen.prepare();
 		
 		mainScreen.setColor(Color.RED);
+		
 		
 		mainScreen.renderArc(0, 0, 50, 50, 90, 180);
 		mainScreen.renderFilledArc(50, 0, 50, 50, 90, 180);

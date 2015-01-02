@@ -71,6 +71,9 @@ public class Screen {
 	 */
 	protected int yOffset = 0;
 	
+	//TODO documentation
+	protected boolean ignoreOffset;
+	
 	/**
 	 * Color used in {@link #prepare()} method, entire screen is filled with this color when {@link #prepare()} is called.<br>
 	 * The value of this color is initialized in constructor and is last passed argument in {@link #Screen(int, int, Color) constructor}.
@@ -159,7 +162,7 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderFilledRectangle(int x, int y, int width, int height) {
-		g.fillRect(x, y, width, height);
+		g.fillRect(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height);
 	}
 	
 	/**
@@ -174,7 +177,7 @@ public class Screen {
 	 */
 	public void renderRectangle(int x, int y, int width, int height, Color color) {
 		setColor(color);
-		g.drawRect(x, y, width, height);
+		renderRectangle(x, y, width, height);
 	}
 	
 	/**
@@ -189,7 +192,7 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderRectangle(int x, int y, int width, int height) {
-		g.drawRect(x, y, width, height);
+		g.drawRect(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height);
 	}
 
 	/**
@@ -219,7 +222,7 @@ public class Screen {
 	 * @see java.awt.image.BufferedImage
 	 */
 	public void renderImage(BufferedImage img, int x, int y) {
-		g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
+		g.drawImage(img, ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), img.getWidth(), img.getHeight(), null);
 	}
 	
 	/**
@@ -253,7 +256,7 @@ public class Screen {
 	 */
 	public void renderString(String text, int x, int y, Font font) {
 		setFont(font);
-		g.drawString(text, x, y);
+		renderString(text,x,y);
 	}
 	
 	/**
@@ -268,7 +271,7 @@ public class Screen {
 	 * @see {@link #setFont(Font)}
 	 */
 	public void renderString(String text, int x, int y) {
-		g.drawString(text, x, y);
+		g.drawString(text, ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset));
 	}
 	
 	/**
@@ -298,7 +301,7 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderOval(int x, int y, int width, int height) {
-		g.drawOval(x, y, width, height);
+		g.drawOval(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height);
 	}
 	
 	/**
@@ -329,7 +332,7 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderFiledOval(int x, int y, int width, int height) {
-		g.fillOval(x, y, width, height);
+		g.fillOval(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height);
 	}
 
 	/**
@@ -359,7 +362,7 @@ public class Screen {
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderLine(int x, int y, int xa, int ya) {
-		g.drawLine(x, y, xa, ya);
+		g.drawLine(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), ignoreOffset ? xa : offsetCoordinate(xa,xOffset), ignoreOffset ? ya : offsetCoordinate(ya,yOffset));
 	}
 	
 	/**
@@ -396,7 +399,7 @@ public class Screen {
 	 * @see {@link java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle){
-		g.fillArc(x, y, width, height, startAngle, arcAngle);
+		g.fillArc(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height, startAngle, arcAngle);
 	}
 	
 	
@@ -434,7 +437,7 @@ public class Screen {
 	 * @see {@link java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
 	 */
 	public void renderArc(int x, int y, int width, int height, int startAngle,	int arcAngle) {
-		g.drawArc(x, y, width, height, startAngle, arcAngle);
+		g.drawArc(ignoreOffset ? x : offsetCoordinate(x,xOffset), ignoreOffset ? y : offsetCoordinate(y,yOffset), width, height, startAngle, arcAngle);
 	}
 	
 	//TODO
@@ -457,6 +460,12 @@ public class Screen {
 		g.fillRect(0, 0, width, height);
 	}
 	
+	
+	//TODO documentation
+	protected int offsetCoordinate(int coord, int offset){
+		return coord - offset;
+	}
+	
 	//TODO documentation and exception
 	public void setColor(Color color) {
 		if (color == null) {
@@ -473,6 +482,24 @@ public class Screen {
 			return;
 		}
 		g.setFont(font);
+	}
+	
+	//TODO better documentation
+	/**
+	 * Sets horizontal and vertical offset of screen to specified values. <br>
+	 * Offseting screen can be used to "move" screen. <br>
+	 * 
+	 * @param xOffset Horizontal offset of screen (offset on x axis)
+	 * @param yOffset Vertical offset of screen (offset on y axis)
+	 */
+	public void setOffset(int xOffset, int yOffset){
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+	}
+	
+	//TODO documentation
+	public void setIngoreOffset(boolean ignore){
+		this.ignoreOffset = ignore;
 	}
 	
 	/**
@@ -515,18 +542,5 @@ public class Screen {
 	 */
 	public BufferedImage getRenderLayer() {
 		return renderLayer;
-	}
-	
-	//TODO better documentation
-	/**
-	 * Sets horizontal and vertical offset of screen to specified values. <br>
-	 * Offseting screen can be used to "move" screen. <br>
-	 * 
-	 * @param xOffset Horizontal offset of screen (offset on x axis)
-	 * @param yOffset Vertical offset of screen (offset on y axis)
-	 */
-	public void setOffset(int xOffset, int yOffset){
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
 	}
 }
