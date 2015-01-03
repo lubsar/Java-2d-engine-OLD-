@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import svk.sglubos.engine.gfx.sprite.Sprite;
+import svk.sglubos.engine.utils.MessageHandler;
 
 /**
  * Handles rendering of basic shapes, images, texts and sprites.
@@ -38,7 +39,8 @@ import svk.sglubos.engine.gfx.sprite.Sprite;
  * <p>
  * @see java.awt.Graphics
  * @see svk.sglubos.engine.gfx.sprite.Sprite
-	
+ * @see {@link #setOffset(int, int) offseting of screen}
+ * <p>
  * @see {@link #prepare()}
  * @see {@link #disposeGraphics()}
  */
@@ -165,7 +167,7 @@ public class Screen {
 	 * @param y vertical coordinate
 	 * @param width width of rectangle
 	 * @param height height of rectangle
-	 * 
+	 * <p>
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderFilledRectangle(int x, int y, int width, int height) {
@@ -199,7 +201,7 @@ public class Screen {
 	 * @param y vertical coordinate
 	 * @param width width of rectangle
 	 * @param height height of rectangle
-	 * 
+	 * <p>
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderRectangle(int x, int y, int width, int height) {
@@ -219,7 +221,7 @@ public class Screen {
 	 * @param y vertical coordinate
 	 * @param width width of image
 	 * @param height height of image
-	 * 
+	 * <p>
 	 * @see java.awt.image.BufferedImage
 	 */
 	public void renderImage(BufferedImage img, int x, int y, int width, int height) {
@@ -237,7 +239,7 @@ public class Screen {
 	 * @param img image which will be drawn
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
-	 * 
+	 * <p>
 	 * @see java.awt.image.BufferedImage
 	 */
 	public void renderImage(BufferedImage img, int x, int y) {
@@ -257,7 +259,7 @@ public class Screen {
 	 * @param y vertical coordinate
 	 * @param font font of text
 	 * @param color color of text
-	 * 
+	 * <p>
 	 *@see java.awt.Font
 	 */
 	public void renderString(String text, int x, int y, Font font, Color color) {
@@ -273,7 +275,7 @@ public class Screen {
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
 	 * @param font font of text
-	 * 
+	 * <p>
 	 * @see {@link #setColor(Color)}
 	 * @see java.awt.Font
 	 */
@@ -289,7 +291,7 @@ public class Screen {
 	 * @param text text which will be drawn
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
-	 * 
+	 * <p>
 	 * @see {@link #setColor(Color)}
 	 * @see {@link #setFont(Font)}
 	 */
@@ -343,7 +345,8 @@ public class Screen {
 	 * @param y vertical coordinate
 	 * @param width width of oval
 	 * @param height height of oval
-	 * 
+	 * @param color color of filled oval
+	 * <p>
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderFiledOval(int x, int y, int width, int height, Color color) {
@@ -359,7 +362,7 @@ public class Screen {
 	 * @param y vertical coordinate
 	 * @param width width of oval
 	 * @param height height of oval
-	 * 
+	 * <p>
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderFiledOval(int x, int y, int width, int height) {
@@ -393,7 +396,7 @@ public class Screen {
 	 * @param y vertical coordinate of starting point
 	 * @param xa horizontal coordinate of ending point
 	 * @param ya vertical coordinate of ending point
-	 * 
+	 * <p>
 	 * @see {@link #setColor(Color)}
 	 */
 	public void renderLine(int x, int y, int xa, int ya) {
@@ -417,7 +420,7 @@ public class Screen {
 	 * @param startAngle arc begins on this angle
 	 * @param arcAngle arc finishes on this angle
 	 * @param color color of filled  arc
-	 * 
+	 * <p>
 	 * @see {@link java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
@@ -435,7 +438,7 @@ public class Screen {
 	 * @param height height of arc
 	 * @param startAngle arc begins on this angle
 	 * @param arcAngle arc finishes on this angle
-	 * 
+	 * <p>
 	 * @see {@link #setColor(Color)}
 	 * @see {@link java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
 	 */
@@ -458,7 +461,7 @@ public class Screen {
 	 * @param startAngle arc begins on this angle
 	 * @param arcAngle arc finishes on this angle
 	 * @param color color of arc
-	 * 
+	 * <p>
 	 * @see {@link java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
 	 */
 	public void renderArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
@@ -476,7 +479,7 @@ public class Screen {
 	 * @param height height of arc
 	 * @param startAngle arc begins on this angle
 	 * @param arcAngle arc finishes on this angle
-	 * 
+	 * <p>
 	 * @see {@link #setColor(Color)}
 	 * @see {@link java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
 	 */
@@ -488,7 +491,7 @@ public class Screen {
 		g.drawArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
-	//TODO
+	//TODO documentation and scaling
 	public void renderSprite(Sprite sprite, int xCoord, int yCoord){
 		int[] spritePixels = sprite.getPixels();
 		
@@ -538,8 +541,9 @@ public class Screen {
 	 * 
 	 * @param coord coordinate which will be offset
 	 * @param offset value which is coordinate offset
+	 * <p>
 	 * @return coord - offset 
-	 * 
+	 * <p>
 	 * @see {@link #xOffset}
 	 * @see {@link #yOffset}
 	 * @see {@link #ignoreOffset}
@@ -548,32 +552,47 @@ public class Screen {
 		return coord - offset;
 	}
 	
-	//TODO documentation and exception
+	/**
+	 * Sets color in {@link  #g Graphics object} to specified color.<br>
+	 * <strong> If parameter color is null, message is printed and color in {@link  #g Graphics object} keeps. </strong>
+	 * 
+	 * @param color color which will be set to {@link  #g Graphics object}
+	 * <p>
+	 * @see java.awt.Color
+	 * @see java.awt.Graphics
+	 */
 	public void setColor(Color color) {
 		if (color == null) {
-			// TODO handle error
+			MessageHandler.printMessage(MessageHandler.ERROR, "Screen color cannot be set to null, color stays seto to current color");
 			return;
 		}
 		g.setColor(color);
 	}
 	
-	//TODO documentation and exception
+	/**
+	 * Sets font in {@link  #g Graphics object} to specified font.<br>
+	 * <strong> If parameter font is null, message is printed and font in {@link  #g Graphics object} keeps. </strong>
+	 * 
+	 * @param font font which will be set to {@link  #g Graphics object}
+	 * <p>
+	 * @see java.awt.Font
+	 * @see java.awt.Graphics
+	 */
 	public void setFont(Font font) {
 		if (font == null) {
-			// TODO handle error
+			MessageHandler.printMessage(MessageHandler.ERROR, "Screen font cannot be set to null, font stays set to current font");
 			return;
 		}
 		g.setFont(font);
 	}
 	
-	//TODO better documentation
 	/**
 	 * Sets horizontal and vertical offset of screen to specified values. <br>
-	 * Offseting screen can be used to "move" screen. <br>
+	 * Offseting means subtracting offsets from rendered contents coordinates <br>
 	 * 
 	 * @param xOffset Horizontal offset of screen (offset on x axis)
 	 * @param yOffset Vertical offset of screen (offset on y axis)
-	 * 
+	 * <p>
 	 * @see {@link #xOffset}
 	 * @see {@link #yOffset}
 	 * @see {@link #ignoreOffset}
@@ -588,7 +607,7 @@ public class Screen {
 	 * Sets if screen offset is ignored while rendering content.
 	 * 
 	 * @param ignore if true offset of screen is ignored else position of rendered content is recalculated with screen offset
-	 * 
+	 * <p>
 	 * @see {@link #xOffset}
 	 * @see {@link #yOffset}
 	 * @see {@link #setOffset(int,int) setOffset(xOffset, yOffset)}
@@ -609,7 +628,7 @@ public class Screen {
 	/**
 	 * Disposes {@link #g Graphics object} which is used to draw on {@link #renderLayer}.
 	 * This method should be called at the end of rendering content for better performance.
-	 * 
+	 * <p>
 	 * @see java.awt.Graphics
 	 */
 	public void disposeGraphics() {
@@ -646,7 +665,7 @@ public class Screen {
 	
 	/**
 	 * @return <code>BufferedImage</code>{@link #renderLayer} which contains all rendered graphics.
-	 * 
+	 * <p>
 	 * @see java.awt.image.BufferedImage
 	 */
 	public BufferedImage getRenderLayer() {

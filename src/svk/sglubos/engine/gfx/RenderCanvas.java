@@ -46,6 +46,7 @@ public class RenderCanvas extends Canvas {
 		g = bs.getDrawGraphics();
 		
 		g.clearRect(0, 0, getWidth(), getHeight());
+		
 		g.drawImage(renderContent, 0, 0,getWidth(), getHeight(), null);
 		
 		g.dispose();

@@ -1,13 +1,10 @@
 package svk.sglubos.engine.test;
 
 import java.awt.Color;
-import java.awt.Font;
+import java.util.Random;
 
-import javax.swing.JFrame;
-
-import svk.sglubos.engine.gfx.RenderCanvas;
-import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.GameWindow;
+import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
 
 /**
@@ -95,9 +92,8 @@ public class Game implements Runnable{
 	 * Updates game content.
 	 */
 	
-	int x = 0;
 	public void tick(){
-		mainScreen.setOffset(x++, 0);
+		
 	}
 	
 	/**
@@ -108,7 +104,6 @@ public class Game implements Runnable{
 		debugScreen.prepare();
 		
 		mainScreen.setColor(Color.RED);
-		
 		
 		mainScreen.renderArc(0, 0, 50, 50, 90, 180);
 		mainScreen.renderFilledArc(50, 0, 50, 50, 90, 180);
@@ -122,10 +117,7 @@ public class Game implements Runnable{
 		mainScreen.renderLine(300, 0, 349, 0);
 		
 		mainScreen.renderSprite(test, 350, 0);
-		
 		mainScreen.renderString("auto", 400, 10);
-		
-		
 		
 		debugScreen.setColor(Color.white);
 		debugScreen.renderString(render, 0, 15);
