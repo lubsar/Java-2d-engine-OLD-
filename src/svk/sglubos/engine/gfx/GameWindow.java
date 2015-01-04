@@ -30,11 +30,11 @@ public class GameWindow extends JFrame {
 
 		screen = new Screen(width, height, defaultScreenColor);
 		canvas = new RenderCanvas(screen, canvasScale);
-
+		
 		add(canvas);
 		pack();
 		setVisible(true);
-
+		
 		canvas.init(2);
 	}
 

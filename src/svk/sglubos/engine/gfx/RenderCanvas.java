@@ -1,9 +1,14 @@
 package svk.sglubos.engine.gfx;
 
 import java.awt.Canvas;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+
+import svk.sglubos.engine.utils.MessageHandler;
+//TODO remake documentation
 
 /**
  * Render Canvas inherits from {@link java.awt.Canvas Canvas} class. <br>
@@ -28,27 +33,27 @@ public class RenderCanvas extends Canvas {
 	private double scale = 1.0;
 	
 	private BufferStrategy bs;
-	private Graphics g;
 	
 	public RenderCanvas(Screen screen,double scale){
 		renderContent = screen.getRenderLayer();
-		setSize((int)(screen.getWidth()*scale), (int)(screen.getHeight()*scale));
+		setPreferredSize(new Dimension((int)(screen.getWidth()*scale), (int)(screen.getHeight()*scale)));
 		
 		this.scale = scale;
 	}
 	
-	public void init(int buffers){
-		createBufferStrategy(buffers);
+	public void init(int numBuffers){
+		try{
+			createBufferStrategy(numBuffers);			
+		}catch(Exception e){
+			MessageHandler.printMessage("RENDER_CANVAS", MessageHandler.ERROR, "Exception while creating BufferStrategy ! printing stack trace\n");
+			e.printStackTrace();
+		}
 		bs = getBufferStrategy();
 	}
 	
 	public void showRenderedContent(){
-		g = bs.getDrawGraphics();
-		
-		g.clearRect(0, 0, getWidth(), getHeight());
-		
-		g.drawImage(renderContent, 0, 0,getWidth(), getHeight(), null);
-		
+		Graphics g = bs.getDrawGraphics();
+		g.drawImage(renderContent, 0, 0,getWidth(),getHeight(), null);
 		g.dispose();
 		bs.show();
 	}

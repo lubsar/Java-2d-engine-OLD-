@@ -3,6 +3,7 @@ package svk.sglubos.engine.test;
 import java.awt.Color;
 import java.util.Random;
 
+import svk.sglubos.engine.gfx.GameRenderingWindow;
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
@@ -21,8 +22,11 @@ public class Game implements Runnable{
 	private Screen mainScreen;
 	private Screen debugScreen;
 	
-	private GameWindow mainWindow;
-	private GameWindow debugWindow;
+//	private GameWindow mainWindow;
+//	private GameWindow debugWindow;
+	
+	private GameRenderingWindow mainWindow;
+	private GameRenderingWindow debugWindow;
 	
 	//Constructor
 	public Game(){
@@ -40,13 +44,17 @@ public class Game implements Runnable{
 		
 		test = new Sprite(50,50,pixels);
 		
-		mainWindow = new GameWindow(500,500,"Game",2.0);
-		debugWindow = new GameWindow(640,300,"Debug",Color.BLUE);
+		mainScreen = new Screen(500,500,Color.black);
+		debugScreen = new Screen(640,300,Color.BLUE);
 		
-		mainScreen = mainWindow.getScreen();
-		debugScreen = debugWindow.getScreen();
+		mainWindow = new GameRenderingWindow("Game",mainScreen.getRenderLayer(),1000,1000);
+		debugWindow = new GameRenderingWindow("Debug",debugScreen.getRenderLayer(),640,300);
 		
-//		mainScreen.setIngoreOffset(true);
+//		mainWindow = new GameWindow(500,500,"Game",2.0);
+//		debugWindow = new GameWindow(640,300,"Debug",Color.BLUE);
+		
+//		mainScreen = mainWindow.getScreen();
+//		debugScreen = debugWindow.getScreen();
 	}
 	
 	public void start(){
@@ -75,11 +83,19 @@ public class Game implements Runnable{
 				tick();
 				ticks++;
 			}
-			render();
+			
+			try {
+				Thread.sleep(9);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			fps++;
+			render();
 				
 			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
 				render = "[DEBUG] ticks: " + ticks + "fps: " + fps;
+				System.out.println(render);
 				lastTimeDebugOutput += 1000;
 				fps = 0;
 				ticks = 0;
@@ -125,8 +141,10 @@ public class Game implements Runnable{
 		mainScreen.disposeGraphics();
 		debugScreen.disposeGraphics();
 		
-		mainWindow.showContent();
-		debugWindow.showContent();
+		mainWindow.render();
+		debugWindow.render();
+		
+//		mainWindow.showContent();
+//		debugWindow.showContent();
 	}
-	
 }

@@ -25,7 +25,7 @@ public class MessageHandler {
 	public static final String INFO = "INFO";
 	
 	/**
-	 * Message tag with value: "ERROR"
+	 * Message tag with value: "ERROR" if used, message is printed as an error.
 	 * 
 	 * @see {@link #printMessage(String, String)}
 	 */
@@ -46,7 +46,7 @@ public class MessageHandler {
 	
 	/**
 	 * Prints specified message with specified prefix and tag. <br>
-	 * Uses {@link System#out}'s printLine(String) method. <br>
+	 * Uses {@link System#out}'s println(String) method and if you use {@link #ERROR} tag, message is printed by: {@link System#err}`s println(String)} <br>
 	 * 
 	 * <h1> Message structure:</h1>
 	 * prefix: [tag] message
@@ -58,6 +58,10 @@ public class MessageHandler {
 	 * @see {@link #printMessage(String, String, String)}
 	 */
 	public static void printMessage(String prefix, String tag, String message){
+		if(tag.equals(ERROR)){
+			System.err.println(prefix + ": [" +tag + "] " + message );
+			return;
+		}
 		System.out.println(prefix + ": [" +tag + "] " + message );
 	}
 }
