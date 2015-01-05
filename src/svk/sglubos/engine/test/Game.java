@@ -1,9 +1,7 @@
 package svk.sglubos.engine.test;
 
 import java.awt.Color;
-import java.util.Random;
 
-import svk.sglubos.engine.gfx.GameRenderingWindow;
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
@@ -20,13 +18,13 @@ public class Game implements Runnable{
 	private Sprite test;
 	
 	private Screen mainScreen;
-	private Screen debugScreen;
+//	private Screen debugScreen;
 	
-//	private GameWindow mainWindow;
+	private GameWindow mainWindow;
 //	private GameWindow debugWindow;
 	
-	private GameRenderingWindow mainWindow;
-	private GameRenderingWindow debugWindow;
+//	private GameRenderingWindow mainWindow;
+//	private GameRenderingWindow debugWindow;
 	
 	//Constructor
 	public Game(){
@@ -44,16 +42,16 @@ public class Game implements Runnable{
 		
 		test = new Sprite(50,50,pixels);
 		
-		mainScreen = new Screen(500,500,Color.black);
-		debugScreen = new Screen(640,300,Color.BLUE);
+//		mainScreen = new Screen(500,500,Color.black);
+//		debugScreen = new Screen(640,300,Color.BLUE);
 		
-		mainWindow = new GameRenderingWindow("Game",mainScreen.getRenderLayer(),1000,1000);
-		debugWindow = new GameRenderingWindow("Debug",debugScreen.getRenderLayer(),640,300);
+//		mainWindow = new GameRenderingWindow("Game",mainScreen.getRenderLayer(),1000,1000);
+//		debugWindow = new GameRenderingWindow("Debug",debugScreen.getRenderLayer(),640,300);
 		
-//		mainWindow = new GameWindow(500,500,"Game",2.0);
+		mainWindow = new GameWindow(500,500,"Game",2.0);
 //		debugWindow = new GameWindow(640,300,"Debug",Color.BLUE);
 		
-//		mainScreen = mainWindow.getScreen();
+		mainScreen = mainWindow.getScreen();
 //		debugScreen = debugWindow.getScreen();
 	}
 	
@@ -85,7 +83,7 @@ public class Game implements Runnable{
 			}
 			
 			try {
-				Thread.sleep(9);
+				Thread.sleep(7);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -115,9 +113,9 @@ public class Game implements Runnable{
 	/**
 	 * Renders game content. 
 	 */
-	public void render(){
+	public synchronized void render(){
 		mainScreen.prepare();
-		debugScreen.prepare();
+//		debugScreen.prepare();
 		
 		mainScreen.setColor(Color.RED);
 		
@@ -135,16 +133,16 @@ public class Game implements Runnable{
 		mainScreen.renderSprite(test, 350, 0);
 		mainScreen.renderString("auto", 400, 10);
 		
-		debugScreen.setColor(Color.white);
-		debugScreen.renderString(render, 0, 15);
+//		debugScreen.setColor(Color.white);
+//		debugScreen.renderString(render, 0, 15);
 		
 		mainScreen.disposeGraphics();
-		debugScreen.disposeGraphics();
+//		debugScreen.disposeGraphics();
 		
-		mainWindow.render();
-		debugWindow.render();
+//		mainWindow.render();
+//		debugWindow.render();
 		
-//		mainWindow.showContent();
+		mainWindow.showRenderedContent();
 //		debugWindow.showContent();
 	}
 }

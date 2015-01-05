@@ -1,14 +1,13 @@
 package svk.sglubos.engine.gfx;
 
 import java.awt.Canvas;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import svk.sglubos.engine.utils.MessageHandler;
-//TODO remake documentation
+//TODO documentation
 
 /**
  * Render Canvas inherits from {@link java.awt.Canvas Canvas} class. <br>
