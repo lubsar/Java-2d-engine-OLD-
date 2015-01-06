@@ -14,17 +14,17 @@ import svk.sglubos.engine.utils.MessageHandler;
  * <code>BufferedImage</code> renderLayer contains all rendered graphics
  * and this <code>BufferedImage</code> is returned by method <code>getRenderLayer()</code>.
  *<p>
- * A java.awt.Graphics object which can drawn on renderLayer is returned by method <code>getGraphics()</code>.
+ * A java.awt.Graphics object which can draw on renderLayer is returned by method <code>getGraphics()</code>.
  * </p>
  * <p>
  * Before rendering game content every frame you need to call <code>prepare()</code> method, which creates new Graphics object
  * and fills entire screen with defaultColor passed in constructor of this class.  
  * After rendering game content you need to call <code>disposeGraphics()</code> method which disposes Graphics object to release system resources.
  * </p>
- * <h1>example: </h1>
+ * <h1>example:render method called every frame </h1>
  * <p>
  * <code>
- * 	public void render() {<br>
+ * void render() {<br>
  * 		//start with preparation<br>
  * 		screen.prepare();<br>
  * 		<br>
@@ -74,7 +74,7 @@ public class Screen {
 	protected int yOffset = 0;
 	
 	/**
-	 * If true offsets are ignored when rendering some content, else position of rendered content is offset. <br>
+	 * If true offsets are ignored when rendering content, else position of rendered content is offset. <br>
 	 * Can be set by {@link #setIngoreOffset(boolean) setIgnoreOffset(boolean ignoreOffset)} method.
 	 * 
 	 *  @see {@link #xOffset xOffset}
@@ -85,13 +85,13 @@ public class Screen {
 	
 	/**
 	 * Color used in {@link #prepare()} method, entire screen is filled with this color when {@link #prepare()} is called.<br>
-	 * The value of this color is initialized in constructor and is last passed argument in {@link #Screen(int, int, Color) constructor}.
+	 * The value of this color is initialized in constructor and is last passed parameter in {@link #Screen(int, int, Color) constructor}.
 	 */
 	protected Color defaultScreenColor;
 	
 	/**
 	 * BufferedImage which contains all rendered graphics. To display your rendered graphics display this image.<br>
-	 * It is initialized in {@link #Screen(int, int, Color) constructor}.<br>
+	 * The renderLayer is initialized in {@link #Screen(int, int, Color) constructor}.<br>
 	 * This image is returned by {@link #getRenderLayer()} method. <br>
 	 */
 	protected BufferedImage renderLayer;
@@ -145,7 +145,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws filled rectangle of specified position, size and color.<br>
+	 * Draws filled rectangle with specified position, size and color.<br>
 	 * Uses {@link #renderFilledRectangle(int, int, int, int) renderFilledRectangle(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -160,7 +160,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws filled rectangle of specified position and size. Uses current color set in Graphics object.<br>
+	 * Draws filled rectangle with specified position and size. Uses current color set in Graphics object.<br>
 	 * Uses {@link java.awt.Graphics#fillRect(int, int, int, int)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -179,7 +179,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws rectangle of specified position, size and color. <br>
+	 * Draws rectangle with specified position, size and color. <br>
 	 * Uses {@link #renderRectangle(int, int, int, int) renderRectangle(x,y,width,height)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -194,7 +194,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws rectangle of specified position and size. Uses current color set in Graphics object.<br>
+	 * Draws rectangle with specified position and size. Uses current color set in Graphics object.<br>
 	 * Uses {@link java.awt.Graphics#drawRect(int, int, int, int) g.drawRect(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -213,7 +213,7 @@ public class Screen {
 	}
 
 	/**
-	 * Draws BufferedImage of specified position and size. <br>
+	 * Draws BufferedImage with specified position and size. <br>
 	 * Uses {@link java.awt.Graphics#drawImage(java.awt.Image, int, int,int,int, java.awt.image.ImageObserver) g.drawImage(img, x, y, width, height,null)} method.
 	 * 
 	 * @param img image which will be drawn
@@ -233,7 +233,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws BufferedImage on specified position and default size of image. <br>
+	 * Draws BufferedImage with specified position and default size of image. <br>
 	 * Uses {@link java.awt.Graphics#drawImage(java.awt.Image, int, int,int,int, java.awt.image.ImageObserver) g.drawImage(img,x,y,img.getWidth(),img.getHeight(),null)} method.
 	 * 
 	 * @param img image which will be drawn
@@ -251,7 +251,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws String of specified position, font and color.<br>
+	 * Draws String with specified position, font and color.<br>
 	 * Uses {@link #renderString(String, int, int, Font) renderString(text, x, y, font)} method.
 	 * 
 	 * @param text text which will be drawn
@@ -268,7 +268,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws String of specified position and font. Uses current color set in Graphics object.<br>
+	 * Draws String with specified position and font. Uses current color set in Graphics object.<br>
 	 * Uses {@link #renderString(String, int, int) renderString(text, x, y)} method.
 	 * 
 	 * @param text text which will be drawn
@@ -285,7 +285,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws String of specified position. Uses current color and font set in Graphics object.<br>
+	 * Draws String with specified position. Uses current color and font set in Graphics object.<br>
 	 * Uses {@link java.awt.Graphics2D#drawString(String, int, int) g.drawString(text, x, y)} method.
 	 * 
 	 * @param text text which will be drawn
@@ -319,7 +319,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws oval of specified position and size. Uses current color set in Graphics object<br>
+	 * Draws oval with specified position and size. Uses current color set in Graphics object<br>
 	 * Uses {@link java.awt.Graphics#drawOval(int, int, int, int) g.drawOval(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -338,7 +338,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws filled oval of specified position and size. Uses current color set in Graphics object<br>
+	 * Draws filled oval with specified position and size. Uses current color set in Graphics object<br>
 	 * Uses {@link #renderFiledOval(int, int, int, int) renderOval(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -355,7 +355,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws filled oval of specified position and size. Uses current color set in Graphics object<br>
+	 * Draws filled oval with specified position and size. Uses current color set in Graphics object<br>
 	 * Uses {@link java.awt.Graphics#fillOval(int, int, int, int) g.fillOval(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -374,7 +374,7 @@ public class Screen {
 	}
 
 	/**
-	 * Draws line from specified starting point to specified ending point of specified color.<br>
+	 * Draws line from specified starting point to specified ending point with specified color.<br>
 	 * Uses {@link #renderLine(int, int, int, int) renderLine(x, y, xa, ya)} method.
 	 * 
 	 * @param x horizontal coordinate of starting point
@@ -410,7 +410,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws filled arc of specified position, size, angles and color.<br>
+	 * Draws filled arc with specified position, size, angles and color.<br>
 	 * Uses {@link #renderFilledArc(int, int, int, int, int, int) rendeFilledrArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -429,7 +429,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws filled arc of specified position, size and angles. Uses current color set in Graphics object.<br>
+	 * Draws filled arc with specified position, size and angles. Uses current color set in Graphics object.<br>
 	 * Uses {@link #renderFilledArc(int, int, int, int, int, int) rendeFilledrArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -451,7 +451,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws arc of specified position, size, angles and color.<br>
+	 * Draws arc with specified position, size, angles and color.<br>
 	 * Uses {@link #renderArc(int, int, int, int, int, int) renderArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -470,7 +470,7 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws arc of specified position, size and angles. Uses current color set in Graphics object.<br>
+	 * Draws arc with specified position, size and angles. Uses current color set in Graphics object.<br>
 	 * Uses {@link java.awt.Graphics#drawArc(int, int, int, int, int, int) g.drawArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
 	 * @param x horizontal coordinate

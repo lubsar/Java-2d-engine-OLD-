@@ -15,31 +15,72 @@ import svk.sglubos.engine.utils.MessageHandler;
  * from {@link svk.sglubos.engine.gfx.Screen Screen} object passed in {@link #RenderCanvas(Screen) constructor}. 
  *<p>
  * If you want to start displaying game content, you need to create {@link java.awt.image.BufferStrategy BufferStrategy} object. <br>
- * To initialize {@link java.awt.image.BufferStrategy BufferStrategy} object call method {@link #init(int) init(numBuffers)}. <br>
- * The canvas must be visible when you create {@link java.awt.image.BufferStrategy BufferStrategy}!
+ * To initialize {@link java.awt.image.BufferStrategy BufferStrategy} object call method {@link #init(int) init(numBuffers)}<br>
+ * This method creates <code>BufferStrategy with specified number of buffers</code>. <br>
+ * <strong>The canvas must be visible when you create {@link java.awt.image.BufferStrategy BufferStrategy}!</strong>
  * <p>
  * Every frame after all is rendered call method {@link #showRenderedContent()}. <br>
- * This method fills entire canvas with {@link java.awt.image.BufferedImage BufferedImage} renderLayer.
+ * This method fills entire canvas with {@link java.awt.image.BufferedImage BufferedImage} renderLayer, <br>
+ *  which contains all graphics rendered by {@link svk.sglubos.engine.gfx.Screen screen}.
  * 
  * @see svk.sglubos.engine.gfx.Screen
  * @see {@link svk.sglubos.engine.gfx.Screen#renderLayer renderLayer}
  */
-
-
 @SuppressWarnings("serial")
 public class RenderCanvas extends Canvas {
-	private BufferedImage renderContent;
-	private double scale = 1.0;
+	/**
+	 * {@link java.awt.image.BufferedImage BufferedImage} which contains all graphics rendered by {@link svk.sglubos.engine.gfx.Screen screen}. <br>
+	 * This image is used in {@link #showRenderedContent()}  method to display all of that rendered graphics and is initialized in {@link #RenderCanvas(Screen, double) constructor}.<br>
+	 * 
+	 * @see {@link #showRenderedContent()}  
+	 * @see svk.sglubos.engine.gfx.Screen
+	 */
+	protected BufferedImage renderLayer;
 	
-	private BufferStrategy bs;
+	/**
+	 * Canvas size is screen size times scale.<br>
+	 * This variable is initialized in {@link #RenderCanvas(Screen, double) constructor}.
+	 */
+	protected double scale = 1.0;
+	//TODO better documentation
+	/** 
+	 * {@link java.awt.image.BufferStrategy BufferStrategy} removes flickering of fast rendering by drawing renderLayer to back buffer and displaying it after renderLayer is drawn.<br>
+	 * This object is initialized in {@link #init(int) init(int numBuffers)} method.
+	 * <p>
+	 * @see java.awt.image.BufferStrategy
+	 * @see {@link #showRenderedContent()} 
+	 */
+	protected BufferStrategy bs;
 	
+	/**
+	 * Constructs new {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas}.<br>
+	 * <h1>initializes</h1>
+	 * <p>
+	 * {@link java.awt.image.BufferedImage BufferedImage} {@link #renderLayer} is initialized by {@link svk.sglubos.engine.gfx.Screen Screen} <code>getRenderLayer()</code> method. <br>  
+	 * Preferred size of canvas set to width: screen.getWidth()*scale and height: screen.getHeight()*scale. <br>
+	 * {@link #scale} is initialized to value of passed parameter scale. <br>
+	 * <p>
+	 * @param screen screen object which is used to initialize sizes and renderLayer
+	 * @param scale value which scales up canvas 
+	 * 
+	 * @see svk.sglubos.engine.gfx.Screen
+	 * @see java.awt.image.BufferedImage
+	 * @see java.awt.image.BufferStrategy
+	 */
 	public RenderCanvas(Screen screen,double scale){
-		renderContent = screen.getRenderLayer();
+		renderLayer = screen.getRenderLayer();
 		setPreferredSize(new Dimension((int)(screen.getWidth()*scale), (int)(screen.getHeight()*scale)));
 		
 		this.scale = scale;
 	}
 	
+	/**
+	 * Initializes buffer strategy with specified number of buffers. <br>
+	 * This method must be called before started rendering content, but the RenderCanvas must be displayed !
+	 * 
+	 * 
+	 * @param numBuffers number of buffers
+	 */
 	public void init(int numBuffers){
 		try{
 			createBufferStrategy(numBuffers);			
@@ -51,8 +92,12 @@ public class RenderCanvas extends Canvas {
 	}
 	
 	public void showRenderedContent(){
+		if(bs == null){
+			MessageHandler.printMessage("RENDER_CANVAS", MessageHandler.ERROR, "BufferStrategy is not initialized !");
+			return;
+		}
 		Graphics g = bs.getDrawGraphics();
-		g.drawImage(renderContent, 0, 0,getWidth(),getHeight(), null);
+		g.drawImage(renderLayer, 0, 0,getWidth(),getHeight(), null);
 		g.dispose();
 		bs.show();
 	}

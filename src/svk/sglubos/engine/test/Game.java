@@ -105,15 +105,13 @@ public class Game implements Runnable{
 	/**
 	 * Updates game content.
 	 */
-	
 	public void tick(){
-		
 	}
 	
 	/**
 	 * Renders game content. 
 	 */
-	public synchronized void render(){
+	public void render(){
 		mainScreen.prepare();
 //		debugScreen.prepare();
 		
@@ -132,6 +130,8 @@ public class Game implements Runnable{
 		
 		mainScreen.renderSprite(test, 350, 0);
 		mainScreen.renderString("auto", 400, 10);
+		
+		mainScreen.setColor(Color.CYAN);
 		
 //		debugScreen.setColor(Color.white);
 //		debugScreen.renderString(render, 0, 15);
