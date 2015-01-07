@@ -7,7 +7,6 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import svk.sglubos.engine.utils.MessageHandler;
-//TODO documentation
 
 /**
  * Render Canvas inherits from {@link java.awt.Canvas Canvas} class. <br>
@@ -42,7 +41,6 @@ public class RenderCanvas extends Canvas {
 	 * This variable is initialized in {@link #RenderCanvas(Screen, double) constructor}.
 	 */
 	protected double scale = 1.0;
-	//TODO better documentation
 	/** 
 	 * {@link java.awt.image.BufferStrategy BufferStrategy} removes flickering of fast rendering by drawing renderLayer to back buffer and displaying it after renderLayer is drawn.<br>
 	 * This object is initialized in {@link #init(int) init(int numBuffers)} method.
@@ -76,10 +74,12 @@ public class RenderCanvas extends Canvas {
 	
 	/**
 	 * Initializes buffer strategy with specified number of buffers. <br>
-	 * This method must be called before started rendering content, but the RenderCanvas must be displayed !
-	 * 
-	 * 
+	 * This method must be called before started rendering content, but the RenderCanvas must be visible !
+	 * <p>
 	 * @param numBuffers number of buffers
+	 * <p>
+	 * @see java.awt.image.BufferStrategy
+	 * 
 	 */
 	public void init(int numBuffers){
 		try{
@@ -91,6 +91,16 @@ public class RenderCanvas extends Canvas {
 		bs = getBufferStrategy();
 	}
 	
+	/**
+	 * Shows content rendered by {@link svk.sglubos.engine.gfx.Screen Screen} passed in {@link #RenderCanvas(Screen, double) constructor}.<br>
+	 * {@link java.awt.image.BufferStrategy BufferStrategy BufferStrategy} {@link #bs} have to be initialized ! If not, error message is printed and return is called. <br>
+	 * 
+	 * Rendered content is displayer by filling entire canvas with {@link #renderLayer}.
+	 * Handles showing of {@link java.awt.image.BufferStrategy BufferStrategy};
+	 * 
+	 * @see svk.sglubos.engine.gfx.Screen
+	 * @see java.awt.image.BufferStrategy
+	 */
 	public void showRenderedContent(){
 		if(bs == null){
 			MessageHandler.printMessage("RENDER_CANVAS", MessageHandler.ERROR, "BufferStrategy is not initialized !");
