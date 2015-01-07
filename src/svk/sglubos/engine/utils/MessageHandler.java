@@ -46,7 +46,7 @@ public class MessageHandler {
 	
 	/**
 	 * Prints specified message with specified prefix and tag. <br>
-	 * Uses {@link System#out}'s println(String) method and if you use {@link #ERROR} tag, message is printed by: {@link System#err}`s println(String)} <br>
+	 * Uses {@link System#out}'s println(String) method and if you use {@link #ERROR} tag, message is printed by: {@link System#err}`s println(String)} method.<br>
 	 * 
 	 * <h1> Message structure:</h1>
 	 * prefix: [tag] message

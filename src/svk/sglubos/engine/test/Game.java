@@ -5,6 +5,7 @@ import java.awt.Color;
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
+import svk.sglubos.engine.gfx.sprite.SpriteSheet;
 
 /**
  * Temporary class.
@@ -41,6 +42,8 @@ public class Game implements Runnable{
 		}
 		
 		test = new Sprite(50,50,pixels);
+		
+		new SpriteSheet(null);
 		
 //		mainScreen = new Screen(500,500,Color.black);
 //		debugScreen = new Screen(640,300,Color.BLUE);
@@ -137,6 +140,9 @@ public class Game implements Runnable{
 //		debugScreen.renderString(render, 0, 15);
 		
 		mainScreen.disposeGraphics();
+		
+		
+		
 //		debugScreen.disposeGraphics();
 		
 //		mainWindow.render();

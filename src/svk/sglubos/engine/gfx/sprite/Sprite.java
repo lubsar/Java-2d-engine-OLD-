@@ -1,7 +1,7 @@
 package svk.sglubos.engine.gfx.sprite;
 
 /**
- * Class which contains integer array of pixels which can be rendered on {@link svk.sglubos.engine.gfx.Screen Screen}. <br>
+ * Contains integer array of pixels which can be rendered on {@link svk.sglubos.engine.gfx.Screen Screen}. <br>
  * 
  * This class provides methods which can change this pixels.
  *
