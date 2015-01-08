@@ -1,6 +1,7 @@
 package svk.sglubos.engine.gfx.sprite;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 
 public class SpriteSheet {
 	private BufferedImage image;
@@ -11,7 +12,7 @@ public class SpriteSheet {
 	
 	public SpriteSheet(BufferedImage image){
 		if(image == null) {
-			throw new NullPointerException("BufferedImage is null, SpriteSheet can not be created");
+			throw new IllegalArgumentException("BufferedImage can not be null");
 		}
 		this.image = image;
 		this.width = image.getWidth();
@@ -24,7 +25,13 @@ public class SpriteSheet {
 	}
 	
 	public BufferedImage getSubImabe(int x, int y, int width, int height) {
-		return image.getSubimage(x, y, width, height);
+		BufferedImage image = null;
+		try{
+			image = this.image.getSubimage(x, y, width, height);			
+		}catch (RasterFormatException e) {
+			e.printStackTrace();
+		}
+		return image;
 	}
 	
 	public Sprite getSprite(int x, int y, int width, int height) {

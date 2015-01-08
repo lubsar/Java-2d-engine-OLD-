@@ -11,7 +11,7 @@ import svk.sglubos.engine.utils.MessageHandler;
 /**
  * Render Canvas inherits from {@link java.awt.Canvas Canvas} class. <br>
  * RenderCanvas provides easy way to display rendered game content
- * from {@link svk.sglubos.engine.gfx.Screen Screen} object passed in {@link #RenderCanvas(Screen) constructor}. 
+ * from {@link svk.sglubos.engine.gfx.Screen Screen} object passed in {@link #RenderCanvas(Screen, double) constructor}. 
  *<p>
  * If you want to start displaying game content, you need to create {@link java.awt.image.BufferStrategy BufferStrategy} object. <br>
  * To initialize {@link java.awt.image.BufferStrategy BufferStrategy} object call method {@link #init(int) init(numBuffers)}<br>
@@ -23,7 +23,7 @@ import svk.sglubos.engine.utils.MessageHandler;
  *  which contains all graphics rendered by {@link svk.sglubos.engine.gfx.Screen screen}.
  * 
  * @see svk.sglubos.engine.gfx.Screen
- * @see {@link svk.sglubos.engine.gfx.Screen#renderLayer renderLayer}
+ * @see svk.sglubos.engine.gfx.Screen#renderLayer renderLayer
  */
 @SuppressWarnings("serial")
 public class RenderCanvas extends Canvas {
@@ -31,7 +31,7 @@ public class RenderCanvas extends Canvas {
 	 * {@link java.awt.image.BufferedImage BufferedImage} which contains all graphics rendered by {@link svk.sglubos.engine.gfx.Screen screen}. <br>
 	 * This image is used in {@link #showRenderedContent()}  method to display all of that rendered graphics and is initialized in {@link #RenderCanvas(Screen, double) constructor}.<br>
 	 * 
-	 * @see {@link #showRenderedContent()}  
+	 * @see #showRenderedContent()  
 	 * @see svk.sglubos.engine.gfx.Screen
 	 */
 	protected BufferedImage renderLayer;
@@ -44,9 +44,9 @@ public class RenderCanvas extends Canvas {
 	/** 
 	 * {@link java.awt.image.BufferStrategy BufferStrategy} removes flickering of fast rendering by drawing renderLayer to back buffer and displaying it after renderLayer is drawn.<br>
 	 * This object is initialized in {@link #init(int) init(int numBuffers)} method.
-	 * <p>
+	 * 
 	 * @see java.awt.image.BufferStrategy
-	 * @see {@link #showRenderedContent()} 
+	 * @see  #showRenderedContent()
 	 */
 	protected BufferStrategy bs;
 	
@@ -77,7 +77,7 @@ public class RenderCanvas extends Canvas {
 	 * This method must be called before started rendering content, but the RenderCanvas must be visible !
 	 * <p>
 	 * @param numBuffers number of buffers
-	 * <p>
+	 * 
 	 * @see java.awt.image.BufferStrategy
 	 * 
 	 */

@@ -6,28 +6,28 @@ package svk.sglubos.engine.utils;
  * Messages start with prefix. Default tag is "ENGINE", but you can also specify prefix.<br>
  * Prefix is on start of printed message. 
  * 
- * @see {@link #printMessage(String, String) printMessage(tag ,message)}
- * @see {@link #printMessage(String,String, String) printMessage(prefix, tag, message)}
+ * @see #printMessage(String, String) printMessage(tag ,message)
+ * @see #printMessage(String,String, String) printMessage(prefix, tag, message)
  */
 public class MessageHandler {
 	/**
 	 * Message tag with value: "WARNING"
 	 * 
-	 * @see {@link #printMessage(String, String)}
+	 * @see #printMessage(String, String)
 	 */
 	public static final String WARNING = "WARNING";
 	
 	/**
 	 * Message tag with value: "INFO"
 	 * 
-	 * @see {@link #printMessage(String, String)}
+	 * @see #printMessage(String, String)
 	 */
 	public static final String INFO = "INFO";
 	
 	/**
 	 * Message tag with value: "ERROR" if used, message is printed as an error.
 	 * 
-	 * @see {@link #printMessage(String, String)}
+	 * @see #printMessage(String, String)
 	 */
 	public static final String ERROR = "ERROR";
 	
@@ -38,7 +38,7 @@ public class MessageHandler {
 	 * @param tag message tag
 	 * @param message message text
 	 * <p>
-	 * @see {@link #printMessage(String, String, String)}
+	 * @see #printMessage(String, String, String)
 	 */
 	public static void printMessage(String tag, String message){
 		printMessage("ENGINE", tag, message);
@@ -55,7 +55,7 @@ public class MessageHandler {
 	 * @param tag message tag
 	 * @param message message text
 	 * <p>
-	 * @see {@link #printMessage(String, String, String)}
+	 * @see #printMessage(String, String, String)
 	 */
 	public static void printMessage(String prefix, String tag, String message){
 		if(tag.equals(ERROR)){

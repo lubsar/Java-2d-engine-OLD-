@@ -39,12 +39,11 @@ import svk.sglubos.engine.utils.MessageHandler;
  * <p>
  * @see java.awt.Graphics
  * @see svk.sglubos.engine.gfx.sprite.Sprite
- * @see {@link #setOffset(int, int) offseting of screen}
- * <p>
- * @see {@link #prepare()}
- * @see {@link #disposeGraphics()}
+ * @see #setOffset(int, int) offseting of screen
+ * 
+ * @see #prepare()
+ * @see #disposeGraphics()
  */
-
 public class Screen {
 	
 	/**
@@ -61,7 +60,7 @@ public class Screen {
 	 * Horizontal offset of screen in pixels. Default value 0.<br>
 	 * Offset can be set by {@link #setOffset(int, int) setOffset(xOffset, yOffset)} method.
 	 * 
-	 * @see {@link #setOffset(int xOffset,int yOffset)}
+	 * @see #setOffset(int xOffset,int yOffset)
 	 */
 	protected int xOffset = 0;
 	
@@ -69,7 +68,7 @@ public class Screen {
 	 * Vertical offset of screen in pixels. Default value 0.<br>
 	 * Offset can be set by {@link #setOffset(int, int) setOffset(xOffset, yOffset)} method.
 	 * 
-	 * @see {@link #setOffset(int xOffset,int yOffset)}
+	 * @see #setOffset(int xOffset,int yOffset)
 	 */
 	protected int yOffset = 0;
 	
@@ -77,9 +76,9 @@ public class Screen {
 	 * If true offsets are ignored when rendering content, else position of rendered content is offset. <br>
 	 * Can be set by {@link #setIngoreOffset(boolean) setIgnoreOffset(boolean ignoreOffset)} method.
 	 * 
-	 *  @see {@link #xOffset xOffset}
-	 *  @see {@link #yOffset yOffset}
-	 *  @see {@link #setOffset(int, int) setOffset(xOffset, yOffset)}
+	 *  @see #xOffset xOffset
+	 *  @see #yOffset yOffset
+	 *  @see #setOffset(int, int) setOffset(xOffset, yOffset)
 	 */
 	protected boolean ignoreOffset;
 	
@@ -101,9 +100,9 @@ public class Screen {
 	 * This object is initialized in method {@link #prepare()}. <br>
 	 * It should be initialized every frame before rendering and disposed at the end of rendering for better performance. <br>
 	 * 
-	 * @see {@link #prepare()}
-	 * @see {@link #renderLayer}
-	 * @see {@link #disposeGraphics()}
+	 * @see #prepare()
+	 * @see #renderLayer
+	 * @see #disposeGraphics()
 	 */
 	protected Graphics g;
 	
@@ -168,7 +167,7 @@ public class Screen {
 	 * @param width width of rectangle
 	 * @param height height of rectangle
 	 * <p>
-	 * @see {@link #setColor(Color)}
+	 * @see #setColor(Color)
 	 */
 	public void renderFilledRectangle(int x, int y, int width, int height) {
 		if(!ignoreOffset){
@@ -202,7 +201,7 @@ public class Screen {
 	 * @param width width of rectangle
 	 * @param height height of rectangle
 	 * <p>
-	 * @see {@link #setColor(Color)}
+	 * @see #setColor(Color)
 	 */
 	public void renderRectangle(int x, int y, int width, int height) {
 		if(!ignoreOffset){
@@ -276,7 +275,7 @@ public class Screen {
 	 * @param y vertical coordinate
 	 * @param font font of text
 	 * <p>
-	 * @see {@link #setColor(Color)}
+	 * @see #setColor(Color)
 	 * @see java.awt.Font
 	 */
 	public void renderString(String text, int x, int y, Font font) {
@@ -292,8 +291,8 @@ public class Screen {
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
 	 * <p>
-	 * @see {@link #setColor(Color)}
-	 * @see {@link #setFont(Font)}
+	 * @see #setColor(Color)
+	 * @see #setFont(Font)
 	 */
 	public void renderString(String text, int x, int y) {
 		if(!ignoreOffset){
@@ -327,7 +326,7 @@ public class Screen {
 	 * @param width width of oval
 	 * @param height height of oval
 	 * 
-	 * @see {@link #setColor(Color)}
+	 * @see #setColor(Color)
 	 */
 	public void renderOval(int x, int y, int width, int height) {
 		if(!ignoreOffset){
@@ -347,7 +346,7 @@ public class Screen {
 	 * @param height height of oval
 	 * @param color color of filled oval
 	 * <p>
-	 * @see {@link #setColor(Color)}
+	 * @see #setColor(Color)
 	 */
 	public void renderFiledOval(int x, int y, int width, int height, Color color) {
 		setColor(color);
@@ -363,7 +362,7 @@ public class Screen {
 	 * @param width width of oval
 	 * @param height height of oval
 	 * <p>
-	 * @see {@link #setColor(Color)}
+	 * @see #setColor(Color)
 	 */
 	public void renderFiledOval(int x, int y, int width, int height) {
 		if(!ignoreOffset){
@@ -397,7 +396,7 @@ public class Screen {
 	 * @param xa horizontal coordinate of ending point
 	 * @param ya vertical coordinate of ending point
 	 * <p>
-	 * @see {@link #setColor(Color)}
+	 * @see #setColor(Color)
 	 */
 	public void renderLine(int x, int y, int xa, int ya) {
 		if(!ignoreOffset){
@@ -421,7 +420,7 @@ public class Screen {
 	 * @param arcAngle arc finishes on this angle
 	 * @param color color of filled  arc
 	 * <p>
-	 * @see {@link java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
+	 * @see java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
 		setColor(color);
@@ -439,8 +438,8 @@ public class Screen {
 	 * @param startAngle arc begins on this angle
 	 * @param arcAngle arc finishes on this angle
 	 * <p>
-	 * @see {@link #setColor(Color)}
-	 * @see {@link java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
+	 * @see #setColor(Color)
+	 * @see java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle){
 		if(!ignoreOffset){
@@ -462,7 +461,7 @@ public class Screen {
 	 * @param arcAngle arc finishes on this angle
 	 * @param color color of arc
 	 * <p>
-	 * @see {@link java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
+	 * @see java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
 		setColor(color);
@@ -480,8 +479,8 @@ public class Screen {
 	 * @param startAngle arc begins on this angle
 	 * @param arcAngle arc finishes on this angle
 	 * <p>
-	 * @see {@link #setColor(Color)}
-	 * @see {@link java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)}
+	 * @see #setColor(Color)
+	 * @see java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderArc(int x, int y, int width, int height, int startAngle,	int arcAngle) {
 		if(!ignoreOffset){
@@ -525,8 +524,8 @@ public class Screen {
 	 * Initializes <code>Graphics</code> object which is returned by this method: <code>renderLayer.createGraphics()</code>. <br> 
 	 * Also fills entire screen with  {@link #defaultScreenColor} defaultScreenColor}. This method should be called every frame.
 	 * 
-	 * @see {@link #g Graphics object}
-	 * @see {@link #defaultScreenColor}
+	 * @see #g Graphics object
+	 * @see #defaultScreenColor
 	 * 
 	 */
 	public void prepare(){
@@ -544,9 +543,9 @@ public class Screen {
 	 * <p>
 	 * @return coord - offset 
 	 * <p>
-	 * @see {@link #xOffset}
-	 * @see {@link #yOffset}
-	 * @see {@link #ignoreOffset}
+	 * @see #xOffset
+	 * @see #yOffset
+	 * @see #ignoreOffset
 	 */
 	protected int offsetCoordinate(int coord, int offset){
 		return coord - offset;
@@ -593,9 +592,9 @@ public class Screen {
 	 * @param xOffset Horizontal offset of screen (offset on x axis)
 	 * @param yOffset Vertical offset of screen (offset on y axis)
 	 * <p>
-	 * @see {@link #xOffset}
-	 * @see {@link #yOffset}
-	 * @see {@link #ignoreOffset}
+	 * @see #xOffset
+	 * @see #yOffset
+	 * @see #ignoreOffset
 	 */
 	public void setOffset(int xOffset, int yOffset){
 		this.xOffset = xOffset;
@@ -608,9 +607,9 @@ public class Screen {
 	 * 
 	 * @param ignore if true offset of screen is ignored else position of rendered content is recalculated with screen offset
 	 * <p>
-	 * @see {@link #xOffset}
-	 * @see {@link #yOffset}
-	 * @see {@link #setOffset(int,int) setOffset(xOffset, yOffset)}
+	 * @see #xOffset
+	 * @see #yOffset
+	 * @see #setOffset(int,int) setOffset(xOffset, yOffset)
 	 */
 	public void setIngoreOffset(boolean ignore){
 		this.ignoreOffset = ignore;
