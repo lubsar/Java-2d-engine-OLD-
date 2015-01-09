@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 
 //TODO documentation fix window size
 
+@SuppressWarnings("serial")
 public class GameRenderingWindow extends JFrame {
 	
 	protected BufferedImage renderLayer;

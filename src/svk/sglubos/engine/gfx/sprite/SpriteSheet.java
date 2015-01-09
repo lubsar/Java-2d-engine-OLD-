@@ -3,6 +3,8 @@ package svk.sglubos.engine.gfx.sprite;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 
+//TODO Documentation
+
 public class SpriteSheet {
 	private BufferedImage image;
 	private int width;
@@ -35,7 +37,7 @@ public class SpriteSheet {
 	}
 	
 	public Sprite getSprite(int x, int y, int width, int height) {
-		return  new Sprite(width, height, image.getRGB((x * width), (y * height) , width, height,null, 0, this.width));
+		return  new Sprite(width, height, image.getRGB((x * width), (y * height) , width, height,null, 0, width));
 	}
 	
 	public Sprite[] getSprites(){

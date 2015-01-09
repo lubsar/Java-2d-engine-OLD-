@@ -2,9 +2,13 @@ package svk.sglubos.engine.test;
 
 import java.awt.Color;
 
+import svk.sglubos.engine.IO.ImagePort;
+import svk.sglubos.engine.gfx.Animation;
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
+import svk.sglubos.engine.gfx.sprite.SpriteAnimation;
+import svk.sglubos.engine.gfx.sprite.SpriteSheet;
 
 /**
  * Temporary class.
@@ -18,6 +22,8 @@ public class Game implements Runnable{
 	private Sprite test;
 	
 	private Screen mainScreen;
+	private SpriteSheet sheet = new SpriteSheet(ImagePort.loadImage("G:\\Dokumenty\\eclipseWS\\GameEngine\\res\\testSheet.png"));
+	private SpriteAnimation anim;
 //	private Screen debugScreen;
 	
 	private GameWindow mainWindow;
@@ -39,6 +45,10 @@ public class Game implements Runnable{
 		for(int i = 0; i < pixels.length;i++){
 			pixels[i] = 0xFF00FF;
 		}
+		
+		Sprite[] spr = {sheet.getSprite(0, 0, 32, 32), sheet.getSprite(1, 0, 32, 32), sheet.getSprite(2, 0, 32, 32), sheet.getSprite(1, 1, 32, 32)};
+		
+		anim = new SpriteAnimation(10,Animation.DELAY_FORMAT_TICKS,spr);
 		
 		test = new Sprite(50,50,pixels);
 		
@@ -63,6 +73,7 @@ public class Game implements Runnable{
 	@Override
 	public void run() {
 		init();
+		anim.start(false);
 		
 		long lastTime = System.nanoTime();
 		long lastTimeDebugOutput = System.currentTimeMillis();
@@ -106,6 +117,7 @@ public class Game implements Runnable{
 	 * Updates game content.
 	 */
 	public void tick(){
+		anim.tick();
 	}
 	
 	/**
@@ -132,6 +144,8 @@ public class Game implements Runnable{
 		mainScreen.renderString("auto", 400, 10);
 		
 		mainScreen.setColor(Color.CYAN);
+		
+		anim.render(mainScreen, 100, 100);
 		
 //		debugScreen.setColor(Color.white);
 //		debugScreen.renderString(render, 0, 15);
