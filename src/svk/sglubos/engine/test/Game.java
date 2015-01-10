@@ -66,7 +66,7 @@ public class Game implements Runnable{
 //		debugWindow = new GameWindow(640,300,"Debug",Color.BLUE);
 		
 		mainScreen = mainWindow.getScreen();
-		mainScreen.addScreenExpansion(r);
+		mainScreen.addScreenComponent(r);
 //		debugScreen = debugWindow.getScreen();
 	}
 	

@@ -38,10 +38,10 @@ import svk.sglubos.engine.utils.MessageHandler;
  * }	
  * </code>
  * <h1>Rendering expansion </h1>
- *  The <code> Screen</code> also provides ability to use your own rendering by {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent interface}.<br>
- * To make your class implementing {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent interface} able to draw onto the screen you need to add object of that class 
- * to {@link #components ArrayList of ScreenComponents} by using {@link #addScreenExpansion(ScreenComponent)} method. <br>
- * Removing of {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent object} provides method {@link #removeScreenExpansion(ScreenComponent)}. <br>   
+ * The <code> Screen</code> also provides ability to use your own rendering by {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent abstract class}.<br>
+ * The <code> ScreenComponent </code> class provides ability to access {@link #g screen graphics object} but also {@link #pixels screen pixels array}. <br>
+ * To make your screen component communicate with screen, add object of your component to the {@link #components ArrayList of ScreenComponents} by using {@link #addScreenComponent(ScreenComponent)} method.<br>
+ * To remove your screen component use method {@link #removeScreenComponent(ScreenComponent)}.<br>   
  * <p>
  * @see java.awt.Graphics
  * @see svk.sglubos.engine.gfx.sprite.Sprite
@@ -49,7 +49,7 @@ import svk.sglubos.engine.utils.MessageHandler;
  * 
  * @see #prepare()
  * @see #disposeGraphics()
- * @see #addScreenExpansion(ScreenComponent)
+ * @see #addScreenComponent(ScreenComponent)
  */
 public class Screen {
 	
@@ -125,12 +125,12 @@ public class Screen {
 	
 	/**
 	 * {@link java.util.List} object which stores all {@link svk.sglubos.engine.gfx.ScreenComponent} objects which have ability to use {@link #g graphics object} and change {@link #pixels Screen pixels} on their own. <br>
-	 * Objects can be added by {@link #addScreenExpansion(ScreenComponent)} method and removed by {@link #removeScreenExpansion(ScreenComponent)} method. <br>
-	 * If component is added component gains ability to use {@link #g Graphics object} and change {@link #pixels}. If that component is removed by {@link #removeScreenExpansion(ScreenComponent)} method, it looses this abilities. 
+	 * Objects can be added by {@link #addScreenComponent(ScreenComponent)} method and removed by {@link #removeScreenComponent(ScreenComponent)} method. <br>
+	 * If component is added component gains ability to use {@link #g Graphics object} and change {@link #pixels}. If that component is removed by {@link #removeScreenComponent(ScreenComponent)} method, it looses this abilities. 
 	 *  
 	 *  @see svk.sglubos.engine.gfx.ScreenComponent
-	 *  @see #addScreenExpansion(ScreenComponent)
-	 *  @see #removeScreenExpansion(ScreenComponent)
+	 *  @see #addScreenComponent(ScreenComponent)
+	 *  @see #removeScreenComponent(ScreenComponent)
 	 */
 	protected List<ScreenComponent> components = new ArrayList<ScreenComponent>();
 	
@@ -556,28 +556,28 @@ public class Screen {
 	}
 	
 	/**
-	 * Adds specified object which implements {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} to <code>ArrayList</code> {@link #components} 
-	 * and prepares it to use by calling it`s {@link svk.sglubos.engine.gfx.ScreenComponent#bind(Graphics, int[]) bind(g, pixels)} method with arguments: {@link #g screen graphics object} and {@link #pixels screen pixels}<br>
-	 * The <code>ScreenComponent</code> object can be removed by {@link #removeScreenExpansion(ScreenComponent)} method.
+	 * Adds specified object which extends {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} to <code>ArrayList</code> {@link #components} 
+	 * and prepares it to use by calling it`s {@link svk.sglubos.engine.gfx.ScreenComponent#bind(Graphics, int[]) bind(g, pixels)} method with arguments: {@link #g screen graphics object} and {@link #pixels screen pixels}.<br>
+	 * The <code>ScreenComponent</code> object can be removed by {@link #removeScreenComponent(ScreenComponent)} method.
 	 * 
 	 * @param component component which will be added to list and prepared to be used <br><br>
 	 * 
 	 * @see svk.sglubos.engine.gfx.ScreenComponent
 	 */
-	public void addScreenExpansion(ScreenComponent component) {
+	public void addScreenComponent(ScreenComponent component) {
 		components.add(component);
 		component.bind(g, pixels);
 	}
 	
 	/**
-	 * Removes specified object which implements {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} from <code>ArrayList</code> {@link #components} 
+	 * Removes specified object which extends {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} from <code>ArrayList</code> {@link #components} 
 	 * and removes its functionality by calling it`s {@link svk.sglubos.engine.gfx.ScreenComponent#unbind() unbind()} method.<br>
 	 * 
 	 * @param component component which will be removed from list and his ability to draw on screen will be removed<br><br>
 	 * 
 	 * @see svk.sglubos.engine.gfx.ScreenComponent
 	 */
-	public void removeScreenExpansion(ScreenComponent component) {
+	public void removeScreenComponent(ScreenComponent component) {
 		components.remove(component);
 		component.unbind();
 	}
