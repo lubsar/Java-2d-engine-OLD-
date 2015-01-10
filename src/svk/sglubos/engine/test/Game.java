@@ -138,7 +138,7 @@ public class Game implements Runnable{
 		mainScreen.renderFilledArc(50, 0, 50, 50, 90, 180);
 		
 		mainScreen.renderOval(100, 0, 50, 50);
-		mainScreen.renderFiledOval(150, 0, 50, 50);
+		mainScreen.renderFilledOval(150, 0, 50, 50);
 		
 		mainScreen.renderRectangle(200, 0, 50, 50);
 		mainScreen.renderFilledRectangle(250, 0, 50, 50);

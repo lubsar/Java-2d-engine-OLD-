@@ -36,8 +36,8 @@ public class MessageHandler {
 	 * Uses {@link #printMessage(String, String, String) printMessage("ENGINE", tag, message)} method.
 	 *  
 	 * @param tag message tag
-	 * @param message message text
-	 * <p>
+	 * @param message message text<br><br>
+	 * 
 	 * @see #printMessage(String, String, String)
 	 */
 	public static void printMessage(String tag, String message){
@@ -49,12 +49,12 @@ public class MessageHandler {
 	 * Uses {@link System#out}'s println(String) method and if you use {@link #ERROR} tag, message is printed by: {@link System#err}`s println(String)} method.<br>
 	 * 
 	 * <h1> Message structure:</h1>
-	 * prefix: [tag] message
-	 * <p>
+	 * prefix: [tag] message<br><br>
+	 * 
 	 * @param prefix message prefix
 	 * @param tag message tag
-	 * @param message message text
-	 * <p>
+	 * @param message message text<br><br>
+	 * 
 	 * @see #printMessage(String, String, String)
 	 */
 	public static void printMessage(String prefix, String tag, String message){

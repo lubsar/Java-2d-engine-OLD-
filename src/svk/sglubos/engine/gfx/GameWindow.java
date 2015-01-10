@@ -5,9 +5,10 @@ import java.awt.Color;
 import javax.swing.JFrame;
 
 /**
- * <code>GameWindow</code> inherits from {@link javax.swing.JFrame JFrame} class. <br>
  * <code>GameWindow</code> class provides easy way to create {@link javax.swing.JFrame JFrame} which contains {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas}.<br>
- * {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas} provides ability to display content rendered by {@link svk.sglubos.engine.gfx.Screen Screen}.{@link svk.sglubos.engine.gfx.Screen Screen} is also created in this class. <br>
+ * <code>GameWindow</code> inherits from {@link javax.swing.JFrame JFrame} class. <br>
+ * {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas} provides ability to display content rendered by {@link svk.sglubos.engine.gfx.Screen Screen}.<br>
+ * {@link svk.sglubos.engine.gfx.Screen Screen} object which can will be displayed is also created in this class. <br>
  * The {@link svk.sglubos.engine.gfx.Screen Screen object} is returned by {@link #getScreen()} method.
  * <p>
  * <code>GameWindow</code> does not handle {@link svk.sglubos.engine.gfx.Screen#prepare() screen prepare method} so you have to do it manually.
@@ -26,7 +27,7 @@ import javax.swing.JFrame;
  * 	...<br>
  * 	<br>
  *	//dispose screen Graphics<br>
- *  screenFromGameWindow.disposesGraphics();<br>
+ *  screenFromGameWindow.disposeGraphics();<br>
  *  <br>
  *  //display content rendered on screenFromGameWindow in GameWindow<br>
  *  myGameWindow.showRenderedContent();<br>
@@ -65,7 +66,7 @@ public class GameWindow extends JFrame {
 	protected RenderCanvas canvas;
 	
 	/**
-	 * Constructs new {@link GameWindow} object with specified width and height of screen, title and with canvas scale: 1.0 and default screen color: Color.black. <br>
+	 * Constructs new {@link GameWindow} object with specified width and height of screen, title, with canvas scale: 1.0 and with default screen color Color.black. <br>
 	 * Uses {@link #GameWindow(int, int, String, double, Color) this(width, height, title, 1.0, Color.black)} constructor.
 	 * 
 	 * @param screenWidth width of Screen
@@ -79,7 +80,7 @@ public class GameWindow extends JFrame {
 	}
 	
 	/**
-	 * Constructs new {@link GameWindow} object with specified width and height of screen, title and scale and width default screen color: Color.black. <br>
+	 * Constructs new {@link GameWindow} object with specified width and height of screen, title and scale and with default screen color Color.black. <br>
 	 * Uses {@link #GameWindow(int, int, String, double, Color) this(width, height, title, canvasScale, Color.black)} constructor.
 	 * 
 	 * @param screenWidth width of Screen
@@ -94,7 +95,7 @@ public class GameWindow extends JFrame {
 	}
 	
 	/**
-	 * Constructs new {@link GameWindow} object with specified width and height of screen, title and color and canvas scale: 1.0. <br>
+	 * Constructs new {@link GameWindow} object with specified width and height of screen, title and color and with canvas scale 1.0. <br>
 	 * Uses {@link #GameWindow(int, int, String, double, Color) this(width, height, title, 1.0, defaultScreenColor)} constructor.
 	 * 
 	 * @param screenWidth width of Screen
@@ -108,28 +109,28 @@ public class GameWindow extends JFrame {
 		this(screenWidth, screenHeight, title, 1.0, defaultScreenColor);
 	}
 	/**
-	 * Constructs new {@link GameWindow} object with specified width and height of screen, title, canvas scale and default screen color. <br>
+	 * Constructs new {@link GameWindow} object with specified width and height of screen, title, canvas scale and with specified default screen color. <br>
 	 *	
-	 * <h1>Initializes</h1>
-	 * {@link javax.swing.JFrame#JFrame(String) JFrame constructor} with parameter title, which sets window title to that text<br>
-	 * Sets {@link javax.swing.JFrame#setDefaultCloseOperation(int) JFrame default close operation} with argument {@link javax.swing.JFrame#EXIT_ON_CLOSE}, which shuts down entire application. <br>
-	 * Sets {@link javax.swing.JFrame#setResizable(boolean) JFrame resizability } with argument <code>false</code>, window is not resizable. <br>
+	 * <h1>Initializes: </h1>
+	 * {@link javax.swing.JFrame#JFrame(String) JFrame constructor} with parameter title, which sets window title to title passed by this constructor<br>
+	 * Sets {@link javax.swing.JFrame#setDefaultCloseOperation(int) JFrame default close operation} to {@link javax.swing.JFrame#EXIT_ON_CLOSE}, which shuts down entire application. <br>
+	 * Makes JFrame not resizable.<br>
 	 *	
 	 * <h2>WARNING:</h2>
 	 * Canvas is flickering while manually resizing JFrame ! <br>
 	 * <p>
-	 * {@link #screen Screen object} with parameters: <code>screenWidth</code>,<code> screenHeight </code>and <code>defaultScrenColor</code>, creates screen of specified size and with specified defaul color.<br>
+	 * {@link #screen Screen object} with parameters: <code>screenWidth</code>,<code> screenHeight </code>and <code>defaultScreenColor</code>, creates screen of specified size and with specified default color.<br>
 	 * {@link #canvas RenderCanvas object} with parameters: <code>screen</code>, <code>canvasScale</code>, creates canvas with dimensions of screen times scale.<br>
-	 * Calls {@link javax.swing.JFrame#add(java.awt.Component)}JFrame add method with argument <code>canvas</code>. adds canvas onto the window. <br>
-	 * Calls {@link javax.swing.JFrame#pack()} method,in this case sets size of window depended on size of canvas. <br>
-	 * Sets {@link javax.swing.JFrame#setVisible(boolean)} with argument <code>true</code> sets window to visible state. <br>
-	 * Sets {@link javax.swing.JFrame#setLocationRelativeTo(java.awt.Component)} with argument <code>null</code>, centers position of screen. <br>
-	 * Calls {@link svk.sglubos.engine.gfx.RenderCanvas#init(int)} with argument <code>2</code>, initializes {@link java.awt.image.BufferStategy} with 2 buffers.<br>
+	 * Adds canvas onto the window. <br>
+	 * Packs the JFrame, which in this case sets size of window depended on size of canvas.
+	 * Sets JFame to visible state. <br>
+	 * Sets JFrame location relative to <code>null </code>, which centers JFrame.<br>
+	 * Calls {@link svk.sglubos.engine.gfx.RenderCanvas#init(int)} with argument <code>2</code>, which initializes {@link svk.sglubos.engine.gfx.RenderCanvas#bs render canvas BufferStrategy} with 2 buffers.<br>
 	 * <p>
 	 * @param screenWidth width of screen
 	 * @param screenHeight height of screen
 	 * @param title title of JFrame
-	 * @param canvasScale scale of renderCanvas
+	 * @param canvasScale scale of canvas which displays screen
 	 * @param defaultScreenColor defaultScreenColor of screen
 	 *
 	 *@see svk.sglubos.engine.gfx.Screen
@@ -154,7 +155,7 @@ public class GameWindow extends JFrame {
 	}
 	
 	/**
-	 * @return {@link #screen screen object} which can render content
+	 * @return {@link #screen screen object} which can render content displayed in this window
 	 *
 	 * @see svk.sglubos.engine.gfx.Screen
 	 */

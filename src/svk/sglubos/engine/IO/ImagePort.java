@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 import svk.sglubos.engine.utils.MessageHandler;
 
 /**
- * Provides ability to load and export {@link java.image.BufferedImage BufferedImage}. <br>
+ * Provides ability to load and export {@link java.awt.image.BufferedImage BufferedImage}. <br>
  * The image can be obtained from specified resource path or path of file. <br>
  * To load images are used methods from {@link javax.imageio.ImageIO}
  * 
@@ -27,7 +27,7 @@ public class ImagePort {
 	 * @param path path of resource which will be read
 	 * <p>
 	 * @return BufferedImage decoded from specified resource
-	 * <p>
+	 * 
 	 * @see javax.imageio.ImageIO#read(java.net.URL)
 	 */
 	public static BufferedImage getImageAsResource(String path) {
@@ -43,14 +43,14 @@ public class ImagePort {
 	
 	/**
 	 * Returns {@link java.awt.image.BufferedImage} as a product of decoding File at specified path. <br>
-	 * Uses {@link javax.imageio.ImageIO#read(java.io.File) ImageIO.read(File)} with parameter {@link java.io.File file} instance created with specified path,  </code> <br>
+	 * Uses {@link javax.imageio.ImageIO#read(java.io.File) ImageIO.read(File)} with parameter {@link java.io.File file} instance created with specified path,<br>
 	 * Catches {java.io.IOException IOException}.<br>
 	 * If caught, error message is printed through {@link svk.sglubos.engine.utils.MessageHandler message handler} and stack trace is printed. <br>
 	 * <p>
 	 * @param path path of file which will be read
 	 * <p>
 	 * @return BufferedImage decoded from specified file
-	 * <p>
+	 * 
 	 * @see javax.imageio.ImageIO#read(java.io.File)
 	 */
 	public static BufferedImage loadImage(String path) {

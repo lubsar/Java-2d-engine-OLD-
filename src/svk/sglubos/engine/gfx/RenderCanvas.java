@@ -9,9 +9,9 @@ import java.awt.image.BufferedImage;
 import svk.sglubos.engine.utils.MessageHandler;
 
 /**
- * Render Canvas inherits from {@link java.awt.Canvas Canvas} class. <br>
  * RenderCanvas provides easy way to display rendered game content
- * from {@link svk.sglubos.engine.gfx.Screen Screen} object passed in {@link #RenderCanvas(Screen, double) constructor}. 
+ * from {@link svk.sglubos.engine.gfx.Screen Screen} object passed in {@link #RenderCanvas(Screen, double) constructor}. <br>
+ * Render Canvas inherits from {@link java.awt.Canvas Canvas} class.
  *<p>
  * If you want to start displaying game content, you need to create {@link java.awt.image.BufferStrategy BufferStrategy} object. <br>
  * To initialize {@link java.awt.image.BufferStrategy BufferStrategy} object call method {@link #init(int) init(numBuffers)}<br>
@@ -52,7 +52,7 @@ public class RenderCanvas extends Canvas {
 	
 	/**
 	 * Constructs new {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas}.<br>
-	 * <h1>initializes</h1>
+	 * <h1>Initializes: </h1>
 	 * <p>
 	 * {@link java.awt.image.BufferedImage BufferedImage} {@link #renderLayer} is initialized by {@link svk.sglubos.engine.gfx.Screen Screen} <code>getRenderLayer()</code> method. <br>  
 	 * Preferred size of canvas set to width: screen.getWidth()*scale and height: screen.getHeight()*scale. <br>
@@ -73,7 +73,7 @@ public class RenderCanvas extends Canvas {
 	}
 	
 	/**
-	 * Initializes buffer strategy with specified number of buffers. <br>
+	 * Initializes {@link #bs BufferStrategy object} with specified number of buffers. <br>
 	 * This method must be called before started rendering content, but the RenderCanvas must be visible !
 	 * <p>
 	 * @param numBuffers number of buffers
@@ -92,11 +92,11 @@ public class RenderCanvas extends Canvas {
 	}
 	
 	/**
-	 * Shows content rendered by {@link svk.sglubos.engine.gfx.Screen Screen} passed in {@link #RenderCanvas(Screen, double) constructor}.<br>
+	 * Shows content rendered by {@link svk.sglubos.engine.gfx.Screen Screen} object passed in {@link #RenderCanvas(Screen, double) constructor}.<br>
 	 * {@link java.awt.image.BufferStrategy BufferStrategy BufferStrategy} {@link #bs} have to be initialized ! If not, error message is printed and return is called. <br>
 	 * 
-	 * Rendered content is displayer by filling entire canvas with {@link #renderLayer}.
-	 * Handles showing of {@link java.awt.image.BufferStrategy BufferStrategy};
+	 * Rendered content is displayed by filling entire canvas with {@link #renderLayer}.
+	 * Handles showing of {@link java.awt.image.BufferStrategy BufferStrategy}.
 	 * 
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see java.awt.image.BufferStrategy
