@@ -3,6 +3,8 @@ package svk.sglubos.engine.gfx.sprite;
 import svk.sglubos.engine.gfx.Animation;
 import svk.sglubos.engine.gfx.Screen;
 
+//TODO Documentaton
+
 public class SpriteAnimation extends Animation {
 	protected Sprite[] sprites;
 	

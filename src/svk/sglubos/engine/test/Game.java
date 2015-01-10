@@ -21,6 +21,8 @@ public class Game implements Runnable{
 	
 	private Sprite test;
 	
+	private ScreenComponentTest r = new ScreenComponentTest();
+	
 	private Screen mainScreen;
 	private SpriteSheet sheet = new SpriteSheet(ImagePort.loadImage("G:\\Dokumenty\\eclipseWS\\GameEngine\\res\\testSheet.png"));
 	private SpriteAnimation anim;
@@ -46,6 +48,8 @@ public class Game implements Runnable{
 			pixels[i] = 0xFF00FF;
 		}
 		
+		
+		
 		Sprite[] spr = {sheet.getSprite(0, 0, 32, 32), sheet.getSprite(1, 0, 32, 32), sheet.getSprite(2, 0, 32, 32), sheet.getSprite(1, 1, 32, 32)};
 		
 		anim = new SpriteAnimation(10,Animation.DELAY_FORMAT_TICKS,spr);
@@ -62,6 +66,7 @@ public class Game implements Runnable{
 //		debugWindow = new GameWindow(640,300,"Debug",Color.BLUE);
 		
 		mainScreen = mainWindow.getScreen();
+		mainScreen.addScreenExpansion(r);
 //		debugScreen = debugWindow.getScreen();
 	}
 	
@@ -78,7 +83,7 @@ public class Game implements Runnable{
 		long lastTime = System.nanoTime();
 		long lastTimeDebugOutput = System.currentTimeMillis();
 		double delta = 0;
-		double nanoSecPerTick = Math.pow(10, 9)/60;
+		double nanoSecPerTick = Math.pow(10, 9)/500;
 		int fps = 0;
 		int ticks = 0;
 		
@@ -144,6 +149,8 @@ public class Game implements Runnable{
 		mainScreen.renderString("auto", 400, 10);
 		
 		mainScreen.setColor(Color.CYAN);
+		
+		r.shadeItAll();
 		
 		anim.render(mainScreen, 100, 100);
 		
