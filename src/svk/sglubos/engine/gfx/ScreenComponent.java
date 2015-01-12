@@ -3,19 +3,23 @@ package svk.sglubos.engine.gfx;
 import java.awt.Graphics;
 
 public abstract class ScreenComponent {
-	protected boolean bind;
 	protected Graphics g;
+	protected Screen screen;
 	protected int[] pixels;
 	
-	public void bind(Graphics g, int[] pixels) {
-		this.bind = true;
+	protected boolean bound;
+	
+	public void bind(Screen screen, Graphics g, int[] pixels) {
+		this.bound = true;
 		this.g = g;
 		this.pixels = pixels;
+		this.screen = screen;
 	}
 	
 	public void unbind() {
-		this.bind = false;
-		this.g = null;
-		this.pixels = null;
+		bound = false;
+		g = null;
+		pixels = null;
+		screen = null;
 	}
 }

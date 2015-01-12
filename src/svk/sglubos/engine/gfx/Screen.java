@@ -39,7 +39,7 @@ import svk.sglubos.engine.utils.MessageHandler;
  * </code>
  * <h1>Rendering expansion </h1>
  * The <code> Screen</code> also provides ability to use your own rendering by {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent abstract class}.<br>
- * The <code> ScreenComponent </code> class provides ability to access {@link #g screen graphics object} but also {@link #pixels screen pixels array}. <br>
+ * The <code> ScreenComponent </code> class provides ability to access {@link #g screen graphics object} but also {@link #pixels screen pixels array}, and also to <code> screen class instance to which is added. <br>
  * To make your screen component communicate with screen, add object of your component to the {@link #components ArrayList of ScreenComponents} by using {@link #addScreenComponent(ScreenComponent)} method.<br>
  * To remove your screen component use method {@link #removeScreenComponent(ScreenComponent)}.<br>   
  * <p>
@@ -557,7 +557,7 @@ public class Screen {
 	
 	/**
 	 * Adds specified object which extends {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} to <code>ArrayList</code> {@link #components} 
-	 * and prepares it to use by calling it`s {@link svk.sglubos.engine.gfx.ScreenComponent#bind(Graphics, int[]) bind(g, pixels)} method with arguments: {@link #g screen graphics object} and {@link #pixels screen pixels}.<br>
+	 * and prepares it to use by calling it`s {@link svk.sglubos.engine.gfx.ScreenComponent#bind(Graphics, int[]) bind(g, pixels)} method with arguments:{@link Screen this}, {@link #g screen graphics object} and {@link #pixels screen pixels}.<br>
 	 * The <code>ScreenComponent</code> object can be removed by {@link #removeScreenComponent(ScreenComponent)} method.
 	 * 
 	 * @param component component which will be added to list and prepared to be used <br><br>
@@ -566,7 +566,7 @@ public class Screen {
 	 */
 	public void addScreenComponent(ScreenComponent component) {
 		components.add(component);
-		component.bind(g, pixels);
+		component.bind(this, g, pixels);
 	}
 	
 	/**

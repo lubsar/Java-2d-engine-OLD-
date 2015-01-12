@@ -3,7 +3,7 @@ package svk.sglubos.engine.gfx;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.utils.MessageHandler;
 
-//TODO Documentation
+//TODO Documentation create separate timer class
 
 public abstract class Animation {
 	public static final byte DELAY_FORMAT_MILISECS = 0x0;

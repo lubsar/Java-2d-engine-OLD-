@@ -83,7 +83,7 @@ public class Game implements Runnable{
 		long lastTime = System.nanoTime();
 		long lastTimeDebugOutput = System.currentTimeMillis();
 		double delta = 0;
-		double nanoSecPerTick = Math.pow(10, 9)/500;
+		double nanoSecPerTick = Math.pow(10, 9)/60;
 		int fps = 0;
 		int ticks = 0;
 		
@@ -128,6 +128,8 @@ public class Game implements Runnable{
 	/**
 	 * Renders game content. 
 	 */
+	int i = 0;
+	
 	public void render(){
 		mainScreen.prepare();
 //		debugScreen.prepare();
@@ -150,7 +152,7 @@ public class Game implements Runnable{
 		
 		mainScreen.setColor(Color.CYAN);
 		
-		r.shadeItAll();
+		r.shadeItAll(++i);
 		
 		anim.render(mainScreen, 100, 100);
 		
