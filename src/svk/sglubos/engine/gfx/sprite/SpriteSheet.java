@@ -152,20 +152,31 @@ public class SpriteSheet {
 		return sprites;
 	}
 	
-	//TODO documentation
 	/**
-	 * @param width
-	 * @param height
+	 * Initializes array of {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} objects {@link #sprites}.<br>
+	 * These sprite objects contains pixels obtained from {@link #image sprite sheet image file}.
+	 * Each {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} has size specified by arguments of this method.<br>
+	 * <p>
+	 * Maximum number of sprites with specified size is created, first sprite (sprite at index 0) has all pixels from 0, 0 to spriteWidth-1, spriteHeight-1.
+	 * Sprites are stored in array from left to right and from top to bottom. (sprite at index 0 is first sprite in top line and sprite at index sprites.length-1 is the last sprite in bottom line).
+	 * <p>
+	 * The created sprites are returned by {@link #getSprites()} method.
+	 * 
+	 * @param spriteWidth width of sprites which will be created
+	 * @param spriteHeight height of sprites which will be created
+	 * 
+	 * @see #sprites
+	 * @see #getSprites()
 	 */
-	public void createSprites(int width,int height) {
-		int horizontalSprites = this.width / width;
-		int verticalSprites = this.height / height;
+	public void createSprites(int spriteWidth, int spriteHeight) {
+		int horizontalSprites = this.width / spriteWidth;
+		int verticalSprites = this.height / spriteHeight;
 		
-		Sprite[] sprites = new Sprite[this.width / width * this.height / height];
+		Sprite[] sprites = new Sprite[this.width / spriteWidth * this.height / spriteHeight];
 		
 		for(int y = 0; y < verticalSprites; y++) {
 			for(int x = 0; x < horizontalSprites; x++) {
-				sprites[x + y * horizontalSprites] = new Sprite(width, height, image.getRGB((x * width), (y * height) , width, height,null, 0, this.width));
+				sprites[x + y * horizontalSprites] = new Sprite(spriteWidth, spriteHeight, image.getRGB((x * spriteWidth), (y * spriteHeight), spriteWidth, spriteHeight, null, 0, this.width));
 			}
 		}
 		this.sprites = sprites;

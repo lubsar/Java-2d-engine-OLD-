@@ -9,6 +9,7 @@ import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
 import svk.sglubos.engine.gfx.sprite.SpriteAnimation;
 import svk.sglubos.engine.gfx.sprite.SpriteSheet;
+import svk.sglubos.engine.utils.Timer;
 
 /**
  * Temporary class.
@@ -52,7 +53,7 @@ public class Game implements Runnable{
 		
 		Sprite[] spr = {sheet.getSprite(0, 0, 32, 32), sheet.getSprite(1, 0, 32, 32), sheet.getSprite(2, 0, 32, 32), sheet.getSprite(1, 1, 32, 32)};
 		
-		anim = new SpriteAnimation(10,Animation.DELAY_FORMAT_TICKS,spr);
+		anim = new SpriteAnimation(100,Timer.DELAY_FORMAT_MILISECS,spr);
 		
 		test = new Sprite(50,50,pixels);
 		
@@ -109,6 +110,7 @@ public class Game implements Runnable{
 				
 			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
 				render = "[DEBUG] ticks: " + ticks + "fps: " + fps;
+				anim.start(false);
 				System.out.println(render);
 				lastTimeDebugOutput += 1000;
 				fps = 0;
