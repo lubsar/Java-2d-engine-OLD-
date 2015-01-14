@@ -17,19 +17,13 @@ public abstract class Animation {
 	protected int currentFrame;
 	
 	protected Timer timer;
+	protected TimerTask t = () -> updateFrame();
 	
 	public Animation(long frameDelay, byte timeFormat, int frames) {
 		this.frameDelay = frameDelay;
 		this.timeFormat = timeFormat;
 		this.frames = frames;
-		timer = new Timer(new TimerTask(){
-
-			@Override
-			public void timeSwitch() {
-				updateFrame();
-			}
-			
-		}, timeFormat, frameDelay);
+		timer = new Timer(t, timeFormat, frameDelay);
 	}
 
 	public void startReverse(boolean loop){
