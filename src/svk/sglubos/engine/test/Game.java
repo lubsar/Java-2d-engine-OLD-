@@ -3,7 +3,6 @@ package svk.sglubos.engine.test;
 import java.awt.Color;
 
 import svk.sglubos.engine.IO.ImagePort;
-import svk.sglubos.engine.gfx.Animation;
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
@@ -33,7 +32,7 @@ public class Game implements Runnable{
 //	private GameWindow debugWindow;
 	
 //	private GameRenderingWindow mainWindow;
-//	private GameRenderingWindow debugWindow;
+//	private GameFullScreenWindow debugWindow;
 	
 	//Constructor
 	public Game(){
@@ -61,7 +60,7 @@ public class Game implements Runnable{
 //		debugScreen = new Screen(640,300,Color.BLUE);
 		
 //		mainWindow = new GameRenderingWindow("Game",mainScreen.getRenderLayer(),1000,1000);
-//		debugWindow = new GameRenderingWindow("Debug",debugScreen.getRenderLayer(),640,300);
+//		debugWindow = new GameFullScreenWindow("Debug",debugScreen.getRenderLayer(),640,300);
 		
 		mainWindow = new GameWindow(500,500,"Game",2.0);
 //		debugWindow = new GameWindow(640,300,"Debug",Color.BLUE);
@@ -130,7 +129,6 @@ public class Game implements Runnable{
 	/**
 	 * Renders game content. 
 	 */
-	int i = 0;
 	
 	public void render(){
 		mainScreen.prepare();
@@ -153,13 +151,13 @@ public class Game implements Runnable{
 		mainScreen.renderString("auto", 400, 10);
 		
 		mainScreen.setColor(Color.CYAN);
-		
-		r.shadeItAll(++i);
-		
 		anim.render(mainScreen, 100, 100);
 		
+//		r.shadeItAll();
+		
+		
 //		debugScreen.setColor(Color.white);
-//		debugScreen.renderString(render, 0, 15);
+//		debugScreen.renderString(render, 0, 90);
 		
 		mainScreen.disposeGraphics();
 //		debugScreen.disposeGraphics();

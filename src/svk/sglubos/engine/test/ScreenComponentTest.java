@@ -12,28 +12,28 @@ public class ScreenComponentTest extends ScreenComponent {
 	private BufferedImage shadowMap = new BufferedImage(500,500,BufferedImage.TYPE_INT_ARGB);
 	int shadowPixels[] = ((DataBufferInt)shadowMap.getRaster().getDataBuffer()).getData();
 	private BufferedImage map = ImagePort.loadImage("G:\\Dokumenty\\eclipseWS\\GameEngine\\res\\shadow.png");
-	private BufferedImage mp = new BufferedImage(10,10,BufferedImage.TYPE_INT_ARGB);
+	private BufferedImage mp = new BufferedImage(100,100,BufferedImage.TYPE_INT_ARGB);
 	private int light = map.getRGB(0,0);;
 	public void bind(Screen screen,Graphics g, int[] pixels) {
 		super.bind(screen, g, pixels);
 		shadowMap.setRGB(0, 0, 500, 500, map.getRGB(0, 0, 500, 500, null, 0, 500), 0, 500);
-		for(int i = 0; i < 100; i++) {
-			mp.setRGB(i%10, i/10, light);
+		for(int i = 0; i < 10000; i++) {
+			mp.setRGB(i%100, i/100, light);
 		}
 	}
 	
-	public void shadeItAll(int transp) {
+	public void shadeItAll() {
 		if(!bound) {
 			return;
 		}
-		for(int y = 0; y < 500; y+= 10){
-			for(int x = 0; x < 500; x+= 10){
-				g.drawImage(mp, x, y,null);				
-			}
-		}
-//		for(int i =0; i <pixels.length; i++){
-//			pixels[i] = mixColorsWithAlpha(pixels[i], light,23);		
+//		for(int y = 0; y < 5; y++){
+//			for(int x = 0; x < 5; x++){
+//				g.drawImage(mp, x*100, y*100,null);				
+//			}
 //		}
+		for(int i =0; i <pixels.length; i++){
+			pixels[i] = mixColorsWithAlpha(pixels[i], light,23);		
+		}
 	}
 	
 	public int mixColorsWithAlpha(int color1, int color2, int alpha)

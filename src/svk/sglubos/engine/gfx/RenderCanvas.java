@@ -106,9 +106,16 @@ public class RenderCanvas extends Canvas {
 			MessageHandler.printMessage("RENDER_CANVAS", MessageHandler.ERROR, "BufferStrategy is not initialized !");
 			return;
 		}
-		Graphics g = bs.getDrawGraphics();
-		g.drawImage(renderLayer, 0, 0,getWidth(),getHeight(), null);
-		g.dispose();
-		bs.show();
+		Graphics g = null;
+		
+		do {
+		    try{
+		    	g = bs.getDrawGraphics();
+		    	g.drawImage(renderLayer, 0, 0,getWidth(),getHeight(), null);
+		    } finally {
+		    	g.dispose();
+		    }
+		    bs.show();
+		} while (bs.contentsLost());
 	}
 }
