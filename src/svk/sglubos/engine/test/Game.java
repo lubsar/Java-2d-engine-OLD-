@@ -1,14 +1,17 @@
 package svk.sglubos.engine.test;
 
 import java.awt.Color;
+import java.awt.GraphicsEnvironment;
 
 import svk.sglubos.engine.IO.ImagePort;
+import svk.sglubos.engine.gfx.Animation;
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
 import svk.sglubos.engine.gfx.sprite.SpriteAnimation;
 import svk.sglubos.engine.gfx.sprite.SpriteSheet;
 import svk.sglubos.engine.utils.Timer;
+import svk.sglubos.engine.utils.TimerTask;
 
 /**
  * Temporary class.
@@ -24,14 +27,13 @@ public class Game implements Runnable{
 	private ScreenComponentTest r = new ScreenComponentTest();
 	
 	private Screen mainScreen;
-	private SpriteSheet sheet = new SpriteSheet(ImagePort.loadImage("G:\\Dokumenty\\eclipseWS\\GameEngine\\res\\testSheet.png"));
+	private SpriteSheet sheet = new SpriteSheet(ImagePort.loadImage("G:\\Dokumenty\\eclipseWS\\GameEngine\\res\\testSheet.png"),32,32);
 	private SpriteAnimation anim;
 //	private Screen debugScreen;
 	
 	private GameWindow mainWindow;
 //	private GameWindow debugWindow;
 	
-//	private GameRenderingWindow mainWindow;
 //	private GameFullScreenWindow debugWindow;
 	
 	//Constructor
@@ -48,22 +50,21 @@ public class Game implements Runnable{
 			pixels[i] = 0xFF00FF;
 		}
 		
-		
-		
 		Sprite[] spr = {sheet.getSprite(0, 0, 32, 32), sheet.getSprite(1, 0, 32, 32), sheet.getSprite(2, 0, 32, 32), sheet.getSprite(1, 1, 32, 32)};
 		
-		anim = new SpriteAnimation(100,Timer.DELAY_FORMAT_MILISECS,spr);
+		anim = new SpriteAnimation(sheet, 300, 0, 2, Timer.DELAY_FORMAT_MILISECS);
 		
 		test = new Sprite(50,50,pixels);
 		
-//		mainScreen = new Screen(500,500,Color.black);
+//		mainScreen = new Screen(1920, 1080,Color.black);
 //		debugScreen = new Screen(640,300,Color.BLUE);
 		
 //		mainWindow = new GameRenderingWindow("Game",mainScreen.getRenderLayer(),1000,1000);
 //		debugWindow = new GameFullScreenWindow("Debug",debugScreen.getRenderLayer(),640,300);
 		
-		mainWindow = new GameWindow(500,500,"Game",2.0);
+//		mainWindow = new GameFullScreenWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(),mainScreen.getRenderLayer(),500,500);
 //		debugWindow = new GameWindow(640,300,"Debug",Color.BLUE);
+		mainWindow = new GameWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0],500, 500,"game",2,Color.BLACK);
 		
 		mainScreen = mainWindow.getScreen();
 		mainScreen.addScreenComponent(r);
@@ -74,16 +75,26 @@ public class Game implements Runnable{
 		new Thread(this,"game").start();
 	}
 	
+	Timer t = new Timer(new TimerTask(){
+		
+		@Override
+		public void timeSwitch() {
+			mainWindow.setFullScreenMode(true);
+		}
+		
+	}, Timer.DELAY_FORMAT_MILISECS, 500);
+	
 	//Game loop
 	@Override
 	public void run() {
+		t.start();
 		init();
-		anim.start(false);
+		anim.startReverse(true);
 		
 		long lastTime = System.nanoTime();
 		long lastTimeDebugOutput = System.currentTimeMillis();
 		double delta = 0;
-		double nanoSecPerTick = Math.pow(10, 9)/60;
+		double nanoSecPerTick = Math.pow(10, 9) / 120;
 		int fps = 0;
 		int ticks = 0;
 		
@@ -97,6 +108,9 @@ public class Game implements Runnable{
 				tick();
 				ticks++;
 			}
+		
+			render();
+			fps++;
 			
 			try {
 				Thread.sleep(7);
@@ -104,12 +118,10 @@ public class Game implements Runnable{
 				e.printStackTrace();
 			}
 			
-			fps++;
-			render();
 				
 			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
 				render = "[DEBUG] ticks: " + ticks + "fps: " + fps;
-				anim.start(false);
+//				anim.start(false);
 				System.out.println(render);
 				lastTimeDebugOutput += 1000;
 				fps = 0;
@@ -122,8 +134,10 @@ public class Game implements Runnable{
 	/**
 	 * Updates game content.
 	 */
+	
 	public void tick(){
 		anim.tick();
+		t.update();
 	}
 	
 	/**
@@ -153,8 +167,7 @@ public class Game implements Runnable{
 		mainScreen.setColor(Color.CYAN);
 		anim.render(mainScreen, 100, 100);
 		
-//		r.shadeItAll();
-		
+		r.shadeItAll();
 		
 //		debugScreen.setColor(Color.white);
 //		debugScreen.renderString(render, 0, 90);

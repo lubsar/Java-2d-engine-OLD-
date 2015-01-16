@@ -12,6 +12,15 @@ public class SpriteAnimation extends Animation {
 		super(frameDelayInMilisecs, timeFormat, sprites.length);
 		this.sprites = sprites;
 	}
+	
+
+	
+	public SpriteAnimation(SpriteSheet spriteSheet,long frameDelay, int startFrame, int endFrame, byte timeFormat) {
+		super(frameDelay, startFrame, endFrame, spriteSheet.getSprites().length, timeFormat);
+		this.sprites = spriteSheet.getSprites();
+	}
+
+
 
 	@Override
 	public void render(Screen screen, int x, int y) {

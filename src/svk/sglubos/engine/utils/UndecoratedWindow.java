@@ -1,14 +1,12 @@
-package svk.sglubos.engine.test;
+package svk.sglubos.engine.utils;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GraphicsDevice;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-//TODO FIX decorated mode
+//TODO remake documentation
 /**
  * Provides ability to display {@link svk.sglubos.engine.gfx.Screen#renderLayer BufferedImage renderlayer},  which contains all rendered graphics by {@link svk.sglubos.engine.gfx.Screen Screen} directly in {@link javax.swing.JFame JFrame} in full screen mode <br>
  * Inherits from {@link javax.swing.JFame JFrame} class. <br>
@@ -37,23 +35,23 @@ import javax.swing.JFrame;
  *	@see svk.sglubos.engine.gfx.Screen
  */
 @SuppressWarnings("serial")
-public class GameFullScreenWindow extends JFrame {
+public class UndecoratedWindow extends JFrame {
 	/**
 	 * {@link java.awt.image.BufferedImage BufferedImage} which contains all graphics rendered by specified {@link svk.sglubos.engine.gfx.Screen Screen} object, from which was this {@link java.awt.image.BufferedImage BufferedImage} obtained.<br>
-	 * This object is initialized in {@link #GameFullScreenWindow(String, BufferedImage, int, int) constructor}.
+	 * This object is initialized in {@link #UndecoratedWindow(String, BufferedImage, int, int) constructor}.
 	 * 
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see svk.sglubos.engine.gfx.Screen#getRenderLayer()
-	 * @see #GameFullScreenWindow(String, BufferedImage, int, int) constructor
+	 * @see #UndecoratedWindow(String, BufferedImage, int, int) constructor
 	 */
 	protected BufferedImage renderLayer;
 	
 	/**
 	 * {@link java.awt.image.BufferStrategy BufferStrategy} used for double buffering to prevent flickering, this object is used in {@link #render()} method.<br>
-	 * This object is initialized in {@link #GameFullScreenWindow(String, BufferedImage, int, int) constructor}.
+	 * This object is initialized in {@link #UndecoratedWindow(String, BufferedImage, int, int) constructor}.
 	 * 
 	 * @see java.awt.image.BufferStrategy
-	 * @see #GameFullScreenWindow(String, BufferedImage, int, int) constructor
+	 * @see #UndecoratedWindow(String, BufferedImage, int, int) constructor
 	 * @see #render()
 	 */
 	protected BufferStrategy bs;
@@ -81,14 +79,13 @@ public class GameFullScreenWindow extends JFrame {
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see #render()
 	 */
-	public GameFullScreenWindow(GraphicsDevice graphicsDevice, BufferedImage renderLayer, int width,int height){
+	public UndecoratedWindow(BufferedImage renderLayer, int width,int height){
 		super();
-//		setUndecorated(true);
-		getContentPane().setPreferredSize(new Dimension(width,height));
+		setSize(width, height);
 		pack();
+		setUndecorated(true);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		graphicsDevice.setFullScreenWindow(this);
 		setVisible(true);
 		
 		createBufferStrategy(2);
@@ -113,6 +110,7 @@ public class GameFullScreenWindow extends JFrame {
 			bs = getBufferStrategy();
 			g = bs.getDrawGraphics();
 		}
+		
 		g.drawImage(renderLayer, 0, 0,getWidth(),getHeight(),null);
 		g.dispose();
 		bs.show();

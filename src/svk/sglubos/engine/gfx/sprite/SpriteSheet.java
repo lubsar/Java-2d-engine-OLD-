@@ -176,7 +176,7 @@ public class SpriteSheet {
 		
 		for(int y = 0; y < verticalSprites; y++) {
 			for(int x = 0; x < horizontalSprites; x++) {
-				sprites[x + y * horizontalSprites] = new Sprite(spriteWidth, spriteHeight, image.getRGB((x * spriteWidth), (y * spriteHeight), spriteWidth, spriteHeight, null, 0, this.width));
+				sprites[x + y * horizontalSprites] = new Sprite(spriteWidth, spriteHeight, image.getRGB((x * spriteWidth), (y * spriteHeight), spriteWidth, spriteHeight, null, 0, spriteWidth));
 			}
 		}
 		this.sprites = sprites;

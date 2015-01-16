@@ -156,7 +156,7 @@ public class Screen {
 	 */
 	public Screen(int width, int height, Color defaultColor) {
 		renderLayer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		pixels = ((DataBufferInt) renderLayer.getRaster().getDataBuffer()).getData();
+		pixels = ((DataBufferInt)renderLayer.getRaster().getDataBuffer()).getData();
 		g = renderLayer.getGraphics();
 		
 		this.width = width;
@@ -679,6 +679,8 @@ public class Screen {
 	 * @see java.awt.Graphics
 	 */
 	public void disposeGraphics() {
+//		ImageCapabilities im = renderLayer.getCapabilities(null);
+//		System.out.println(im.isAccelerated());
 		g.dispose();
 	}
 	

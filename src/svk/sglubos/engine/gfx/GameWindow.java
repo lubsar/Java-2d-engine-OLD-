@@ -1,9 +1,12 @@
 package svk.sglubos.engine.gfx;
 
 import java.awt.Color;
+import java.awt.DisplayMode;
+import java.awt.GraphicsDevice;
 
 import javax.swing.JFrame;
 
+//TODO Documentation 
 /**
  * <code>GameWindow</code> class provides easy way to create {@link javax.swing.JFrame JFrame} which contains {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas}.<br>
  * <code>GameWindow</code> inherits from {@link javax.swing.JFrame JFrame} class. <br>
@@ -64,6 +67,8 @@ public class GameWindow extends JFrame {
 	 * @see svk.sglubos.engine.gfx.RenderCanvas
 	 */
 	protected RenderCanvas canvas;
+	
+	protected GraphicsDevice device;
 	
 	/**
 	 * Constructs new {@link GameWindow} object with specified width and height of screen, title, with canvas scale: 1.0 and with default screen color Color.black. <br>
@@ -142,7 +147,7 @@ public class GameWindow extends JFrame {
 		super(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-
+		
 		screen = new Screen(screenWidth, screenHeight, defaultScreenColor);
 		canvas = new RenderCanvas(screen, canvasScale);
 		
@@ -152,6 +157,11 @@ public class GameWindow extends JFrame {
 		setVisible(true);
 		
 		canvas.init(2);
+	}
+	
+	public GameWindow(GraphicsDevice device, int screenWidth, int screenHeight, String title, double scale, Color defaultColor) {
+		this(screenWidth, screenHeight, title, scale, defaultColor);
+		this.device = device;
 	}
 	
 	/**
@@ -170,5 +180,52 @@ public class GameWindow extends JFrame {
 	 */
 	public void showRenderedContent() {
 		canvas.showRenderedContent();
+	}
+	
+	public void setFullScreenMode(boolean fullScreen) {
+		if(device == null) {
+			return;
+		}
+		
+		if(!device.isFullScreenSupported()) {
+			simulateFullScreen(fullScreen);
+			return;
+		}
+		
+		if(fullScreen){
+			setWindowDecoration(true);
+			device.setFullScreenWindow(this);
+		} else {
+			setWindowDecoration(false);
+			device.setFullScreenWindow(null);
+		}
+	}
+	
+	public void setDisplayMode(DisplayMode mode) {
+		DisplayMode[] modes = device.getDisplayModes();
+		for(DisplayMode md : modes) {
+			if(md.equals(mode)) {
+				device.setDisplayMode(mode);
+				break;
+			}
+		}
+	}
+	
+	protected void setWindowDecoration(boolean decorated) {
+		dispose();
+		setUndecorated(decorated);
+		pack();
+		setVisible(true);
+		canvas.init(2);
+	}
+	
+	protected void simulateFullScreen(boolean fullScreen) {
+		if(getExtendedState() == JFrame.MAXIMIZED_BOTH && !fullScreen) {
+			setWindowDecoration(true);
+			setExtendedState(JFrame.NORMAL);
+		} else {
+			setWindowDecoration(false);
+			setExtendedState(JFrame.MAXIMIZED_BOTH);
+		}
 	}
 }

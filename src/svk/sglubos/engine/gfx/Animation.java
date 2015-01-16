@@ -1,9 +1,10 @@
 package svk.sglubos.engine.gfx;
 
+import svk.sglubos.engine.utils.MessageHandler;
 import svk.sglubos.engine.utils.Timer;
 import svk.sglubos.engine.utils.TimerTask;
 
-//TODO Documentation create separate timer class
+//TODO Documentation
 
 public abstract class Animation {
 	protected long frameDelay;
@@ -15,24 +16,34 @@ public abstract class Animation {
 	protected boolean reverse;
 	
 	protected int currentFrame;
+	protected int startFrame;
+	protected int endFrame;
 	
 	protected Timer timer;
 	protected TimerTask t = () -> updateFrame();
 	
 	public Animation(long frameDelay, byte timeFormat, int frames) {
+		this(frameDelay, 0, frames - 1, frames, timeFormat);
+	}
+	
+	public Animation(long frameDelay, int startFrame, int endFrame, int frames, byte timeFormat) {
 		this.frameDelay = frameDelay;
 		this.timeFormat = timeFormat;
 		this.frames = frames;
+		
+		setStartFrame(startFrame);
+		setEndFrame(endFrame);
 		timer = new Timer(t, timeFormat, frameDelay);
 	}
-
+	
 	public void startReverse(boolean loop){
 		if(loop) {
 			timer.startInfiniteLoop();
 		} else {
 			timer.start();
 		}
-		currentFrame = --frames;
+		
+		currentFrame = endFrame;
 		running = true;
 		reverse = true;
 		this.loop = loop;
@@ -42,9 +53,10 @@ public abstract class Animation {
 		if(loop) {
 			timer.startInfiniteLoop();
 		} else {
-			timer.startLoop(frames);
+			timer.startLoop(endFrame - startFrame);
 		}
-		currentFrame = 0;
+		
+		currentFrame = startFrame;
 		running = true;
 		reverse = false;
 		this.loop = loop;
@@ -67,18 +79,19 @@ public abstract class Animation {
 		}else{
 			currentFrame++;			
 		}
-		if(currentFrame < 0) {
+		
+		if(currentFrame < startFrame) {
 			if(loop){
-				currentFrame = frames;							
+				currentFrame = endFrame;							
 			}else {
-				currentFrame = frames;
+				currentFrame = endFrame;
 				stop();
 			}
-		} else if (currentFrame == frames) {
+		} else if (currentFrame == endFrame) {
 			if(loop){
-				currentFrame = 0;							
+				currentFrame = startFrame;							
 			}else {
-				currentFrame = 0;
+				currentFrame = startFrame;
 				stop();
 			}
 		}
@@ -99,6 +112,24 @@ public abstract class Animation {
 	
 	public byte getTimeFormat() {
 		return timeFormat;
+	}
+	
+	public void setStartFrame(int start) {
+		if(start < 0 || start >= frames) {
+			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Illegal starting frame, frame cannot be less than zero and more than frames -1: " + start);
+			throw new IllegalArgumentException("Illegal starting frame: " + start);
+		}
+		
+		this.startFrame = start;
+	}
+	
+	public void setEndFrame(int end) {
+		if(end < 0 || end >= frames) {
+			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Illegal ending frame, frame cannot be less than zero and more than frames -1: " + end);
+			throw new IllegalArgumentException("Illegal ending frame: " + end);
+		}
+		
+		this.endFrame = end;
 	}
 	
 	public void setCurrentFrame(int frame){
