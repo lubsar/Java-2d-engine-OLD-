@@ -89,7 +89,7 @@ public class Game implements Runnable{
 	public void run() {
 		t.start();
 		init();
-		anim.startReverse(true);
+		anim.startReverse(false);
 		
 		long lastTime = System.nanoTime();
 		long lastTimeDebugOutput = System.currentTimeMillis();

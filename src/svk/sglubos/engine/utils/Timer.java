@@ -53,6 +53,7 @@ public class Timer {
 	
 	public void start() {
 		prepareTiming();
+		numCycles = 1;
 		running = true;
 	}
 	

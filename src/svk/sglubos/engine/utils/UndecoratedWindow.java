@@ -94,7 +94,6 @@ public class UndecoratedWindow extends JFrame {
 		this.renderLayer = renderLayer;
 	}
 	
-	//TODO redo
 	/**
 	 * Displays content rendered in {@link #renderLayer}. <br>
 	 */
