@@ -1,47 +1,42 @@
 package svk.sglubos.engine.test;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-
-import svk.sglubos.engine.IO.ImagePort;
-import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.ScreenComponent;
 
 public class ScreenComponentTest extends ScreenComponent {
-	private BufferedImage shadowMap = new BufferedImage(500,500,BufferedImage.TYPE_INT_ARGB);
-	int shadowPixels[] = ((DataBufferInt)shadowMap.getRaster().getDataBuffer()).getData();
-	private BufferedImage map = ImagePort.loadImage("G:\\Dokumenty\\eclipseWS\\GameEngine\\res\\shadow.png");
-	private BufferedImage mp = new BufferedImage(100,100,BufferedImage.TYPE_INT_ARGB);
-	private int light = map.getRGB(0,0);;
-	public void bind(Screen screen,Graphics g, int[] pixels) {
-		super.bind(screen, g, pixels);
-		shadowMap.setRGB(0, 0, 500, 500, map.getRGB(0, 0, 500, 500, null, 0, 500), 0, 500);
-		for(int i = 0; i < 10000; i++) {
-			mp.setRGB(i%100, i/100, light);
-		}
+	
+	int light = 0;
+	
+	int ambientAlpha = 0;
+	float ambientFactor = ambientAlpha / 255f;
+	float colorFactor = 1 -ambientFactor;
+	float ambientRed = (light >> 16 & 0xff) * ambientFactor;
+	float ambientGreen = (light >> 8 &0xff) * ambientFactor;
+	float ambientBlue = (light & 0xff) * ambientFactor;
+	
+	int outAlpha = 255 << 24;
+	
+	public void changeLight(int alpha) {
+	 ambientAlpha = alpha & 255;
+	 ambientFactor = ambientAlpha / 255f;
+	 colorFactor = 1 -ambientFactor;
+	 ambientRed = (light >> 16 & 0xff) * ambientFactor;
+	 ambientGreen = (light >> 8 &0xff) * ambientFactor;
+	 ambientBlue = (light & 0xff) * ambientFactor;
 	}
 	
 	public void shadeItAll() {
 		if(!bound) {
 			return;
 		}
-//		for(int y = 0; y < 5; y++){
-//			for(int x = 0; x < 5; x++){
-//				g.drawImage(mp, x*100, y*100,null);				
-//			}
-//		}
 		for(int i =0; i <pixels.length; i++){
-			pixels[i] = mixColorsWithAlpha(pixels[i], light,23);		
+			pixels[i] = applyLightningOnPixels(pixels[i]);
 		}
 	}
 	
-	public int mixColorsWithAlpha(int color1, int color2, int alpha)
-	{
-	    float factor = alpha / 255f;
-	    int red =  (int) ((((color1 >>16)&0xff) * (1 - factor)) + (((color2>>16)&0xff) * factor));
-	    int green = (int) (((color1>>8)&0xff) * (1 - factor) + (((color2>>8)&0xff) * factor));
-	    int blue = (int) ((color1&0xff) * (1 - factor) + (color2&0xff) * factor);
-	    return (255 <<24) | (red << 16) | (green << 8) | (blue);
+	public int applyLightningOnPixels(int color1) {
+	    int red =  (int) ((color1 >>16 & 0xff) * colorFactor + ambientRed);
+	    int green = (int) (((color1>>8) & 0xff) * colorFactor + ambientGreen);
+	    int blue = (int) ((color1 & 0xff) * colorFactor + ambientBlue);
+	    return outAlpha | (red << 16) | (green << 8) | (blue);
 	}
 }

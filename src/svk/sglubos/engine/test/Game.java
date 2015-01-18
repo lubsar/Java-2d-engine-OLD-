@@ -44,17 +44,17 @@ public class Game implements Runnable{
 	/**
 	 * Initializes game content before starting game loop; 
 	 */
+	Sprite[] spr = {sheet.getSprite(0, 0, 32, 32), sheet.getSprite(1, 0, 32, 32), sheet.getSprite(2, 0, 32, 32), sheet.getSprite(1, 1, 32, 32)};
 	public void init(){
-		int[] pixels = new int[50*50];
+		int[] pixels = new int[10*10];
 		for(int i = 0; i < pixels.length;i++){
 			pixels[i] = 0xFF00FF;
 		}
 		
-		Sprite[] spr = {sheet.getSprite(0, 0, 32, 32), sheet.getSprite(1, 0, 32, 32), sheet.getSprite(2, 0, 32, 32), sheet.getSprite(1, 1, 32, 32)};
 		
 		anim = new SpriteAnimation(sheet, 300, 0, 2, Timer.DELAY_FORMAT_MILISECS);
 		
-		test = new Sprite(50,50,pixels);
+		test = new Sprite(10,10,pixels);
 		
 //		mainScreen = new Screen(1920, 1080,Color.black);
 //		debugScreen = new Screen(640,300,Color.BLUE);
@@ -79,17 +79,17 @@ public class Game implements Runnable{
 		
 		@Override
 		public void timeSwitch() {
-			mainWindow.setFullScreenMode(true);
+			r.changeLight(++r.ambientAlpha);
 		}
 		
-	}, Timer.DELAY_FORMAT_MILISECS, 500);
+	}, Timer.DELAY_FORMAT_MILISECS, 60);
 	
 	//Game loop
 	@Override
 	public void run() {
-		t.start();
 		init();
 		anim.startReverse(false);
+		t.startInfiniteLoop();
 		
 		long lastTime = System.nanoTime();
 		long lastTimeDebugOutput = System.currentTimeMillis();
@@ -143,7 +143,7 @@ public class Game implements Runnable{
 	/**
 	 * Renders game content. 
 	 */
-	
+	int a = 2;
 	public void render(){
 		mainScreen.prepare();
 //		debugScreen.prepare();
@@ -161,7 +161,7 @@ public class Game implements Runnable{
 		
 		mainScreen.renderLine(300, 0, 349, 0);
 		
-		mainScreen.renderSprite(test, 350, 0);
+		mainScreen.renderSprite(spr[0], 0, 0, a);
 		mainScreen.renderString("auto", 400, 10);
 		
 		mainScreen.setColor(Color.CYAN);

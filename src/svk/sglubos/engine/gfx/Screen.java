@@ -511,8 +511,9 @@ public class Screen {
 		g.drawArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
-	//TODO documentation and scaling
-	public void renderSprite(Sprite sprite, int xCoord, int yCoord){
+//TODO documentation	
+	
+	public void renderSprite(Sprite sprite, int xCoord, int yCoord) {
 		int[] spritePixels = sprite.getPixels();
 		
 		if(!ignoreOffset){
@@ -523,19 +524,69 @@ public class Screen {
 		int spriteWidth = sprite.getWidth();
 		int spriteHeight = sprite.getHeight();
 		
-		int pixelX;
-		int pixelY;
+		int pixelX = 0;
+		int pixelY = 0;
+		
 		
 		for(int y = 0; y < spriteHeight; y++){
 			pixelY = y + yCoord;
 			for(int x = 0; x < spriteWidth; x++){
 				pixelX = x + xCoord;
+				
 				if(spritePixels[x + y * spriteWidth] == 0){
 					continue;
 				}
-				if(pixelY > 0 && pixelY < this.height && pixelX > 0 && pixelX < this.width ){
+				
+				if(pixelY > 0 && pixelY < this.height && pixelX > 0 && pixelX < this.width){
 					this.pixels[pixelX + pixelY * this.width] = spritePixels[x + y * spriteWidth];
 				}
+			}
+		}
+	}
+	
+	public void renderSprite(Sprite sprite, int xCoord, int yCoord, int scale){
+		int[] spritePixels = sprite.getPixels();
+		
+		if(!ignoreOffset){
+			xCoord = offsetCoordinate(xCoord,xOffset);
+			yCoord = offsetCoordinate(yCoord,yOffset);
+		}
+		
+		int spriteWidth = sprite.getWidth();
+		int spriteHeight = sprite.getHeight();
+
+		int pixelX = 0;
+		int pixelY = 0;
+		
+		int scaledPixelX;
+		int scaledPixelY;
+		
+		for(int y = 0; y < spriteHeight; y++){
+			pixelY = y *scale + yCoord;
+			for(int x = 0; x < spriteWidth; x++){
+				pixelX = x * scale + xCoord;
+				
+				if(spritePixels[x + y * spriteWidth] == 0){
+					continue;
+				}
+				
+				if(scale > 1){
+					for(int yScaler = 0; yScaler < scale; yScaler++) {
+						for(int xScaler = 0; xScaler < scale; xScaler++) {
+							scaledPixelY = pixelY + yScaler;
+							scaledPixelX = pixelX + xScaler;
+							
+							if(scaledPixelY  >= 0 && scaledPixelY  < this.height && scaledPixelX  >= 0 && scaledPixelX  < this.width) {
+								this.pixels[scaledPixelX  + scaledPixelY * this.width] = spritePixels[x + y * spriteWidth];
+							}
+						}
+ 					}
+				} else {
+					if(pixelY > 0 && pixelY < this.height && pixelX > 0 && pixelX < this.width){
+						this.pixels[pixelX + pixelY * this.width] = spritePixels[x + y * spriteWidth];
+					}
+				}
+				
 			}
 		}
 	}
@@ -679,8 +730,6 @@ public class Screen {
 	 * @see java.awt.Graphics
 	 */
 	public void disposeGraphics() {
-//		ImageCapabilities im = renderLayer.getCapabilities(null);
-//		System.out.println(im.isAccelerated());
 		g.dispose();
 	}
 	

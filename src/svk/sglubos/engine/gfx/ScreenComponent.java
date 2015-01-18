@@ -65,8 +65,8 @@ public abstract class ScreenComponent {
 	
 	/**
 	 * This method makes component able to render into the specific {@link svk.sglubos.engine.gfx.Screen Screen} object.<br>
-	 * This method should not be called manually, to add component to specific {@link svk.sglubos.engine.gfx.Screen Screen} object
-	 *  use its {@link svk.sglubos.engine.gfx.Screen#addScreenComponent(ScreenComponent) addScreenComponent(component)} method.
+	 * <strong>This method should not be called manually, to add component to specific {@link svk.sglubos.engine.gfx.Screen Screen} object </stong> 
+	 * use its {@link svk.sglubos.engine.gfx.Screen#addScreenComponent(ScreenComponent) addScreenComponent(component)} method.
 	 *
 	 * <h1>Initializes:</h1>
 	 * {@link #g Graphics object} with argument passed in this method, gets abilities to draw into the specific screen object.<br>
@@ -82,7 +82,6 @@ public abstract class ScreenComponent {
 	 * @see svk.sglubos.engine.gfx.Screen#addScreenComponent(ScreenComponent)
 	 * @see svk.sglubos.engine.gfx.Screen#removeScreenComponent(ScreenComponent)
 	 */
-	@Deprecated
 	public void bind(Screen screen, Graphics g, int[] pixels) {
 		this.bound = true;
 		this.g = g;
@@ -91,14 +90,13 @@ public abstract class ScreenComponent {
 	}
 	/**
 	 * This method removes components abilities to render into the specific {@link svk.sglubos.engine.gfx.Screen Screen} object.<br>
-	 * This method should not be called manually, to remove component from specific {@link svk.sglubos.engine.gfx.Screen Screen} object
+	 * <strong>This method should not be called manually, to remove component from specific {@link svk.sglubos.engine.gfx.Screen Screen} object</strong>
 	 * use its {@link svk.sglubos.engine.gfx.Screen#removeScreenComponent(ScreenComponent) removeScreenComponent(component)} method.
 	 *
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see svk.sglubos.engine.gfx.Screen#addScreenComponent(ScreenComponent)
 	 * @see svk.sglubos.engine.gfx.Screen#removeScreenComponent(ScreenComponent)
 	 */
-	@Deprecated
 	public void unbind() {
 		bound = false;
 		g = null;
