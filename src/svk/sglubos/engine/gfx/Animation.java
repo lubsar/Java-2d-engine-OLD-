@@ -11,7 +11,8 @@ import svk.sglubos.engine.utils.TimerTask;
  * This class handles timing, starting and stopping, and also provides reverse, but not rendering. 
  * Rendering have to be created manually.<br>
  * <p>
- * Timing is based on {@link svk.sglubos.engine.utils.Timer Timer} class. Every time when {@link #timer timer} finishes loop after specified {@link #frameDelay time} (delay), 
+ * Timing is based on {@link svk.sglubos.engine.utils.Timer Timer} class. 
+ * Every time when {@link #timer timer} finishes loop after specified {@link #frameDelay time} (delay), 
  * {@link #updateFrame()} method is called.
  * The {@link #updateFrame()} method switches to next frame of animation. Switching to next frame means to increase,
  * or decrease (if reverse decrease) value of {@link #currentFrame} by one.
@@ -38,8 +39,11 @@ public abstract class Animation {
 	 * Delay between frame switch of animation.<br>
 	 * This variable is initialized in {@link}
 	 * The delay can be set by {@link #setFrameDelay(long)} method.
-	 * A {@link #delayFormat delay format} (unit) is also initialized in {@link #Animation(long, byte, int) constructor}. Avaible units are all units in {@link svk.sglubos.engine.utils.Timer Timer}: {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_MILISECS milliseconds}, {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_SECS seconds} and {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_TICKS ticks}.
-	 * The delay format can be also set by {@link #setFrameDelay(long)} method, but the frame delay will not be converted to that specific unit, because the conversion is not implemented.
+	 * A {@link #delayFormat delay format} (unit) is also initialized in {@link #Animation(long, byte, int) constructor}. Avaible units are all units in {@link svk.sglubos.engine.utils.Timer Timer}: 
+	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_MILISECS milliseconds}, {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_SECS seconds} 
+	 * and {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_TICKS ticks}.
+	 * The delay format can be also set by {@link #setFrameDelay(long)} method, but the frame delay will not be converted to that specific unit, 
+	 * because the conversion is not implemented.
 	 * 
 	 * @see #Animation(long, byte, int) constructor
 	 * @see #svk.sglubos.engine.utils.Timer

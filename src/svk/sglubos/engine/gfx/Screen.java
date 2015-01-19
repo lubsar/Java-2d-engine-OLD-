@@ -511,8 +511,19 @@ public class Screen {
 		g.drawArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
-//TODO documentation	
-	
+	/**
+	 * Draws specified {@link svk.sglubos.engine.gfx.sprite.Sprite sprite} at specifiied position.<br>
+	 * Sprites are rendered by changing {@link #pixels pixels} at specified position to pixels from {@link svk.sglubos.engine.gfx.sprite.Sprite} object.
+	 * To render scaled up sprite use {@link #renderSprite(Sprite, int, int, int)} method. 
+	 * 
+	 * @param sprite sprite object containing pixels which will be drawn
+	 * @param xCoord horizontal coordinate where sprite will be drawn
+	 * @param yCoord vertical coordinate where sprite will be drawn<br><br>
+	 * 
+	 * @see #renderSprite(Sprite, int, int, int)
+	 * @see svk.sglubos.engine.gfx.sprite.Sprite
+	 * @see #pixels
+	 */
 	public void renderSprite(Sprite sprite, int xCoord, int yCoord) {
 		int[] spritePixels = sprite.getPixels();
 		
@@ -544,6 +555,20 @@ public class Screen {
 		}
 	}
 	
+	/**
+	 * Draws specified {@link svk.sglubos.engine.gfx.sprite.Sprite sprite} at specifiied position, with specified scale.<br>
+	 * Sprites are rendered by changing {@link #pixels pixels} at specified position to pixels from {@link svk.sglubos.engine.gfx.sprite.Sprite} object.
+	 * To render non scaled sprite use {@link #renderSprite(Sprite, int, int)}.<br>
+	 * 
+	 * @param sprite sprite object containing pixels which will be drawn
+	 * @param xCoord horizontal coordinate where sprite will be drawn
+	 * @param yCoord vertical coordinate where sprite will be drawn
+	 * @param scale scale with sprite will be drawn<br><br>
+	 * 
+	 * @see #renderSprite(Sprite, int, int)
+	 * @see svk.sglubos.engine.gfx.sprite.Sprite
+	 * @see #pixels
+	 */
 	public void renderSprite(Sprite sprite, int xCoord, int yCoord, int scale){
 		int[] spritePixels = sprite.getPixels();
 		

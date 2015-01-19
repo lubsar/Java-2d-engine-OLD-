@@ -8,7 +8,8 @@ import javax.swing.JFrame;
 
 //TODO remake documentation
 /**
- * Provides ability to display {@link svk.sglubos.engine.gfx.Screen#renderLayer BufferedImage renderlayer},  which contains all rendered graphics by {@link svk.sglubos.engine.gfx.Screen Screen} directly in {@link javax.swing.JFame JFrame} in full screen mode <br>
+ * Provides ability to display {@link svk.sglubos.engine.gfx.Screen#renderLayer BufferedImage renderlayer}, 
+ * which contains all rendered graphics by {@link svk.sglubos.engine.gfx.Screen Screen} directly in {@link javax.swing.JFame JFrame} in full screen mode <br>
  * Inherits from {@link javax.swing.JFame JFrame} class. <br>
  * <p>
  * Fills JFrame with {@link java.awt.image.BufferedImage BufferedImage} passed in {@link #GameFullScreenWindow(String, BufferedImage, int, int) constructor}.
@@ -37,7 +38,8 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public class UndecoratedWindow extends JFrame {
 	/**
-	 * {@link java.awt.image.BufferedImage BufferedImage} which contains all graphics rendered by specified {@link svk.sglubos.engine.gfx.Screen Screen} object, from which was this {@link java.awt.image.BufferedImage BufferedImage} obtained.<br>
+	 * {@link java.awt.image.BufferedImage BufferedImage} which contains all graphics rendered by specified {@link svk.sglubos.engine.gfx.Screen Screen} object, 
+	 * from which was this {@link java.awt.image.BufferedImage BufferedImage} obtained.<br>
 	 * This object is initialized in {@link #UndecoratedWindow(String, BufferedImage, int, int) constructor}.
 	 * 
 	 * @see svk.sglubos.engine.gfx.Screen
@@ -57,7 +59,8 @@ public class UndecoratedWindow extends JFrame {
 	protected BufferStrategy bs;
 	
 	/**
-	 * Constructs new {@link svk.sglubos.engine.test.GameFullScreenWindow GameFullScreenWindow} with specified <code>title </code>, <code>width</code>, <code>height</code> and {@link java.awt.image.BufferedImage renderlayer} which will be displayed.<br>
+	 * Constructs new {@link svk.sglubos.engine.test.GameFullScreenWindow GameFullScreenWindow} with specified <code>title </code>,
+	 *  <code>width</code>, <code>height</code> and {@link java.awt.image.BufferedImage renderlayer} which will be displayed.<br>
 	 * <p>
 	 * <h1>Initializes: </h1><br>
 	 * {@link javax.swing.JFrame JFrame} with parameter passed in this constructor: <code>title</code><br>
@@ -68,7 +71,8 @@ public class UndecoratedWindow extends JFrame {
 	 * Creates {@link javax.swing.JFrame JFrame} {@link java.awt.image.BufferStrategy BufferStrategy} with two buffers. <br>
 	 * <p>
 	 * {@link #bs BufferStrategy object} with object obtained from {@link javax.swing.JFrame JFrame}, which was created before.<br>
-	 * {@link #renderLayer BufferedImage renderLayer  object} with object passed as parameter in this constructor: <code>renderLayer</code>. To display this image call {@link #render()} method.<br> 
+	 * {@link #renderLayer BufferedImage renderLayer  object} with object passed as parameter in this constructor: <code>renderLayer</code>. 
+	 * To display this image call {@link #render()} method.<br> 
 	 * 
 	 * @param title title of JFrame
 	 * @param renderLayer BufferedImage which will be displayed
