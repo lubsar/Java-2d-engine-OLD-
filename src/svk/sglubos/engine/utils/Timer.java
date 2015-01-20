@@ -1,7 +1,7 @@
 package svk.sglubos.engine.utils;
 //TODO Documentation
 public class Timer {
-	public static final byte DELAY_FORMAT_MILISECS = 0x0;
+	public static final byte DELAY_FORMAT_MILLISECS = 0x0;
 	public static final byte DELAY_FORMAT_TICKS = 0x1;
 	public static final byte DELAY_FORMAT_SECS = 0x2;
 	
@@ -75,7 +75,7 @@ public class Timer {
 	
 	protected void prepareTiming() {
 		switch(timeFormat){
-		case DELAY_FORMAT_MILISECS:
+		case DELAY_FORMAT_MILLISECS:
 			switchTime = System.currentTimeMillis() + delay;
 		break;	
 		case DELAY_FORMAT_TICKS:
@@ -92,7 +92,7 @@ public class Timer {
 	
 	private long getCurrentTime(){
 		switch(timeFormat){
-			case DELAY_FORMAT_MILISECS:
+			case DELAY_FORMAT_MILLISECS:
 				return System.currentTimeMillis();
 			case DELAY_FORMAT_TICKS:
 				return ++currentTime;
@@ -106,7 +106,7 @@ public class Timer {
 	
 	private void updateSwitchTime() {
 		switch(timeFormat){
-		case DELAY_FORMAT_MILISECS:
+		case DELAY_FORMAT_MILLISECS:
 			switchTime = currentTime + delay;
 		break;	
 		case DELAY_FORMAT_TICKS:

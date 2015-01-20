@@ -52,7 +52,7 @@ public class Game implements Runnable{
 		}
 		
 		
-		anim = new SpriteAnimation(sheet, 300, 0, 2, Timer.DELAY_FORMAT_MILISECS);
+		anim = new SpriteAnimation(sheet, 300, 0, 2, Timer.DELAY_FORMAT_MILLISECS);
 		
 		test = new Sprite(10,10,pixels);
 		
@@ -82,7 +82,7 @@ public class Game implements Runnable{
 			r.changeLight(++r.ambientAlpha);
 		}
 		
-	}, Timer.DELAY_FORMAT_MILISECS, 60);
+	}, Timer.DELAY_FORMAT_MILLISECS, 60);
 	
 	//Game loop
 	@Override
