@@ -13,10 +13,10 @@ import svk.sglubos.engine.utils.TimerTask;
  * <p>
  * Timing is based on {@link svk.sglubos.engine.utils.Timer Timer} class. 
  * Every time when {@link #timer timer} finishes loop after specified {@link #frameDelay time} (delay), 
- * {@link #updateFrame()} method is called.
- * The {@link #updateFrame()} method switches to next frame of animation. Switching to next frame means to increase,
+ * {@link #switchFrame()} method is called.
+ * The {@link #switchFrame()} method switches to next frame of animation. Switching to next frame means to increase,
  * or decrease (if reverse decrease) value of {@link #currentFrame} by one.
- * {@link #updateFrame() Update frame} method also keeps {@link #currentFrame} value in bounds of {@link #startFrame} and {@link #endFrame}.
+ * {@link #switchFrame() Update frame} method also keeps {@link #currentFrame} value in bounds of {@link #startFrame} and {@link #endFrame}.
  * <strong>But keep in mind, that {@link #startFrame} < {@link #endFrame}.</strong>
  * <p>
  * To play animation from {@link #startFrame} to {@link #endFrame} use {@link #start(boolean)} method 
@@ -122,23 +122,23 @@ public abstract class Animation {
 	 * <p>
 	 * The {@link #start(boolean)} method sets this variable to <code>false</code>,
 	 * what causes that the frames are played from {@link #startFrame} to {@link #endFrame}, 
-	 * so the {@link #currentFrame} is increased by 1 every time when {@link #updateFrame()} method is called.<br>
+	 * so the {@link #currentFrame} is increased by 1 every time when {@link #switchFrame()} method is called.<br>
 	 * The {@link #startReverse(boolean)} method sets this variable to <code>true</code>,
 	 * what causes that the frames are played from {@link #endFrame} to {@link #startFrame}, 
-	 * so the {@link #currentFrame} is decreased by 1 every time when {@link #updateFrame()} method is called.<br>
+	 * so the {@link #currentFrame} is decreased by 1 every time when {@link #switchFrame()} method is called.<br>
 	 * 
 	 * @see #currentFrame
 	 * @see #startFrame
 	 * @see #endFrame
 	 * @see #start(boolean)
 	 * @see #startReverse(boolean)
-	 * @see #updateFrame()
+	 * @see #switchFrame()
 	 */
 	protected boolean reverse;
 	
 	/**
 	 * This variable stores the current frame of animation.<br>
-	 * This variable is updated in {@link #updateFrame()} method, 
+	 * This variable is updated in {@link #switchFrame()} method, 
 	 * can be set by {@link #setCurrentFrame(int)} method and can be obtained by {@link #getCurrentFrame()}.<br>
 	 * <p>
 	 * The value of this variable is kept between {@link #startFrame} and {@link #endFrame}, 
@@ -150,7 +150,7 @@ public abstract class Animation {
 	 * @see #reverse
 	 * @see #startFrame
 	 * @see #endFrame
-	 * @see #updateFrame()
+	 * @see #switchFrame()
 	 * @see #setCurrentFrame(int)
 	 * @see #getCurrentFrame()
 	 * @see #start(boolean)
@@ -176,7 +176,7 @@ public abstract class Animation {
 	 * 
 	 * @see #Animation(long, byte, int) constructor (sets to 0)
 	 * @see #Animation(long, int, int, int, byte) constuctor (sets to specified value)
-	 * @see #updateFrame()
+	 * @see #switchFrame()
 	 * @see #setStartFrame(int)
 	 * @see #endFrame
 	 * @see #currentFrame
@@ -201,7 +201,7 @@ public abstract class Animation {
 	 * 
 	 * @see #Animation(long, byte, int) constructor (sets to frames-1)
 	 * @see #Animation(long, int, int, int, byte) constuctor (sets to specified value)
-	 * @see #updateFrame()
+	 * @see #switchFrame()
 	 * @see #setEndFrame(int)
 	 * @see #startFrame
 	 * @see #currentFrame
@@ -222,14 +222,14 @@ public abstract class Animation {
 	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_TICKS DELAY_FORMAT_TICKS}<br>
 	 *	<p> 
 	 * Every time timer completes cycle, {@link svk.sglubos.engine.utils.TimerTask TimerTask} {@link #frameSwitch}s 
-	 * {@link svk.sglubos.engine.utils.TimerTask#timeSwitch() timeSwitch()} method is called, which calls {@link #updateFrame()} method.
-	 * The {@link #updateFrame()} method switches to the next frame.<br> 
+	 * {@link svk.sglubos.engine.utils.TimerTask#timeSwitch() timeSwitch()} method is called, which calls {@link #switchFrame()} method.
+	 * The {@link #switchFrame()} method switches to the next frame.<br> 
 	 * 
 	 * @see svk.sglubos.engine.utils.Timer
 	 * @see svk.sglubos.engine.utils.TimerTask
 	 * @see #setFrameDelay(long)
 	 * @see #setTimeFormat(byte)
-	 * @see #updateFrame()
+	 * @see #switchFrame()
 	 * @see #delayFormat
 	 * @see #frameDelay
 	 * @see #frameSwitch
@@ -237,18 +237,60 @@ public abstract class Animation {
 	protected Timer timer;
 	
 	/**
-	 * {@link svk.sglubos.engine.utils.TimerTask TimerTask} frameSwitch which calls {@link #updateFrame()} method every time {@link #timer} finishes cycle.<br>
+	 * {@link svk.sglubos.engine.utils.TimerTask TimerTask} which calls {@link #switchFrame()} method every time {@link #timer} finishes cycle.<br>
 	 * 
 	 * @see #timer
-	 * @see #updateFrame()
+	 * @see #switchFrame()
 	 * @see svk.sglubos.engine.utils.TimerTask
 	 */
-	protected TimerTask frameSwitch = () -> updateFrame();
+	protected TimerTask frameSwitch = () -> switchFrame();
 	
+	/**
+	 * Constructs new animation with specified {@link #frameDelay delay between frame switches}, {@link #delayFormat format of delay} and {@link #frames number of frames}.
+	 * The {@link #startFrame} of animation is set to <code>0</code> and the {@link #endFrame} of animation is set to <code>frames - 1 </code>.<br>
+	 * Uses this {@link #Animation(long, int, int, int, byte) constructor}.<br>
+	 * 
+	 * @param frameDelay delay between frame switches
+	 * @param timeFormat format (time unit) of delay between frame switches
+	 * @param frames number of frames in this animation<br><br>
+	 * 
+	 * @see #Animation(long, int, int, int, byte) constructor
+	 * @see #frameDelay
+	 * @see #delayFormat
+	 * @see #frames
+	 * @see #startFrame
+	 * @see #endFrame
+	 */
 	public Animation(long frameDelay, byte timeFormat, int frames) {
 		this(frameDelay, 0, frames - 1, frames, timeFormat);
 	}
 	
+	/**
+	 * Constructs new animation with specified {@link #frameDelay delay between frame switches}, 
+	 * {@link #startFrame start frame of animation}, {@link #endFrame end frame of animation},  
+	 * {@link #frames number of frames} and {@link #delayFormat format of delay}.<br>
+	 * 
+	 * <h1>Initializes:</h1>
+	 * {@link #frameDelay FrameDelay} to value passed as a parameter.<br>
+	 * {@link #startFrame StartFrame} using {@link #setStartFrame(int)} method with value passed as a parameter.
+	 * The {@link #setStartFrame(int)} method keeps the start frame in bounds of <code>0</code> and {@link #frames } - 1.<br>
+	 * {@link #endFrame EndFrame} using {@link #setEndFrame(int)} method with value passes as a parameter. 
+	 * The {@link #setEndFrame(int)} method keeps the end frame in bounds of <code>0</code> and {@link #frames} - 1.<br>
+	 * The {@link #frames Frames} to value passed as a parameter.<br>
+	 * The {@link #delayFormat DelayFormat} to value passed as a parameter, the avaible formats (units) are formats from {@link svk.sglubos.engine.utils.Timer}:
+	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_MILLISECS DELAY_FORMAT_MILLISECS}, {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_SECS DELAY_FORMAT_SECS}
+	 * and {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_TICKS DELAY_FORMAT_TICKS}.<br>
+	 * {@link #timer Timer} which handles timing between frame switches of animation. 
+	 * The {@link #timer} is initialized with {@link svk.sglubos.engine.utils.TimerTask TimerTask} {@link #frameSwitch frame switch}, 
+	 * which calls {@link #switchFrame()} method every time the {@link #timer} completes cycle after specified {@link #frameDelay delay}, 
+	 * the delay value passed as a parameter and the format passed as a parameter.<br><br>
+	 * 
+	 * @param frameDelay delay between frame switches
+	 * @param startFrame start frame of animation
+	 * @param endFrame end frame of animation
+	 * @param frames number of animation frames
+	 * @param timeFormat format of delay (time unit)
+	 */
 	public Animation(long frameDelay, int startFrame, int endFrame, int frames, byte timeFormat) {
 		this.frameDelay = frameDelay;
 		this.delayFormat = timeFormat;
@@ -296,7 +338,7 @@ public abstract class Animation {
 		}
 	}
 	
-	protected void updateFrame() {
+	protected void switchFrame() {
 		if(reverse){
 			currentFrame--;
 		}else{
