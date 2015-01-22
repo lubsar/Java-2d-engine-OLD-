@@ -80,6 +80,7 @@ public class SpriteSheet {
 		if(image == null) {
 			throw new IllegalArgumentException("BufferedImage can not be null");
 		}
+		
 		this.image = image;
 		this.width = image.getWidth();
 		this.height = image.getHeight();
@@ -122,6 +123,7 @@ public class SpriteSheet {
 		}catch (RasterFormatException e) {
 			e.printStackTrace();
 		}
+		
 		return image;
 	}
 	
@@ -143,11 +145,11 @@ public class SpriteSheet {
 	 * If {@link #sprites} is <code>null</code>, {@link java.lang.NullPointerException NullPointerException} is thrown.
 	 * 
 	 * @return sprites created by {@link #createSprites(int, int)} method <br><br>
-	 * @throws java.lang.NullPointerException NullPointerException if {@link #sprites} were not created.
+	 * @throws java.lang.IllegalStateException IllegalStateException if {@link #sprites} were not created.
 	 */
 	public Sprite[] getSprites(){
 		if(sprites == null){
-			throw new NullPointerException("Sprites were not created");
+			throw new IllegalStateException("Sprites were not created");
 		}
 		return sprites;
 	}
@@ -179,6 +181,7 @@ public class SpriteSheet {
 				sprites[x + y * horizontalSprites] = new Sprite(spriteWidth, spriteHeight, image.getRGB((x * spriteWidth), (y * spriteHeight), spriteWidth, spriteHeight, null, 0, spriteWidth));
 			}
 		}
+		
 		this.sprites = sprites;
 	}
 }

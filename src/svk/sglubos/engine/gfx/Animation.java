@@ -8,8 +8,8 @@ import svk.sglubos.engine.utils.TimerTask;
 
 /**
  * Provides abilities to create basic animations.<br>
- * This class handles timing, starting and stopping, and also provides reverse, but not rendering. 
- * Rendering have to be created manually.<br>
+ * This class handles timing, starting and stopping, and also provides reverse, but not specific rendering. 
+ * Rendering should be created manually using {@link #render(Screen, int, int)} method.<br>
  * <p>
  * Timing is based on {@link svk.sglubos.engine.utils.Timer Timer} class. 
  * Every time when {@link #timer timer} finishes loop after specified {@link #frameDelay time} (delay), 
@@ -142,7 +142,7 @@ public abstract class Animation {
 	 * can be set by {@link #setCurrentFrame(int)} method and can be obtained by {@link #getCurrentFrame()}.<br>
 	 * <p>
 	 * The value of this variable is kept between {@link #startFrame} and {@link #endFrame}, 
-	 * so the first frame is {@link #startFrame} and the last frame is {@link #endFrame}.<br>
+	 * so the first frame of animation is {@link #startFrame} and the last frame is {@link #endFrame}.<br>
 	 * This variable is increased or decreased by <code>1</code>, depended on {@link #reverse}.
 	 * If reverse is <code>true</code> the value is decreased and if <code>false</code> the value is increased.
 	 * The reverse is set in {@link #start(boolean)} to false and in {@link #startReverse(boolean)} to true.<br>
@@ -301,19 +301,21 @@ public abstract class Animation {
 		timer = new Timer(frameSwitch, timeFormat, frameDelay);
 	}
 	
-	public void startReverse(boolean loop){
-		if(loop) {
-			timer.startInfiniteLoop();
-		} else {
-			timer.start();
-		}
-		
-		currentFrame = endFrame;
-		running = true;
-		reverse = true;
-		this.loop = loop;
-	}
-	
+	/**
+	 * Starts playing animation from {@link #startFrame} to {@link #endFrame}, so the {@link #currentFrame} will be increased by one every frame switch.
+	 * The argument <code>loop</code> determines if the animation will be played once (if <code>false</code>) 
+	 * or it will be continuously played until the {@link #stop()} method is called (if <code>true</code>).<br>
+	 * Starts the {@link #timer}.
+	 * Sets the {@link #running} to <code>true</code>, which makes {@link #tick()} method update the timer, and {@link #reverse} to <code>false</code> which determines, 
+	 * that the animation is player from {@link #startFrame} to {@link #endFrame}.
+	 * 
+	 * @param loop determines if animation will be played once or continuously played until {@link #stop()} method is called<br><br>
+	 *
+	 * @see #startReverse(boolean)
+	 * @see #currentFrame
+	 * @see #startFrame
+	 * @see #endFrame
+	 */
 	public void start(boolean loop) {
 		if(loop) {
 			timer.startInfiniteLoop();
@@ -327,17 +329,95 @@ public abstract class Animation {
 		this.loop = loop;
 	}
 	
+	/**
+	 * Starts playing animation from {@link #endFrame} to {@link #startFrame}, so the {@link #currentFrame} will be decreased by one every frame switch.
+	 * The argument <code>loop</code> determines if the animation will be played once (if <code>false</code>) 
+	 * or it will be continuously played until the {@link #stop()} method is called (if <code>true</code>).<br>
+	 * Starts the {@link #timer}.
+	 * Sets the {@link #running} to <code>true</code>, which makes {@link #tick()} method update the timer, and {@link #reverse} to <code>true</code> which determines, 
+	 * that the animation is player from {@link #endFrame} to {@link #startFrame}.
+	 * 
+	 * @param loop determines if animation will be played once or continuously played until {@link #stop()} method is called<br><br>
+	 * 
+	 * @see #start(boolean)
+	 * @see #currentFrame
+	 * @see #startFrame
+	 * @see #endFrame
+	 */
+	public void startReverse(boolean loop){
+		if(loop) {
+			timer.startInfiniteLoop();
+		} else {
+			timer.start();
+		}
+		
+		currentFrame = endFrame;
+		running = true;
+		reverse = true;
+		this.loop = loop;
+	}
+	
+	/**
+	 * Stops the animation.<br>
+	 * Stops the {@link #timer} and sets the {@link #running} to <code>false</code>.
+	 * The {@link #currentFrame} will stay the same after this method is called, 
+	 * however if called {@link #start(boolean)} or {@link #startReverse(boolean)} methods, the {@link #currentFrame} will reset.<br>
+	 * 
+	 * @see #start(boolean)
+	 * @see #startReverse(boolean)
+	 * @see #currentFrame
+	 * @see #timer
+	 * @see #timer
+	 */
 	public void stop() {
 		timer.stop();
 		running = false;
 	}
 	
+	/**
+	 * Updates the {@link #timer} of animation if {@link #running} is <code>true</code>, 
+	 * the {@link #timer} handles timing of frame switches and needs to be updated for the functionality.<br>
+	 * The {@link #timer} timer calls {@link #switchFrame()} method, which updates the value of {@link #currentFrame}
+	 * after specific {@link #frameDelay delay}.<br>
+	 * 
+	 * @see #timer
+	 * @see #start(boolean)
+	 * @see #startReverse(boolean)
+	 * @see #stop()
+	 */
 	public void tick() {
 		if(running){
 			timer.update();
 		}
 	}
 	
+	/**
+	 * Switches the animation frame to next frame (updates the {@link #currentFrame}).<br>
+	 * This method is called by {@link #frameSwitch frame switch timer task} which is used in {@link #timer}.<br>
+	 * 
+	 * <h1>Switching to next frame</h1>
+	 * The value of {@link #currentFrame} is kept in bounds of {@link #startFrame} and {@link #endFrame}.<br>
+	 * <p>
+	 * If {@link #reverse} is <code>false</code> the {@link #currentFrame} is increased by one every time this method is called.
+	 * When the {@link #currentFrame} reaches the value {@link #endFrame} and the {@link #loop} is <code>false</code>, the animation will stop,
+	 * otherwise if the {@link #loop} is <code>true</code>, the {@link #currentFrame} will be set to {@link #startFrame} 
+	 * and the animation will continuously cycle until {@link #stop()} method is called.<br>
+	 * <p>
+	 * If {@link #reverse} is <code>true</code> the {@link #currentFrame} is decreased by one every time this method is called.
+	 * When the {@link #currentFrame} reaches the value {@link #startFrame} and the {@link #loop} is <code>false</code>, the animation will stop,
+	 * otherwise if the {@link #loop} is <code>true</code>, the {@link #currentFrame} will be set to {@link #endFrame}
+	 * and the animation will continuously cycle until {@link #stop()} method is called.<br>
+	 * 
+	 * @see #start(boolean)
+	 * @see #startReverse(boolean)
+	 * @see #stop()
+	 * @see #timer
+	 * @see #currentFrame
+	 * @see #startFrame
+	 * @see #endFrame
+	 * @see #loop
+	 * @see #reverse
+	 */
 	protected void switchFrame() {
 		if(reverse){
 			currentFrame--;
@@ -359,7 +439,12 @@ public abstract class Animation {
 			}
 		}
 	}
-	
+	/**
+	 * 
+	 * @param frameDelay
+	 * 
+	 * @throws java.lang.IllegalArgumentException IllegalArgumentException
+	 */
 	public void setFrameDelay(long frameDelay) {
 		if(frameDelay < 0) {
 			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Invalind animation frame delay, delay can not be less than zero " + frameDelay);
