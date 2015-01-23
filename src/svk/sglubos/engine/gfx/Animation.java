@@ -51,8 +51,8 @@ public abstract class Animation {
 	 * @see #svk.sglubos.engine.utils.Timer
 	 * @see #setFrameDelay(long)
 	 * @see #getFrameDelay()
-	 * @see #getTimeFormat()
-	 * @see #setTimeFormat(byte)
+	 * @see #getDelayFormat()
+	 * @see #setDelayFormat(byte)
 	 */
 	protected long frameDelay;
 	
@@ -65,9 +65,9 @@ public abstract class Animation {
 	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_TICKS DELAY_FORMAT_TICKS}<br>
 	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_MILLISECS DELAY_FORMAT_MILLISECS}<br>
 	 * <p> 
-	 * This variable is initialized in {@link #Animation(long, byte, int) constructor} and can be set by {@link #setTimeFormat(byte)} method.
+	 * This variable is initialized in {@link #Animation(long, byte, int) constructor} and can be set by {@link #setDelayFormat(byte)} method.
 	 * <strong>Changing of time format does not convert delay value to that specific format.</strong><br>
-	 * To obtain value of this variable use {@link #getTimeFormat()} method.
+	 * To obtain value of this variable use {@link #getDelayFormat()} method.
 	 * 
 	 * @see #frameDelay
 	 * @see #setFrameDelay(long)
@@ -215,7 +215,7 @@ public abstract class Animation {
 	 * The timer handles timing between frame switches.<br>
 	 * Timer does cycles long {@link #frameDelay}s value in unit {@link #delayFormat}. 
 	 * The {@link #frameDelay} can be set by {@link #setFrameDelay(long)} method 
-	 * and the {@link #delayFormat} can be set by {@link #setTimeFormat(byte)} method.
+	 * and the {@link #delayFormat} can be set by {@link #setDelayFormat(byte)} method.
 	 * <h1>Avaible formats: </h1>
 	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_MILLISECS DELAY_FORMAT_MILLISECS}<br>
 	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_SECS DELAY_FORMAT_SECS}<br>
@@ -228,7 +228,7 @@ public abstract class Animation {
 	 * @see svk.sglubos.engine.utils.Timer
 	 * @see svk.sglubos.engine.utils.TimerTask
 	 * @see #setFrameDelay(long)
-	 * @see #setTimeFormat(byte)
+	 * @see #setDelayFormat(byte)
 	 * @see #switchFrame()
 	 * @see #delayFormat
 	 * @see #frameDelay
@@ -296,8 +296,7 @@ public abstract class Animation {
 		this.delayFormat = timeFormat;
 		this.frames = frames;
 		
-		setStartFrame(startFrame);
-		setEndFrame(endFrame);
+		initStartAndEnd(startFrame, endFrame);
 		timer = new Timer(frameSwitch, timeFormat, frameDelay);
 	}
 	
@@ -317,6 +316,11 @@ public abstract class Animation {
 	 * @see #endFrame
 	 */
 	public void start(boolean loop) {
+		if(startFrame == endFrame) {
+			currentFrame = startFrame;
+			return;
+		}
+		
 		if(loop) {
 			timer.startInfiniteLoop();
 		} else {
@@ -345,6 +349,10 @@ public abstract class Animation {
 	 * @see #endFrame
 	 */
 	public void startReverse(boolean loop){
+		if(startFrame == endFrame) {
+			currentFrame = endFrame;
+			return;
+		}
 		if(loop) {
 			timer.startInfiniteLoop();
 		} else {
@@ -439,11 +447,29 @@ public abstract class Animation {
 			}
 		}
 	}
+	//TODO documment
+	protected void initStartAndEnd(int startFrame, int endFrame) {
+		if(startFrame > endFrame || startFrame < 0 || endFrame < 0 || startFrame > frames - 1 || endFrame > frames -1) {
+			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Invalind animation starting or ending frame. Starting frame can not be higher than end frame: start:" + startFrame + " end: " + endFrame);
+			throw new IllegalArgumentException("Invalid starting or ending frame: start: " + startFrame + " end:" +endFrame);
+		}
+		
+		this.startFrame = startFrame;
+		this.endFrame = endFrame;
+	}
+	
 	/**
+	 * Sets the {@link #frameDelay delay between frames} to specified value.<br>
 	 * 
-	 * @param frameDelay
+	 * @param frameDelay delay between frame<br><br>
 	 * 
-	 * @throws java.lang.IllegalArgumentException IllegalArgumentException
+	 * @throws java.lang.IllegalArgumentException IllegalArgumentException if frame delay is bellow 0<br><br>
+	 * 
+	 * @see #getFrameDelay()
+	 * @see #frameDelay
+	 * @see #delayFormat
+	 * @see #setDelayFormat(byte)
+	 * @see #getDelayFormat()
 	 */
 	public void setFrameDelay(long frameDelay) {
 		if(frameDelay < 0) {
@@ -454,20 +480,52 @@ public abstract class Animation {
 		timer.setDelay(frameDelay);
 	}
 	
+	/**
+	 * @return delay between frames<br><br>
+	 * 
+	 * @see #frameDelay
+	 * @see #setFrameDelay(long)
+	 * @see #delayFormat
+	 * @see #getDelayFormat()
+	 * @see #setDelayFormat(byte)
+	 */
 	public long getFrameDelay() {
 		return frameDelay;
 	}
 	
-	public void setTimeFormat(byte timeFormat) {
-		this.delayFormat = timeFormat;
+	/**
+	 * Sets the {@link #delayFormat format of delay} to specified format.<br>
+	 * Avaible formats are formats from {@link svk.sglubos.engine.utils.Timer Timner} class. <br>
+	 * 
+	 * <h1>Avaible formats: </h1>
+	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_MILLISECS DELAY_FORMAT_MILLISECS} delay in milliseconds<br>
+	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_TICKS DELAY_FORMAT_TICKS} delay in ticks<br>
+	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_SECS DELAY_FORMAT_SECS} delay in seconds<br>
+	 * 
+	 * @param delayFormat format of delay
+	 * 
+	 * @see #delayFormat
+	 * @see #frameDelay
+	 * @see #getDelayFormat()
+	 * @see svk.sglubos.engine.utils.Timer
+	 */
+	public void setDelayFormat(byte delayFormat) {
+		this.delayFormat = delayFormat;
 	}
 	
-	public byte getTimeFormat() {
+	/**
+	 * @return format of delay
+	 * 
+	 * @see #setDelayFormat(byte)
+	 * @see #delayFormat
+	 * @see #frameDelay
+	 */
+	public byte getDelayFormat() {
 		return delayFormat;
 	}
 	
 	public void setStartFrame(int start) {
-		if(start < 0 || start >= frames) {
+		if(start < 0 || start >= frames || start > endFrame) {
 			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Illegal starting frame, frame cannot be less than zero and more than frames -1: " + start);
 			throw new IllegalArgumentException("Illegal starting frame: " + start);
 		}
@@ -476,7 +534,7 @@ public abstract class Animation {
 	}
 	
 	public void setEndFrame(int end) {
-		if(end < 0 || end >= frames) {
+		if(end < 0 || end >= frames || end < startFrame) {
 			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Illegal ending frame, frame cannot be less than zero and more than frames -1: " + end);
 			throw new IllegalArgumentException("Illegal ending frame: " + end);
 		}
