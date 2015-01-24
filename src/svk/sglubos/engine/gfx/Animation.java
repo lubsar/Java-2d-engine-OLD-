@@ -4,7 +4,6 @@ import svk.sglubos.engine.utils.MessageHandler;
 import svk.sglubos.engine.utils.Timer;
 import svk.sglubos.engine.utils.TimerTask;
 
-//TODO documentation
 
 /**
  * Provides abilities to create basic animations.<br>
@@ -78,11 +77,9 @@ public abstract class Animation {
 	
 	/**
 	 * Determines number of frames, first frame is <code>0</code> and last frame is <code>frames - 1</code>.<br>
-	 * The {@link #currentFrame} can be set by {@link #setCurrentFrame(int)} method.<br>
 	 * This variable is initialized in {@link #Animation(long, byte, int) constructor}.<br>
 	 * 
 	 * @see #Animation(long, byte, int)
-	 * @see #setCurrentFrame(int)
 	 * @see #setStartFrame(int)
 	 * @see #setEndFrame(int)
 	 */
@@ -138,8 +135,7 @@ public abstract class Animation {
 	
 	/**
 	 * This variable stores the current frame of animation.<br>
-	 * This variable is updated in {@link #switchFrame()} method, 
-	 * can be set by {@link #setCurrentFrame(int)} method and can be obtained by {@link #getCurrentFrame()}.<br>
+	 * This variable is updated in {@link #switchFrame()} method and can be obtained by {@link #getCurrentFrame()}.<br>
 	 * <p>
 	 * The value of this variable is kept between {@link #startFrame} and {@link #endFrame}, 
 	 * so the first frame of animation is {@link #startFrame} and the last frame is {@link #endFrame}.<br>
@@ -151,7 +147,6 @@ public abstract class Animation {
 	 * @see #startFrame
 	 * @see #endFrame
 	 * @see #switchFrame()
-	 * @see #setCurrentFrame(int)
 	 * @see #getCurrentFrame()
 	 * @see #start(boolean)
 	 * @see #startReverse(boolean)
@@ -272,10 +267,9 @@ public abstract class Animation {
 	 * 
 	 * <h1>Initializes:</h1>
 	 * {@link #frameDelay FrameDelay} to value passed as a parameter.<br>
-	 * {@link #startFrame StartFrame} using {@link #setStartFrame(int)} method with value passed as a parameter.
-	 * The {@link #setStartFrame(int)} method keeps the start frame in bounds of <code>0</code> and {@link #frames } - 1.<br>
-	 * {@link #endFrame EndFrame} using {@link #setEndFrame(int)} method with value passes as a parameter. 
-	 * The {@link #setEndFrame(int)} method keeps the end frame in bounds of <code>0</code> and {@link #frames} - 1.<br>
+	 * {@link #startFrame StartFrame} and {@link #endFrame} using method {@link #initStartAndEnd(int, int)} called with arguments passed as parameters. 
+	 * This method validates the values, keeps them in bounds of <code>0</code> and <code>frames -1</code>, but also if {@link #startFrame} is lower than {@link #endFrame}<br>
+	 * 
 	 * The {@link #frames Frames} to value passed as a parameter.<br>
 	 * The {@link #delayFormat DelayFormat} to value passed as a parameter, the avaible formats (units) are formats from {@link svk.sglubos.engine.utils.Timer}:
 	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_MILLISECS DELAY_FORMAT_MILLISECS}, {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_SECS DELAY_FORMAT_SECS}
@@ -447,7 +441,17 @@ public abstract class Animation {
 			}
 		}
 	}
-	//TODO documment
+
+	/**
+	 * Method used by {@link #Animation(long, int, int, int, byte) constructor}, initializes the start and end frame of animation.<br>
+	 * 
+	 * <h1>Conditions for frames: </h1>
+	 * {@link #startFrame StartFrame} have to be positive, but lower than {@link #endFrame} and also lower than {@link #frames}.<br>
+	 * {@link #endFrame EndFrame} have to be positive, lower than {@link #frames} and higher than {@link #startFrame}.<br><br>
+	 * 
+	 * @param startFrame start frame of animation
+	 * @param endFrame end frame of animation
+	 */
 	protected void initStartAndEnd(int startFrame, int endFrame) {
 		if(startFrame > endFrame || startFrame < 0 || endFrame < 0 || startFrame > frames - 1 || endFrame > frames -1) {
 			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Invalind animation starting or ending frame. Starting frame can not be higher than end frame: start:" + startFrame + " end: " + endFrame);
@@ -524,34 +528,67 @@ public abstract class Animation {
 		return delayFormat;
 	}
 	
-	public void setStartFrame(int start) {
-		if(start < 0 || start >= frames || start > endFrame) {
-			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Illegal starting frame, frame cannot be less than zero and more than frames -1: " + start);
-			throw new IllegalArgumentException("Illegal starting frame: " + start);
+	/**
+	 * Sets the {@link #startFrame start frame} o animation to specified frame.<br>
+	 * The value of start frame have to by higher than <code>0</code> and lower than {@link #endFrame}.<br>
+	 * 
+	 * @param startFrame start frame of animation<br><br>
+	 * 
+	 * @throws java.lang.IllegalArgumentException IllegalArgumentException if startFrame is lower than 0 or higher than {@link #endFrame}, or even higher than <code>{@link #frames} -1. </code><br><br>
+	 *
+	 * @see #startFrame
+	 * @see #endFrame
+	 * @see #frames
+	 */
+	public void setStartFrame(int startFrame) {
+		if(startFrame < 0 || startFrame >= frames || startFrame > endFrame) {
+			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Illegal starting frame, frame cannot be less than zero and more than frames -1: " + startFrame);
+			throw new IllegalArgumentException("Illegal starting frame: " + startFrame);
 		}
 		
-		this.startFrame = start;
+		this.startFrame = startFrame;
 	}
 	
-	public void setEndFrame(int end) {
-		if(end < 0 || end >= frames || end < startFrame) {
-			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Illegal ending frame, frame cannot be less than zero and more than frames -1: " + end);
-			throw new IllegalArgumentException("Illegal ending frame: " + end);
+	/**
+	 * Sets the {@link #endFrame end frame} of animation to specified frame.<br>
+	 * The value of end frame have to by higher than <code>0</code> and also higher than {@link #startFrame}.
+	 * The maximum value is {@link #frames} - 1.<br>
+	 * 
+	 * @param endFrame end frame of animation<br><br>
+	 * 
+	 * @throws java.lang.IllegalArgumentException IllegalArgumentException if end is lower than <code>0</code> or lower than {@link #startFrame}, or even higher than <code>{@link #frames} -1 </code><br><br>
+	 * 
+	 * @see #startFrame
+	 * @see #endFrame
+	 * @see #frames
+	 */
+	public void setEndFrame(int endFrame) {
+		if(endFrame < 0 || endFrame >= frames || endFrame < startFrame) {
+			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Illegal ending frame, frame cannot be less than zero and more than frames -1: " + endFrame);
+			throw new IllegalArgumentException("Illegal ending frame: " + endFrame);
 		}
 		
-		this.endFrame = end;
+		this.endFrame = endFrame;
 	}
 	
-	public void setCurrentFrame(int frame){
-		if(frame < 0 || frame >= this.frames) {
-			throw new IllegalArgumentException("Frame can not be set to value less than zero and more than the acutual animation frame array length: " + frame);
-		}
-		this.currentFrame = frame;
-	}
-	
+	/**
+	 * @return current frame of animation
+	 * 
+	 * @see #currentFrame
+	 * @see #frames
+	 */
 	public int getCurrentFrame(){
 		return currentFrame;
 	}
 	
+	/**
+	 * Abstract method which is prepared to handle rendering of animation.<br>
+	 * 
+	 * @param screen screen object used to render currentFrame of animation
+	 * @param x horizontal position of animation
+	 * @param y vertical position of animation<br><br>
+	 * 
+	 * @see svk.sglubos.engine.gfx.Screen
+	 */
 	public abstract void render(Screen screen, int x, int y);
 }

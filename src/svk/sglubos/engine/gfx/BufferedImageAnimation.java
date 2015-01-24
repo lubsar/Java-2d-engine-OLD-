@@ -2,6 +2,7 @@ package svk.sglubos.engine.gfx;
 
 import java.awt.image.BufferedImage;
 
+//TODO Documentation
 public class BufferedImageAnimation extends Animation {
 	protected BufferedImage[] images;
 	

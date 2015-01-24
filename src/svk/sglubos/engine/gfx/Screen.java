@@ -538,7 +538,6 @@ public class Screen {
 		int pixelX = 0;
 		int pixelY = 0;
 		
-		
 		for(int y = 0; y < spriteHeight; y++){
 			pixelY = y + yCoord;
 			for(int x = 0; x < spriteWidth; x++){
@@ -591,6 +590,7 @@ public class Screen {
 			for(int x = 0; x < spriteWidth; x++){
 				pixelX = x * scale + xCoord;
 				
+				System.out.println(spritePixels[x + y * spriteWidth]);
 				if(spritePixels[x + y * spriteWidth] == 0){
 					continue;
 				}
