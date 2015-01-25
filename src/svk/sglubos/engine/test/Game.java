@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 
 import svk.sglubos.engine.IO.ImagePort;
-import svk.sglubos.engine.gfx.Animation;
 import svk.sglubos.engine.gfx.GameWindow;
+import svk.sglubos.engine.gfx.GameRenderingWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
 import svk.sglubos.engine.gfx.sprite.SpriteAnimation;
@@ -27,9 +27,11 @@ public class Game implements Runnable{
 	private ScreenComponentTest r = new ScreenComponentTest();
 	
 	private Screen mainScreen;
-	private SpriteSheet sheet = new SpriteSheet(ImagePort.loadImage("G:\\Dokumenty\\eclipseWS\\GameEngine\\res\\testSheet.png"),32,32);
+	private SpriteSheet sheet = new SpriteSheet(ImagePort.loadImage("G:\\Dokumenty\\eclipseWS\\GameEngine\\res\\Animation I.png"),32,32);
 	private SpriteAnimation anim;
 //	private Screen debugScreen;
+	
+	private GameRenderingWindow pan;
 	
 	private GameWindow mainWindow;
 //	private GameWindow debugWindow;
@@ -44,7 +46,7 @@ public class Game implements Runnable{
 	/**
 	 * Initializes game content before starting game loop; 
 	 */
-	Sprite[] spr = {sheet.getSprite(0, 0, 32, 32), sheet.getSprite(1, 0, 32, 32), sheet.getSprite(2, 0, 32, 32), sheet.getSprite(1, 1, 32, 32)};
+//	Sprite[] spr = {sheet.getSprite(0, 0, 32, 32), sheet.getSprite(1, 0, 32, 32), sheet.getSprite(2, 0, 32, 32), sheet.getSprite(1, 1, 32, 32)};
 	public void init(){
 		int[] pixels = new int[10*10];
 		for(int i = 0; i < pixels.length;i++){
@@ -52,7 +54,7 @@ public class Game implements Runnable{
 		}
 		
 		
-		anim = new SpriteAnimation(sheet, 300, 0, 2, Timer.DELAY_FORMAT_MILLISECS);
+		anim = new SpriteAnimation(sheet, 60, 1, 6, Timer.DELAY_FORMAT_MILLISECS);
 		
 		test = new Sprite(10,10,pixels);
 		
@@ -68,6 +70,8 @@ public class Game implements Runnable{
 		
 		mainScreen = mainWindow.getScreen();
 		mainScreen.addScreenComponent(r);
+		
+		pan = new GameRenderingWindow(mainScreen.getRenderLayer(),1.1119);
 //		debugScreen = debugWindow.getScreen();
 	}
 	
@@ -88,8 +92,9 @@ public class Game implements Runnable{
 	@Override
 	public void run() {
 		init();
-		anim.startReverse(false);
+//		anim.startReverse(false);
 		t.startInfiniteLoop();
+		anim.start(true);
 		
 		long lastTime = System.nanoTime();
 		long lastTimeDebugOutput = System.currentTimeMillis();
@@ -113,7 +118,7 @@ public class Game implements Runnable{
 			fps++;
 			
 			try {
-				Thread.sleep(7);
+				Thread.sleep(0);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -121,7 +126,6 @@ public class Game implements Runnable{
 				
 			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
 				render = "[DEBUG] ticks: " + ticks + "fps: " + fps;
-//				anim.start(false);
 				System.out.println(render);
 				lastTimeDebugOutput += 1000;
 				fps = 0;
@@ -138,12 +142,14 @@ public class Game implements Runnable{
 	public void tick(){
 		anim.tick();
 		t.update();
+		x++;
 	}
 	
 	/**
 	 * Renders game content. 
 	 */
-	int a = 2;
+	int x = 0;
+	int y = 68;
 	public void render(){
 		mainScreen.prepare();
 //		debugScreen.prepare();
@@ -161,13 +167,13 @@ public class Game implements Runnable{
 		
 		mainScreen.renderLine(300, 0, 349, 0);
 		
-		mainScreen.renderSprite(spr[0], 0, 0, a);
+//		mainScreen.renderSprite(spr[0], 0, 0, a);
 		mainScreen.renderString("auto", 400, 10);
 		
 		mainScreen.setColor(Color.CYAN);
-		anim.render(mainScreen, 100, 100);
+		anim.render(mainScreen, x, 68);
 		
-		r.shadeItAll();
+//		r.shadeItAll();
 		
 //		debugScreen.setColor(Color.white);
 //		debugScreen.renderString(render, 0, 90);
@@ -178,7 +184,8 @@ public class Game implements Runnable{
 //		mainWindow.render();
 //		debugWindow.render();
 		
-		mainWindow.showRenderedContent();
+		pan.render();
+//		mainWindow.showRenderedContent();
 //		debugWindow.showContent();
 	}
 }
