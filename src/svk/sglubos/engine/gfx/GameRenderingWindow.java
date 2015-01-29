@@ -1,6 +1,5 @@
 package svk.sglubos.engine.gfx;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
@@ -30,7 +29,6 @@ public class GameRenderingWindow extends JFrame {
 		
 		setSize(getWidth() + insetWide, getHeight() + insetTall);
 		drawingArea = new Rectangle(insets.left, insets.top, renderLayer.getWidth(), renderLayer.getHeight());
-		System.out.println(insets.top);
 		setIgnoreRepaint(true);
 		
 		createBufferStrategy(2);
@@ -41,14 +39,12 @@ public class GameRenderingWindow extends JFrame {
 	}
 
 	public void render() {
-		Graphics g =  bs.getDrawGraphics();
-		Graphics2D drawingGraphics = (Graphics2D) g.create();
+		Graphics2D g =  (Graphics2D) bs.getDrawGraphics();
 		
-		drawingGraphics.translate(drawingArea.x, drawingArea.y);
-		drawingGraphics.scale(scale, scale);
-		drawingGraphics.drawImage(renderLayer, 0 , 0, null);
+		g.translate(drawingArea.x, drawingArea.y);
+		g.scale(scale, scale);
+		g.drawImage(renderLayer, 0 , 0, null);
 		
-		drawingGraphics.dispose();
 		g.dispose();
 		bs.show();
 	}

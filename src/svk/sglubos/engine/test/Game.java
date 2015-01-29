@@ -1,12 +1,14 @@
 package svk.sglubos.engine.test;
 
 import java.awt.Color;
-import java.awt.GraphicsEnvironment;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import svk.sglubos.engine.IO.ImagePort;
-import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.GameRenderingWindow;
 import svk.sglubos.engine.gfx.Screen;
+import svk.sglubos.engine.gfx.particle.ParticleEffect;
+import svk.sglubos.engine.gfx.particle.basic.BasicRectangleParticleEffect;
 import svk.sglubos.engine.gfx.sprite.Sprite;
 import svk.sglubos.engine.gfx.sprite.SpriteAnimation;
 import svk.sglubos.engine.gfx.sprite.SpriteSheet;
@@ -26,17 +28,19 @@ public class Game implements Runnable{
 	
 	private ScreenComponentTest r = new ScreenComponentTest();
 	
-	private Screen mainScreen;
+	private Screen mainScreen = new Screen(500,500, Color.black);
 	private SpriteSheet sheet = new SpriteSheet(ImagePort.loadImage("G:\\Dokumenty\\eclipseWS\\GameEngine\\res\\Animation I.png"),32,32);
 	private SpriteAnimation anim;
 //	private Screen debugScreen;
 	
 	private GameRenderingWindow pan;
 	
-	private GameWindow mainWindow;
-//	private GameWindow debugWindow;
+	private ArrayList<ParticleEffect> effects = new ArrayList<ParticleEffect>();
 	
-//	private GameFullScreenWindow debugWindow;
+	private ParticleEffect e = new BasicRectangleParticleEffect(500, Timer.DELAY_FORMAT_MILLISECS,Color.WHITE,10,10,100);
+	
+//	private GameWindow mainWindow;
+//	private GameWindow debugWindow;
 	
 	//Constructor
 	public Game(){
@@ -53,6 +57,7 @@ public class Game implements Runnable{
 			pixels[i] = 0xFF00FF;
 		}
 		
+		effects.add(e);
 		
 		anim = new SpriteAnimation(sheet, 60, 1, 6, Timer.DELAY_FORMAT_MILLISECS);
 		
@@ -66,9 +71,9 @@ public class Game implements Runnable{
 		
 //		mainWindow = new GameFullScreenWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(),mainScreen.getRenderLayer(),500,500);
 //		debugWindow = new GameWindow(640,300,"Debug",Color.BLUE);
-		mainWindow = new GameWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0],500, 500,"game",2,Color.BLACK);
+//		mainWindow = new GameWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0],500, 500,"game",2,Color.BLACK);
 		
-		mainScreen = mainWindow.getScreen();
+//		mainScreen = mainWindow.getScreen();
 		mainScreen.addScreenComponent(r);
 		
 		pan = new GameRenderingWindow(mainScreen.getRenderLayer(),1.1119);
@@ -79,21 +84,28 @@ public class Game implements Runnable{
 		new Thread(this,"game").start();
 	}
 	
+	Timer particleSpawner = new Timer(new TimerTask(){
+		public void timeSwitch() {
+			effects.add(new BasicRectangleParticleEffect(1000, Timer.DELAY_FORMAT_MILLISECS,Color.WHITE,10,10,100));
+		}
+	}, Timer.DELAY_FORMAT_MILLISECS, 100);
+	
+	
 	Timer t = new Timer(new TimerTask(){
 		
 		@Override
 		public void timeSwitch() {
-			r.changeLight(++r.ambientAlpha);
+			clearEffects();
 		}
 		
-	}, Timer.DELAY_FORMAT_MILLISECS, 60);
+	}, Timer.DELAY_FORMAT_SECS, 10);
 	
 	//Game loop
 	@Override
 	public void run() {
 		init();
-//		anim.startReverse(false);
 		t.startInfiniteLoop();
+		particleSpawner.startInfiniteLoop();
 		anim.start(true);
 		
 		long lastTime = System.nanoTime();
@@ -118,11 +130,10 @@ public class Game implements Runnable{
 			fps++;
 			
 			try {
-				Thread.sleep(0);
+				Thread.sleep(6);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
 				
 			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
 				render = "[DEBUG] ticks: " + ticks + "fps: " + fps;
@@ -142,22 +153,38 @@ public class Game implements Runnable{
 	public void tick(){
 		anim.tick();
 		t.update();
-		x++;
+		particleSpawner.update();
+		
+		Iterator<ParticleEffect> i = effects.iterator();
+		while(i.hasNext()) {
+			ParticleEffect e = i.next();
+			if(e.isAlive()) {
+				e.tick();
+			}
+		}
+	}
+	
+	private void clearEffects() {
+		Iterator<ParticleEffect> i = effects.iterator();
+		while(i.hasNext()) {
+			ParticleEffect e = i.next();
+			if(!e.isAlive()) {
+				i.remove();
+			}
+		}
 	}
 	
 	/**
 	 * Renders game content. 
 	 */
-	int x = 0;
-	int y = 68;
 	public void render(){
 		mainScreen.prepare();
 //		debugScreen.prepare();
 		
 		mainScreen.setColor(Color.RED);
 		
-		mainScreen.renderArc(0, 0, 50, 50, 90, 180);
-		mainScreen.renderFilledArc(50, 0, 50, 50, 90, 180);
+//		mainScreen.renderArc(0, 0, 50, 50, 90, 180);
+//		mainScreen.renderFilledArc(50, 0, 50, 50, 90, 180);
 		
 		mainScreen.renderOval(100, 0, 50, 50);
 		mainScreen.renderFilledOval(150, 0, 50, 50);
@@ -171,7 +198,14 @@ public class Game implements Runnable{
 		mainScreen.renderString("auto", 400, 10);
 		
 		mainScreen.setColor(Color.CYAN);
-		anim.render(mainScreen, x, 68);
+		
+		Iterator<ParticleEffect> i = effects.iterator();
+		while(i.hasNext()) {
+			ParticleEffect e = i.next();
+			if(e.isAlive()) {
+				e.render(mainScreen);
+			}
+		}
 		
 //		r.shadeItAll();
 		
