@@ -21,6 +21,7 @@ public class GameRenderingWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize((int)(renderLayer.getWidth() * scale), (int)( renderLayer.getHeight() * scale));
 		setResizable(false);
+		setUndecorated(true);
 		setVisible(true);
 		
 		insets = getInsets();

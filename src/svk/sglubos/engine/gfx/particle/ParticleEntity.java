@@ -1,13 +1,13 @@
 package svk.sglubos.engine.gfx.particle;
 //TODO documment
 public class ParticleEntity {
-	protected int x;
-	protected int y;
+	protected double x;
+	protected double y;
 	
 	protected double velocityX;
 	protected double velocityY;
 	
-	public ParticleEntity(int x, int y, double velocityX, double velocityY) {
+	public ParticleEntity(double x, double y, double velocityX, double velocityY) {
 		this.x = x;
 		this.y = y;
 		this.velocityX = velocityX;
@@ -32,7 +32,17 @@ public class ParticleEntity {
 		this.velocityX = velocityX;
 		this.velocityY = velocityY;
 	}
-
+	
+	public void setPosition(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public void addPosition(double x, double y) {
+		this.x += x;
+		this.y += y;
+	}
+	
 	public double getVelocityX() {
 		return velocityX;
 	}
@@ -49,19 +59,19 @@ public class ParticleEntity {
 		this.velocityY = velocityY;
 	}
 
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 	
-	public void setX(int x) {
+	public void setX(double x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 	
-	public void setY(int y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 }

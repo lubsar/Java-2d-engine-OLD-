@@ -19,7 +19,7 @@ public abstract class ParticleEffect {
 	}
 	
 	protected void updateTimer() {
-		if(timer.isRunning())
+		if(timer.isRunning() && lifeTime != -1)
 			timer.update();
 	}
 	
@@ -41,4 +41,5 @@ public abstract class ParticleEffect {
 	public boolean isAlive() {
 		return alive;
 	}
+	
 }

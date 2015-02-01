@@ -5,8 +5,9 @@ import java.awt.Graphics;
 
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.particle.ParticleEffect;
+import svk.sglubos.engine.gfx.particle.ParticleEffectFormer;
 import svk.sglubos.engine.gfx.particle.ParticleEntity;
-import svk.sglubos.engine.gfx.particle.ParticleShapeFormer;
+import svk.sglubos.engine.gfx.particle.ParticleFormation;
 //TODO
 public class BasicRectangleParticleEffect extends ParticleEffect {
 	private Color color;
@@ -14,7 +15,10 @@ public class BasicRectangleParticleEffect extends ParticleEffect {
 	private int particleHeight;
 	private ParticleEntity[] particles;
 	
-	public BasicRectangleParticleEffect(long lifeTime, byte timeFormat, Color color, int particleWidth, int particleHeight, int numberOfParticles) {
+	int tempX, tempY;
+	boolean home;
+	
+	public BasicRectangleParticleEffect(long lifeTime, byte timeFormat, Color color, int particleWidth, int particleHeight, int numberOfParticles, ParticleFormation.RectangleFormation f) {
 		super(lifeTime, timeFormat);
 		this.color = color;
 		this.particleWidth = particleWidth;
@@ -23,26 +27,36 @@ public class BasicRectangleParticleEffect extends ParticleEffect {
 		particles = new ParticleEntity[numberOfParticles];
 		
 		for(int i = 0; i < particles.length; i++) {
-			particles[i] = new ParticleEntity(0,0,0,1);
+			particles[i] = new ParticleEntity(0,0,0,0);
 		}
 		
-		ParticleShapeFormer.temp(particles, 500, 30);
+		ParticleEffectFormer.formRectangle(particles, f);
 	}
-
+	
 	@Override
 	public void render(Screen screen) {
 		Graphics g = screen.getGraphics();
 		g.setColor(color);
 		for(ParticleEntity part : particles) {
-			g.fillRect(part.getX(), part.getY(), particleWidth, particleHeight);
+			g.fillRect((int)part.getX(), (int) part.getY(), particleWidth, particleHeight);
 		}
 	}
-
+	
+	public void setPath(int x, int y) {
+		this.tempX = x;
+		this.tempY = y;
+		home = true;
+	}
+	
 	@Override
 	public void tick() {
 		updateTimer();
 		for(ParticleEntity part : particles) {
 			part.tick();
 		}
+	}
+	
+	public ParticleEntity[] getParticles() {
+		return particles;
 	}
 }
