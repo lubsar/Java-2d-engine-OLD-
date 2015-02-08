@@ -6,7 +6,7 @@ public class Timer {
 	public static final byte DELAY_FORMAT_SECS = 0x2;
 	
 	private boolean running;
-	private long switchTime;
+	private long timeSwitch;
 	private long currentTime;
 	private long delay;
 	private byte timeFormat;
@@ -31,7 +31,7 @@ public class Timer {
 			return;
 					
 		currentTime = getCurrentTime();
-		if(currentTime >= switchTime) {
+		if(currentTime >= timeSwitch) {
 			task.timeSwitch();
 			
 			if(numCycles > -1 ){
@@ -53,13 +53,17 @@ public class Timer {
 	
 	public void start() {
 		prepareTiming();
-		numCycles = 1;
 		running = true;
 	}
 	
-	public void startInfiniteLoop() {
-		this.loop = true;
-		this.numCycles = -1;
+	public void startCycle() {
+		numCycles = 1;
+		start();
+	}
+	
+	public void startInfiniteCycle() {
+		loop = true;
+		numCycles = -1;
 		start();
 	}
 	
@@ -70,19 +74,19 @@ public class Timer {
 		}
 		this.numCycles = cycles;
 		this.loop = true;
-		start();
+		startCycle();
 	}
 	
 	protected void prepareTiming() {
 		switch(timeFormat){
 		case DELAY_FORMAT_MILLISECS:
-			switchTime = System.currentTimeMillis() + delay;
+			timeSwitch = System.currentTimeMillis() + delay;
 		break;	
 		case DELAY_FORMAT_TICKS:
-			switchTime = delay;
+			timeSwitch = delay;
 		break;
 		case DELAY_FORMAT_SECS:
-			switchTime = System.currentTimeMillis() / 1000 + delay;
+			timeSwitch = System.currentTimeMillis() / 1000 + delay;
 		break;	
 		default:
 			MessageHandler.printMessage("TIMER", MessageHandler.ERROR, "Unknown delay time format ! ");
@@ -107,14 +111,14 @@ public class Timer {
 	private void updateSwitchTime() {
 		switch(timeFormat){
 		case DELAY_FORMAT_MILLISECS:
-			switchTime = currentTime + delay;
+			timeSwitch = currentTime + delay;
 		break;	
 		case DELAY_FORMAT_TICKS:
-			switchTime = delay;
+			timeSwitch = delay;
 			currentTime = 0;
 		break;
 		case DELAY_FORMAT_SECS:
-			switchTime = currentTime + delay;
+			timeSwitch = currentTime + delay;
 		break;
 		default:
 			MessageHandler.printMessage("TIMER", MessageHandler.ERROR, "Unknown delay time format ! ");

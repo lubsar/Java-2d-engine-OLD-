@@ -316,7 +316,7 @@ public abstract class Animation {
 		}
 		
 		if(loop) {
-			timer.startInfiniteLoop();
+			timer.startInfiniteCycle();
 		} else {
 			timer.startLoop(endFrame - startFrame);
 		}
@@ -348,9 +348,9 @@ public abstract class Animation {
 			return;
 		}
 		if(loop) {
-			timer.startInfiniteLoop();
+			timer.startInfiniteCycle();
 		} else {
-			timer.start();
+			timer.startCycle();
 		}
 		
 		currentFrame = endFrame;

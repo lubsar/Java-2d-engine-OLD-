@@ -40,7 +40,7 @@ public class MessageHandler {
 	 * 
 	 * @see #printMessage(String, String, String)
 	 */
-	public static void printMessage(String tag, String message){
+	public static void printMessage(String tag, String message) {
 		printMessage("ENGINE", tag, message);
 	}
 	
@@ -57,7 +57,7 @@ public class MessageHandler {
 	 * 
 	 * @see #printMessage(String, String, String)
 	 */
-	public static void printMessage(String prefix, String tag, String message){
+	public static void printMessage(String prefix, String tag, String message) {
 		if(tag.equals(ERROR)){
 			System.err.println(prefix + ": [" +tag + "] " + message );
 			return;

@@ -20,6 +20,6 @@ public class SpriteAnimation extends Animation {
 
 	@Override
 	public void render(Screen screen, int x, int y) {
-		screen.renderSprite(sprites[currentFrame], x , y);
+		screen.renderSprite(sprites[currentFrame], x, y);
 	}
 }

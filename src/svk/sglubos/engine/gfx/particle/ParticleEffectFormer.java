@@ -17,7 +17,6 @@ public class ParticleEffectFormer {
 	public static final int FILLMODE_FILLED = 0;
 	public static final int FILLMODE_EDGES = 1;
 	
-	private static Random r = new Random();
 	
 	public static void formLine(ParticleEntity[] particles, ParticleFormation.LineFormation f) {
 		formLine(particles, f.getEndX(), f.getEndY(), f.getVelocity(), f.getFillMode(), f.isRandomness(), f.isOverLap(), f.getParticleWidth(), f.getParticleHeight());
@@ -36,14 +35,19 @@ public class ParticleEffectFormer {
 	}
 	
 	private static class RectangleFormer {
+		private final Random r = new Random();
 		
 		public void position(ParticleEntity[] particles, int width, int height, int fillMode, boolean randomnes, boolean overlap, int particleWidth, int particleHeight){
 			if(randomnes) {
 				randomPosition(particles, width, height, fillMode, overlap, particleWidth, particleHeight);
+			} else {
+				
 			}
 		}
 		
-		public void randomPosition(ParticleEntity[] particles, int width, int height, int fillMode, boolean overlap, int particleWidth, int particleHeight) {
+		
+		
+		private void randomPosition(ParticleEntity[] particles, int width, int height, int fillMode, boolean overlap, int particleWidth, int particleHeight) {
 				switch(fillMode) {
 				case FILLMODE_EDGES:
 					fillEdges(particles, width, height, overlap, particleWidth, particleHeight);
@@ -127,16 +131,6 @@ public class ParticleEffectFormer {
 					}
 				}
 			}
-		}
-	}
-	
-	
-	public static void temp(ParticleEntity[] particles, int width, int height) {
-		for(ParticleEntity e : particles) {
-			e.setX(r.nextInt(width));
-			e.setY(r.nextInt(height) - 23);
-			e.setVelocityY(r.nextDouble() * 1.9);
-			e.setVelocityX(r.nextBoolean() == true ?  r.nextDouble() : r.nextDouble() * -1.065);
 		}
 	}
 }

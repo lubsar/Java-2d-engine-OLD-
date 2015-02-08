@@ -33,8 +33,7 @@ public class Sprite {
 	 * 
 	 * @see svk.sglubos.engine.gfx.Screen
 	 */
-	
-	public Sprite(int width, int height, int[] pixels){
+	public Sprite(int width, int height, int[] pixels) {
 		this.width = width;
 		this.height = height;
 		this.pixels = pixels;
@@ -43,21 +42,21 @@ public class Sprite {
 	/**
 	 * @return integer array containing pixels of sprite
 	 */
-	public int[] getPixels(){
+	public int[] getPixels() {
 		return pixels;
 	}
 	
 	/**
 	 * @return width of sprite
 	 */
-	public int getWidth(){
+	public int getWidth() {
 		return width;
 	}
 
 	/**
 	 * @return height of sprite
 	 */
-	public int getHeight(){
+	public int getHeight() {
 		return height;
 	}
 }

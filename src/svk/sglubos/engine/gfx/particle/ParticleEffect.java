@@ -1,6 +1,8 @@
 package svk.sglubos.engine.gfx.particle;
 
-import svk.sglubos.engine.gfx.Screen;
+import svk.sglubos.engine.gfx.particle.components.ParticleRenderer;
+import svk.sglubos.engine.gfx.particle.components.ParticleShapeFormer;
+import svk.sglubos.engine.gfx.particle.components.ParticleUpdater;
 import svk.sglubos.engine.utils.Timer;
 import svk.sglubos.engine.utils.TimerTask;
 
@@ -10,12 +12,15 @@ public abstract class ParticleEffect {
 	
 	protected Timer timer;
 	protected TimerTask task = () -> lifeTimeOver();
+	protected ParticleFormation f;
+	protected ParticleRenderer renderer;
+	protected ParticleUpdater updater;
 	
 	public ParticleEffect(long lifeTime, byte timeFormat) {
 		this.lifeTime = lifeTime;
 		alive = true;
 		timer = new Timer(task, timeFormat, lifeTime);
-		timer.start();
+		timer.startCycle();
 	}
 	
 	protected void updateTimer() {
@@ -27,8 +32,9 @@ public abstract class ParticleEffect {
 		alive = false;
 	}
 	
-	public abstract void render(Screen screen);
 	public abstract void tick();
+	public abstract void render();
+	public abstract void form(ParticleShapeFormer former);
 	
 	public long getLifeTime() {
 		return lifeTime;
@@ -42,4 +48,15 @@ public abstract class ParticleEffect {
 		return alive;
 	}
 	
+	public void setParticleFormation(ParticleFormation formation) {
+		this.f = formation;
+	}
+	
+	public void setParticleRender(ParticleRenderer render) {
+		this.renderer = render;
+	}
+	
+	public void setParticleUpdater(ParticleUpdater updater) {
+		this.updater = updater;
+	}
 }

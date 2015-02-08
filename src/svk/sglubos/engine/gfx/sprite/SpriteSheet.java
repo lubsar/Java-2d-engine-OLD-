@@ -30,7 +30,7 @@ public class SpriteSheet {
 	 *  @see #getSprites()
 	 *  @see #getSubImage(int, int, int, int)
 	 */
-	private BufferedImage image;
+	private BufferedImage image; 
 	
 	/**
 	 * Width of {@link #image} which sprites and sub images are created from.<br>
@@ -76,7 +76,7 @@ public class SpriteSheet {
 	 * 
 	 * @throws  java.lang.IllegalArgumentException IllegalArgumentException if image is <code>null</code><br><br>
 	 */
-	public SpriteSheet(BufferedImage image){
+	public SpriteSheet(BufferedImage image) {
 		if(image == null) {
 			throw new IllegalArgumentException("BufferedImage can not be null");
 		}
@@ -101,7 +101,7 @@ public class SpriteSheet {
 	 * @see #createSprites(int, int)
 	 * @see #getSprites()
 	 */
-	public SpriteSheet(BufferedImage image, int spriteWidth, int spriteHeight){
+	public SpriteSheet(BufferedImage image, int spriteWidth, int spriteHeight) {
 		this(image);
 		createSprites(spriteWidth, spriteHeight);
 	}
@@ -147,7 +147,7 @@ public class SpriteSheet {
 	 * @return sprites created by {@link #createSprites(int, int)} method <br><br>
 	 * @throws java.lang.IllegalStateException IllegalStateException if {@link #sprites} were not created.
 	 */
-	public Sprite[] getSprites(){
+	public Sprite[] getSprites() {
 		if(sprites == null){
 			throw new IllegalStateException("Sprites were not created");
 		}

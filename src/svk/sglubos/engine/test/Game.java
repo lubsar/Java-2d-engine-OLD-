@@ -1,12 +1,14 @@
 package svk.sglubos.engine.test;
 
-import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.Random;
 
-import svk.sglubos.engine.gfx.GameRenderingWindow;
+import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
-import svk.sglubos.engine.gfx.particle.ParticleEffectFormer;
-import svk.sglubos.engine.gfx.particle.ParticleFormation;
-import svk.sglubos.engine.gfx.particle.basic.BasicRectangleParticleEffect;
+import svk.sglubos.engine.gfx.particle.ParticleEffect;
+import svk.sglubos.engine.gfx.particle.basic.BasicParticleFactory;
 import svk.sglubos.engine.utils.Timer;
 
 /**
@@ -15,10 +17,10 @@ import svk.sglubos.engine.utils.Timer;
  */
 
 public class Game implements Runnable{
-	private Screen mainScreen = new Screen(1280,720, Color.black);
-	private GameRenderingWindow window;
+	private Screen mainScreen;
+	private GameWindow window;
 	
-	private BasicRectangleParticleEffect e = new BasicRectangleParticleEffect(-1, Timer.DELAY_FORMAT_MILLISECS, new Color(255, 137, 65), 2, 2, 1000, new ParticleFormation.RectangleFormation(0, ParticleEffectFormer.FILLMODE_EDGES, true, 6, 6, true, 100, 50));
+	private ArrayList<ParticleEffect> effects = new ArrayList<ParticleEffect>();
 	
 	//Constructor
 	public Game(){
@@ -29,7 +31,9 @@ public class Game implements Runnable{
 	 * Initializes game content before starting game loop; 
 	 */
 	public void init(){
-		window = new GameRenderingWindow(mainScreen.getRenderLayer(),1.1119);
+		window = new GameWindow(1280, 720,"game",1.1119);
+		mainScreen = window.getScreen();
+		BasicParticleFactory.bind(mainScreen);
 	}
 	
 	public void start(){
@@ -81,8 +85,25 @@ public class Game implements Runnable{
 	 * Updates game content.
 	 */
 	
+	int i = 1000;
+	
 	public void tick(){
-		e.tick();
+		ListIterator<ParticleEffect> iter = effects.listIterator();
+		while(iter.hasNext()) {
+			ParticleEffect i = iter.next();
+			if(i.isAlive()) {
+				i.tick();
+			} else {
+				i = null;
+				iter.set(null);
+				iter.remove();
+			}
+		}
+		if(i > 0) {
+			System.out.println(i);
+			effects.add(BasicParticleFactory.test(new Random().nextInt(500) + 5000, Timer.DELAY_FORMAT_MILLISECS, new Random().nextDouble(), new Random().nextDouble(), new Random().nextInt(300) + 300 , new Random().nextInt(1280), new Random().nextInt(720)));			
+			i--;
+		}
 	}
 	
 	/**
@@ -90,12 +111,15 @@ public class Game implements Runnable{
 	 */
 	public void render(){
 		mainScreen.prepare();
-		
-		if(e.isAlive()) {
-			e.render(mainScreen);
+		Iterator<ParticleEffect> iter = effects.iterator();
+		while(iter.hasNext()) {
+			ParticleEffect i = iter.next();
+			if(i.isAlive()) {
+				i.render();
+			}
 		}
 		
 		mainScreen.disposeGraphics();
-		window.render();
+		window.showRenderedContent();
 	}
 }

@@ -8,6 +8,8 @@ package svk.sglubos.engine.utils;
  */
 @FunctionalInterface
 public interface TimerTask {
+	
+	
 	/**
 	 * This method is called when {@link svk.sglubos.engine.utils.Timer} completes its cycle.<br>
 	 * 

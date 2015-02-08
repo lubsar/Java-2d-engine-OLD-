@@ -14,7 +14,7 @@ public class ParticleEntity {
 		this.velocityY = velocityY;
 	}
 	
-	public ParticleEntity(int x, int y) {
+	public ParticleEntity(double x, double y) {
 		this(x, y, 0, 0);
 	}
 	
