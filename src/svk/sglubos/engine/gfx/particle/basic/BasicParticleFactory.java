@@ -4,28 +4,38 @@ import java.awt.Color;
 
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.particle.ParticleEffectFormer;
-import svk.sglubos.engine.gfx.particle.ParticleFormation;
-import svk.sglubos.engine.gfx.particle.components.DefaultParticleRenderer;
-import svk.sglubos.engine.gfx.particle.components.DefaultParticleShapeFormer;
-import svk.sglubos.engine.gfx.particle.components.DefaultParticleUpdater;
+import svk.sglubos.engine.gfx.particle.components.ParticleFormation;
+import svk.sglubos.engine.gfx.particle.components.ParticleInitializer;
+import svk.sglubos.engine.gfx.particle.components.ParticleRenderer;
+import svk.sglubos.engine.gfx.particle.components.ParticleShapeFormer;
+import svk.sglubos.engine.gfx.particle.components.ParticleUpdater;
+import svk.sglubos.engine.gfx.particle.components.sgbasic.BasicParticleInitializer;
+import svk.sglubos.engine.gfx.particle.components.sgbasic.BasicParticleRenderer;
+import svk.sglubos.engine.gfx.particle.components.sgbasic.BasicParticleShapeFormer;
+import svk.sglubos.engine.gfx.particle.components.sgbasic.BasicParticleUpdater;
 
 public class BasicParticleFactory {
-	private static BasicParticleEffect effect;
-	public static DefaultParticleRenderer renderer = new DefaultParticleRenderer(Color.WHITE, 2, 2);
-	public static DefaultParticleUpdater updater = new DefaultParticleUpdater();
-	public static DefaultParticleShapeFormer former = new DefaultParticleShapeFormer();
-	public static ParticleFormation formation = new ParticleFormation.RectangleFormation(0, ParticleEffectFormer.FILLMODE_FILLED, true, 2, 2, true, 300, 120);
-	
-	public static void bind(Screen screen) {
-		screen.addScreenComponent(renderer);
+	public BasicParticleEffect createParticleEffect(long life, byte timeFromat, ParticleInitializer initializer, ParticleShapeFormer former, ParticleFormation formation, ParticleRenderer renderer, ParticleUpdater updater) {
+		BasicParticleEffect e = new BasicParticleEffect(life, timeFromat);
+		e.initialize(initializer);
+		e.setParticleFormation(formation);
+		e.form(former);
+		e.setParticleRender(renderer);
+		e.setParticleUpdater(updater);
+		return e;
 	}
 	
-	public static BasicParticleEffect test(long life, byte timeformat, double initialVelocityX, double initialVelocityY, int number, int x, int y) {
-		effect = new BasicParticleEffect(life, timeformat, number, initialVelocityX, initialVelocityY, x, y);
-		effect.setParticleFormation(formation);
-		effect.form(former);
+	public static BasicParticleEffect test(long life, byte timeformat, double initialVelocityX, double initialVelocityY, int number, int x, int y, Screen screen) {
+		BasicParticleEffect effect = new BasicParticleEffect(life, timeformat);
+		
+		BasicParticleRenderer renderer = new BasicParticleRenderer(Color.WHITE, 2, 2);
+		screen.addScreenComponent(renderer);
+		
+		effect.initialize(new BasicParticleInitializer(x, y, initialVelocityX, initialVelocityY, number));
+		effect.setParticleFormation(new ParticleFormation.RectangleFormation(0, ParticleEffectFormer.FILLMODE_FILLED, true, 2, 2, true, 300, 120));
+		effect.form(new BasicParticleShapeFormer());
 		effect.setParticleRender(renderer);
-		effect.setParticleUpdater(updater);
+		effect.setParticleUpdater(new BasicParticleUpdater());
 		return effect;
 	}
 	

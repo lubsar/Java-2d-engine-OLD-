@@ -1,4 +1,4 @@
-package svk.sglubos.engine.gfx.particle;
+package svk.sglubos.engine.gfx.particle.components;
 //TODO documment
 public abstract class ParticleFormation {
 	private int velocity;

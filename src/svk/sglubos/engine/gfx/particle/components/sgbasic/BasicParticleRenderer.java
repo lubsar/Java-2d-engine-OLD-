@@ -1,17 +1,18 @@
-package svk.sglubos.engine.gfx.particle.components;
+package svk.sglubos.engine.gfx.particle.components.sgbasic;
 
 import java.awt.Color;
 
 import svk.sglubos.engine.gfx.particle.ParticleEffect;
 import svk.sglubos.engine.gfx.particle.ParticleEntity;
 import svk.sglubos.engine.gfx.particle.basic.BasicParticleEffect;
+import svk.sglubos.engine.gfx.particle.components.ParticleRenderer;
 
-public class DefaultParticleRenderer extends ParticleRenderer {
+public class BasicParticleRenderer extends ParticleRenderer {
 	private Color color;
 	private int width;
 	private int height;
 	
-	public DefaultParticleRenderer(Color color, int width, int height) {
+	public BasicParticleRenderer(Color color, int width, int height) {
 		this.color = color;
 		this.width = width;
 		this.height = height;

@@ -2,6 +2,8 @@ package svk.sglubos.engine.gfx.particle;
 
 import java.util.Random;
 
+import svk.sglubos.engine.gfx.particle.components.ParticleFormation;
+
 //TODO
 
 public class ParticleEffectFormer {

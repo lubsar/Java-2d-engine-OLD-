@@ -33,7 +33,6 @@ public class Game implements Runnable{
 	public void init(){
 		window = new GameWindow(1280, 720,"game",1.1119);
 		mainScreen = window.getScreen();
-		BasicParticleFactory.bind(mainScreen);
 	}
 	
 	public void start(){
@@ -101,7 +100,7 @@ public class Game implements Runnable{
 		}
 		if(i > 0) {
 			System.out.println(i);
-			effects.add(BasicParticleFactory.test(new Random().nextInt(500) + 5000, Timer.DELAY_FORMAT_MILLISECS, new Random().nextDouble(), new Random().nextDouble(), new Random().nextInt(300) + 300 , new Random().nextInt(1280), new Random().nextInt(720)));			
+			effects.add(BasicParticleFactory.test(new Random().nextInt(500) + 5000, Timer.DELAY_FORMAT_MILLISECS, new Random().nextDouble(), new Random().nextDouble(), new Random().nextInt(300) + 300 , new Random().nextInt(1280), new Random().nextInt(720), mainScreen));			
 			i--;
 		}
 	}
