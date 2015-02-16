@@ -1,14 +1,16 @@
-package svk.sglubos.engine.gfx.particle;
+package svk.sglubos.engine.gfx.particle.components.basic;
 
 import java.util.Random;
 
+import svk.sglubos.engine.gfx.particle.ParticleEmision;
+import svk.sglubos.engine.gfx.particle.ParticleEntity;
 import svk.sglubos.engine.gfx.particle.components.ParticleFormation;
-
+import svk.sglubos.engine.gfx.particle.components.ParticleFormation.RectangleFormation;
+import svk.sglubos.engine.gfx.particle.components.ParticleFormer;
 //TODO
+//TODO documment
 
-public class ParticleEffectFormer {
-	private static RectangleFormer f = new ParticleEffectFormer.RectangleFormer();
-	
+public class BasicParticleFormer {
 	public static final int VELOCITY_RANDOM = -1;
 	public static final int VELOCITY_AROUND = 0;
 	public static final int VELOCITY_NORTH = 1;
@@ -20,34 +22,16 @@ public class ParticleEffectFormer {
 	public static final int FILLMODE_EDGES = 1;
 	
 	
-	public static void formLine(ParticleEntity[] particles, ParticleFormation.LineFormation f) {
-		formLine(particles, f.getEndX(), f.getEndY(), f.getVelocity(), f.getFillMode(), f.isRandomness(), f.isOverLap(), f.getParticleWidth(), f.getParticleHeight());
-	}
-	
-	public static void formRectangle(ParticleEntity[] particles, ParticleFormation.RectangleFormation f) {
-		formRectangle(particles, f.getWidth(), f.getHeight(), f.getVelocity(), f.getFillMode(), f.isRandomness(), f.isOverLap(), f.getParticleWidth(), f.getParticleHeight());
-	}
-	
-	public static void formLine(ParticleEntity[] particles, int endX, int endY, int direction, int fillMode, boolean coordinateRandomnes, boolean overlap, int particleWidth, int particleHeight) {
-		
-	}
-	
-	public static void formRectangle(ParticleEntity[] particles, int width, int height, int direction, int fillMode, boolean randomnes, boolean overlap, int particleWidth, int particleHeight) {
-		f.position(particles, width, height, fillMode, randomnes, overlap, particleWidth, particleHeight);
-	}
-	
-	private static class RectangleFormer {
+	public static class RectangleFormer implements ParticleFormer{
 		private final Random r = new Random();
 		
-		public void position(ParticleEntity[] particles, int width, int height, int fillMode, boolean randomnes, boolean overlap, int particleWidth, int particleHeight){
+		private void position(ParticleEntity[] particles, int width, int height, int fillMode, boolean randomnes, boolean overlap, int particleWidth, int particleHeight){
 			if(randomnes) {
 				randomPosition(particles, width, height, fillMode, overlap, particleWidth, particleHeight);
 			} else {
 				
 			}
 		}
-		
-		
 		
 		private void randomPosition(ParticleEntity[] particles, int width, int height, int fillMode, boolean overlap, int particleWidth, int particleHeight) {
 				switch(fillMode) {
@@ -133,6 +117,11 @@ public class ParticleEffectFormer {
 					}
 				}
 			}
+		}
+		
+		@Override
+		public void formShape(ParticleEmision effect, ParticleFormation f) {
+			position(effect.getParticles(), ((RectangleFormation)f).getWidth(), ((RectangleFormation)f).getHeight(), f.getFillMode(), f.isRandomness(), f.isRandomness(), f.getParticleWidth(), f.getParticleHeight());
 		}
 	}
 }

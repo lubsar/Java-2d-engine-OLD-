@@ -1,42 +1,34 @@
 package svk.sglubos.engine.gfx.particle.basic;
 
-import java.awt.Color;
-
-import svk.sglubos.engine.gfx.Screen;
-import svk.sglubos.engine.gfx.particle.ParticleEffectFormer;
+import svk.sglubos.engine.gfx.particle.ParticleEmision;
+import svk.sglubos.engine.gfx.particle.ParticleFactory;
+import svk.sglubos.engine.gfx.particle.ParticleTemplate;
 import svk.sglubos.engine.gfx.particle.components.ParticleFormation;
+import svk.sglubos.engine.gfx.particle.components.ParticleFormer;
 import svk.sglubos.engine.gfx.particle.components.ParticleInitializer;
 import svk.sglubos.engine.gfx.particle.components.ParticleRenderer;
-import svk.sglubos.engine.gfx.particle.components.ParticleShapeFormer;
 import svk.sglubos.engine.gfx.particle.components.ParticleUpdater;
-import svk.sglubos.engine.gfx.particle.components.sgbasic.BasicParticleInitializer;
-import svk.sglubos.engine.gfx.particle.components.sgbasic.BasicParticleRenderer;
-import svk.sglubos.engine.gfx.particle.components.sgbasic.BasicParticleShapeFormer;
-import svk.sglubos.engine.gfx.particle.components.sgbasic.BasicParticleUpdater;
+import svk.sglubos.engine.gfx.particle.components.basic.BasicParticleInitializer;
 
-public class BasicParticleFactory {
-	public BasicParticleEffect createParticleEffect(long life, byte timeFromat, ParticleInitializer initializer, ParticleShapeFormer former, ParticleFormation formation, ParticleRenderer renderer, ParticleUpdater updater) {
-		BasicParticleEffect e = new BasicParticleEffect(life, timeFromat);
-		e.initialize(initializer);
-		e.setParticleFormation(formation);
-		e.form(former);
-		e.setParticleRender(renderer);
-		e.setParticleUpdater(updater);
-		return e;
+//TODO documment
+
+public class BasicParticleFactory extends ParticleFactory{
+
+	@Override
+	public ParticleEmision createParticleEmision(int x, int y, double velocityX, double velocityY, int numParticles, long lifeTime, byte timeFormat, ParticleInitializer initializer, ParticleFormer former, ParticleFormation formation) {
+		ParticleEmision emision = new ParticleEmision(lifeTime, timeFormat, numParticles);
+		((BasicParticleInitializer) initializer).setX(x);
+		((BasicParticleInitializer) initializer).setY(y);
+		((BasicParticleInitializer) initializer).setInitialVelocityX(velocityX);
+		((BasicParticleInitializer) initializer).setInitialVelocityY(velocityY);
+		initializer.init(emision);
+		former.formShape(emision, formation);
+		
+		return emision;
 	}
 	
-	public static BasicParticleEffect test(long life, byte timeformat, double initialVelocityX, double initialVelocityY, int number, int x, int y, Screen screen) {
-		BasicParticleEffect effect = new BasicParticleEffect(life, timeformat);
-		
-		BasicParticleRenderer renderer = new BasicParticleRenderer(Color.WHITE, 2, 2);
-		screen.addScreenComponent(renderer);
-		
-		effect.initialize(new BasicParticleInitializer(x, y, initialVelocityX, initialVelocityY, number));
-		effect.setParticleFormation(new ParticleFormation.RectangleFormation(0, ParticleEffectFormer.FILLMODE_FILLED, true, 2, 2, true, 300, 120));
-		effect.form(new BasicParticleShapeFormer());
-		effect.setParticleRender(renderer);
-		effect.setParticleUpdater(new BasicParticleUpdater());
-		return effect;
+	@Override
+	public ParticleTemplate createParticleTemplate(long life,byte timeFormat,int numParticles, ParticleRenderer renderer, ParticleUpdater updater, ParticleInitializer initializer, ParticleFormer former, ParticleFormation formation) {
+		return new ParticleTemplate(life, timeFormat, numParticles, renderer, updater, former, formation, initializer);
 	}
-	
 }

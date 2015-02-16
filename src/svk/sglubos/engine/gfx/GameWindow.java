@@ -172,6 +172,13 @@ public class GameWindow extends JFrame {
 	public Screen getScreen() {
 		return screen;
 	}
+	
+	//TODO documment
+	
+	public RenderCanvas getRenderCanvas() {
+		return canvas;
+	}
+	
 	/**
 	 * Displays rendered content on Canvas which is added to <code>JFrame</code><br>
 	 * Uses {@link svk.sglubos.engine.gfx.RenderCanvas#showRenderedContent() canvas.shownRenderedContent()} method.

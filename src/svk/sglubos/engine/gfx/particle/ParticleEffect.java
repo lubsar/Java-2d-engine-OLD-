@@ -1,77 +1,118 @@
 package svk.sglubos.engine.gfx.particle;
 
+import java.util.ArrayList;
+
 import svk.sglubos.engine.gfx.particle.components.ParticleFormation;
+import svk.sglubos.engine.gfx.particle.components.ParticleFormer;
 import svk.sglubos.engine.gfx.particle.components.ParticleInitializer;
 import svk.sglubos.engine.gfx.particle.components.ParticleRenderer;
-import svk.sglubos.engine.gfx.particle.components.ParticleShapeFormer;
 import svk.sglubos.engine.gfx.particle.components.ParticleUpdater;
 import svk.sglubos.engine.utils.Timer;
 import svk.sglubos.engine.utils.TimerTask;
 
-public abstract class ParticleEffect {
-	protected long lifeTime;
+public class ParticleEffect {
+	protected Timer timer;
+	protected TimerTask emit = () -> emit();
+	
 	protected boolean alive;
 	
-	protected Timer timer;
-	protected TimerTask task = () -> lifeTimeOver();
-	protected ParticleFormation formation;
-	protected ParticleRenderer renderer;
+	protected long delay;
+	protected byte timeFormat;
+	
+	protected int x;
+	protected int y;
+	
+	protected int numParticles;
+	
+	protected double velocityX;
+	protected double velocityY;
+	
+	protected long emisionLifeTime;
+	protected byte emisionTimeFormat;
+	
 	protected ParticleUpdater updater;
+	protected ParticleRenderer renderer;
+	protected ParticleInitializer initializer;
+	protected ParticleFormer former;
+	protected ParticleFormation formation;
 	
-	public ParticleEffect(long lifeTime, byte timeFormat) {
-		this.lifeTime = lifeTime;
-		alive = true;
-		timer = new Timer(task, timeFormat, lifeTime);
-		timer.startCycle();
+	protected ParticleFactory factory;
+	protected ArrayList<ParticleEmision> emisions = new ArrayList<ParticleEmision>();
+	
+	public ParticleEffect(ParticleFactory factory, ParticleTemplate template, int emisions, long delay, byte timeFormat, int x, int y, double velocityX, double velocityY) {
+		this.factory = factory;
+		this.timeFormat = timeFormat;
+		this.delay = delay;
+		this.x = x;
+		this.y = y;
+		
+		this.numParticles = template.getNumParticles();
+		this.renderer = template.getRenderer();
+		this.updater = template.getUpdater();
+		this.initializer = template.getInitializer();
+		this.former = template.getFormer();
+		this.formation = template.getFormation();
 	}
 	
-	protected void updateTimer() {
-		if(timer.isRunning() && lifeTime != -1)
-			timer.update();
+	public void tick() {
+		for(ParticleEmision e : emisions) {
+			if(e.isAlive()) {
+				updater.tick(e);
+				if(renderer.isUpdatable())
+					renderer.tick();
+			}
+		}
 	}
 	
-	protected void lifeTimeOver() {
-		alive = false;
+	public void render() {
+		for(ParticleEmision e : emisions) {
+			if(e.isAlive()) {
+				renderer.render(e);
+			}
+		}
 	}
 	
-	public abstract void tick();
-	public abstract void render();
-	public abstract void form(ParticleShapeFormer former);
-	public abstract void initialize(ParticleInitializer initializer);
-	
-	public long getLifeTime() {
-		return lifeTime;
-	}
-
-	public void setLifeTime(long lifeTime) {
-		this.lifeTime = lifeTime;
-	}
-
-	public boolean isAlive() {
-		return alive;
+	public void emit() {
+		emisions.add(factory.createParticleEmision(x, y, velocityX, velocityY,numParticles,delay, emisionTimeFormat, initializer, former, formation));
 	}
 	
-	public void setParticleFormation(ParticleFormation formation) {
-		this.formation = formation;
-	}
-	
-	public ParticleFormation getParticleFormation() {
-		return formation;
-	}
-	
-	public void setParticleRender(ParticleRenderer render) {
-		this.renderer = render;
-	}
-	
-	public ParticleRenderer getRenderer() {
+	public ParticleRenderer getParticleParticleRenderer() {
 		return renderer;
 	}
-	
+
+	public void setParticleRenderer(ParticleRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+	public ParticleUpdater getParticleUpdater() {
+		return updater;
+	}
+
 	public void setParticleUpdater(ParticleUpdater updater) {
 		this.updater = updater;
 	}
-	
-	public ParticleUpdater getParticleUpdater() {
-		return updater;
+
+	public ParticleFormer getParticleFormer() {
+		return former;
+	}
+
+	public void setParticleFormer(ParticleFormer former) {
+		this.former = former;
+	}
+
+	public ParticleFormation getParticleFormation() {
+		return formation;
+	}
+
+	public void setParticleFormation(ParticleFormation formation) {
+		this.formation = formation;
+	}
+
+	public ParticleInitializer getParticleInitializer() {
+		return initializer;
+	}
+
+	public void setParticleInitializer(ParticleInitializer initializer) {
+		this.initializer = initializer;
 	}
 }

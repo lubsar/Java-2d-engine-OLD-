@@ -1,10 +1,7 @@
 package svk.sglubos.engine.gfx.particle.components;
-
-import svk.sglubos.engine.gfx.particle.ParticleEffect;
-import svk.sglubos.engine.gfx.particle.ParticleEntity;
+//TODO documment
+import svk.sglubos.engine.gfx.particle.ParticleEmision;
 
 public interface ParticleInitializer {
-	
-	public void init(ParticleEffect effect);
-	public ParticleEntity[] getParticles();
+	public void init(ParticleEmision effect);
 }

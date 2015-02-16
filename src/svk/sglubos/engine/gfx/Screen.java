@@ -642,6 +642,7 @@ public class Screen {
 	 */
 	public void addScreenComponent(ScreenComponent component) {
 		components.add(component);
+		g = renderLayer.getGraphics();
 		component.bind(this, g, pixels);
 	}
 	
