@@ -1,8 +1,9 @@
 package svk.sglubos.engine.gfx.particle.basic;
 
+import svk.sglubos.engine.gfx.particle.ParticleEffect;
 import svk.sglubos.engine.gfx.particle.ParticleEmision;
 import svk.sglubos.engine.gfx.particle.ParticleFactory;
-import svk.sglubos.engine.gfx.particle.ParticleTemplate;
+import svk.sglubos.engine.gfx.particle.ParticleEmisionTemplate;
 import svk.sglubos.engine.gfx.particle.components.ParticleFormation;
 import svk.sglubos.engine.gfx.particle.components.ParticleFormer;
 import svk.sglubos.engine.gfx.particle.components.ParticleInitializer;
@@ -28,7 +29,12 @@ public class BasicParticleFactory extends ParticleFactory{
 	}
 	
 	@Override
-	public ParticleTemplate createParticleTemplate(long life,byte timeFormat,int numParticles, ParticleRenderer renderer, ParticleUpdater updater, ParticleInitializer initializer, ParticleFormer former, ParticleFormation formation) {
-		return new ParticleTemplate(life, timeFormat, numParticles, renderer, updater, former, formation, initializer);
+	public ParticleEmisionTemplate createParticleTemplate(long life,byte timeFormat,int numParticles, ParticleRenderer renderer, ParticleUpdater updater, ParticleInitializer initializer, ParticleFormer former, ParticleFormation formation) {
+		return new ParticleEmisionTemplate(life, timeFormat, numParticles, renderer, updater, former, formation, initializer);
+	}
+
+	@Override
+	public ParticleEffect createParticleEffect(int emisions, long delay, byte timeFormat, ParticleEmisionTemplate template) {
+		return new ParticleEffect(this, template, emisions, delay, timeFormat);
 	}
 }

@@ -9,7 +9,6 @@ public class BasicParticleUpdater extends ParticleUpdater {
 	@Override
 	public void tick(ParticleEmision effect) {
 		ParticleEntity[] particles =  effect.getParticles(); 
-		
 		for(ParticleEntity particle : particles) {
 			particle.tick();
 		}

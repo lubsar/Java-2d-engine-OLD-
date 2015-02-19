@@ -78,9 +78,13 @@ public class Mouse extends MouseAdapter{
 	
 	public static int getRotation() {
 		int rot = mouseWheelRotation;
+		resetMouseWheelRotation();
+		return rot;
+	}
+	
+	public static void resetMouseWheelRotation() {
 		mouseWheelRotated = false;
 		mouseWheelRotation = 0;
-		return rot;
 	}
 	
 	public static boolean isButtonPressed(int button) {

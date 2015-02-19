@@ -21,6 +21,7 @@ public class BasicParticleRenderer extends ParticleRenderer {
 	public void render(ParticleEmision e) {
 		ParticleEntity[] particles = e.getParticles();
 		g.setColor(color);
+		System.out.println(e);
 		for(ParticleEntity entity : particles) {
 			g.fillRect((int) entity.getX(), (int) entity.getY(), width, height);
 		}

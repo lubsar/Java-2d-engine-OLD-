@@ -7,8 +7,16 @@ public class ParticleEmiter {
 	
 	private List<ParticleEffect> effects = new ArrayList<ParticleEffect>();
 	
-	public void emit(ParticleTemplate template, ParticleFactory factory, int emisions, long delay, byte timeFormat, int x, int y, double velocityX, double velocityY) {
-		effects.add(new ParticleEffect(factory, template, y, delay, timeFormat, x, y, velocityX, velocityY));
+	public void emit(ParticleEffect effect, int x, int y, double velocityX, double velocityY) {
+		effect.setX(x);
+		effect.setY(y);
+		effect.setVelocityX(velocityX);
+		effect.setVelocityY(velocityY);
+		effects.add(effect);
+	}
+	
+	public void emit(ParticleEffect effect) {
+		effects.add(effect);
 	}
 	
 	public void tick() {

@@ -6,7 +6,7 @@ import svk.sglubos.engine.gfx.particle.components.ParticleInitializer;
 import svk.sglubos.engine.gfx.particle.components.ParticleRenderer;
 import svk.sglubos.engine.gfx.particle.components.ParticleUpdater;
 
-public class ParticleTemplate {
+public class ParticleEmisionTemplate {
 	protected ParticleRenderer renderer;
 	protected ParticleUpdater updater;
 	protected ParticleFormer former;
@@ -17,7 +17,7 @@ public class ParticleTemplate {
 	protected byte timeFormat;
 	protected int numParticles;
 	
-	public ParticleTemplate(long lifeTime, byte timeFormat, int numParticles, ParticleRenderer renderer, ParticleUpdater updater,	ParticleFormer former, ParticleFormation formation, ParticleInitializer initializer) {
+	public ParticleEmisionTemplate(long lifeTime, byte timeFormat, int numParticles, ParticleRenderer renderer, ParticleUpdater updater, ParticleFormer former, ParticleFormation formation, ParticleInitializer initializer) {
 		this.renderer = renderer;
 		this.updater = updater;
 		this.former = former;
