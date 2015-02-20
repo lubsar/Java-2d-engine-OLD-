@@ -1,5 +1,6 @@
-package svk.sglubos.engine.gfx;
+package svk.sglubos.engine.gfx.animation;
 
+import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.utils.MessageHandler;
 import svk.sglubos.engine.utils.Timer;
 import svk.sglubos.engine.utils.TimerTask;

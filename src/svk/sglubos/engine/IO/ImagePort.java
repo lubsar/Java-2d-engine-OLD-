@@ -1,4 +1,4 @@
-package svk.sglubos.engine.IO;
+package svk.sglubos.engine.io;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

@@ -5,16 +5,6 @@ import java.awt.event.KeyEvent;
 
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
-import svk.sglubos.engine.gfx.particle.ParticleEffect;
-import svk.sglubos.engine.gfx.particle.ParticleEmisionTemplate;
-import svk.sglubos.engine.gfx.particle.ParticleEmiter;
-import svk.sglubos.engine.gfx.particle.ParticleFactory;
-import svk.sglubos.engine.gfx.particle.basic.BasicParticleFactory;
-import svk.sglubos.engine.gfx.particle.components.ParticleFormation;
-import svk.sglubos.engine.gfx.particle.components.basic.BasicParticleFormer;
-import svk.sglubos.engine.gfx.particle.components.basic.BasicParticleInitializer;
-import svk.sglubos.engine.gfx.particle.components.basic.BasicParticleRenderer;
-import svk.sglubos.engine.gfx.particle.components.basic.BasicParticleUpdater;
 import svk.sglubos.engine.input.KeyBoard;
 import svk.sglubos.engine.input.Mouse;
 import svk.sglubos.engine.utils.Timer;
@@ -27,12 +17,6 @@ import svk.sglubos.engine.utils.Timer;
 public class Game implements Runnable{
 	private Screen mainScreen;
 	private GameWindow window;
-	private ParticleEmiter emiter;
-	
-	private ParticleFactory basic;
-	private ParticleEmisionTemplate temp;
-	private ParticleEffect effect;
-	private BasicParticleRenderer renderer;
 	
 	//Constructor
 	public Game(){
@@ -45,12 +29,6 @@ public class Game implements Runnable{
 	public void init(){
 		window = new GameWindow(500, 500, "game", 1);
 		mainScreen = window.getScreen();
-		emiter = new ParticleEmiter();
-		basic = new BasicParticleFactory();
-		renderer  = new BasicParticleRenderer(20,20, Color.black);
-		mainScreen.addScreenComponent(renderer);
-		
-		temp = basic.createParticleTemplate(500, Timer.DELAY_FORMAT_MILLISECS, 200, renderer, new BasicParticleUpdater(), new BasicParticleInitializer(), new BasicParticleFormer.RectangleFormer(), new ParticleFormation.RectangleFormation(0, BasicParticleFormer.FILLMODE_EDGES, true, 1, 1, true, 60, 60));
 		
 		Mouse.bind(window.getRenderCanvas());
 		KeyBoard.bind(window.getRenderCanvas());
@@ -125,8 +103,6 @@ public class Game implements Runnable{
 	 */
 	public void render(){
 		mainScreen.prepare();
-		
-		emiter.render();
 		
 		mainScreen.disposeGraphics();
 		window.showRenderedContent();

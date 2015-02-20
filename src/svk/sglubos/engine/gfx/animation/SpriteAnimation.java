@@ -1,7 +1,8 @@
-package svk.sglubos.engine.gfx.sprite;
+package svk.sglubos.engine.gfx.animation;
 
-import svk.sglubos.engine.gfx.Animation;
 import svk.sglubos.engine.gfx.Screen;
+import svk.sglubos.engine.gfx.sprite.Sprite;
+import svk.sglubos.engine.gfx.sprite.SpriteSheet;
 
 //TODO Documentaton
 
