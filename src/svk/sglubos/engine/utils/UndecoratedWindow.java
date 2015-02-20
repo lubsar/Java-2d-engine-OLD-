@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+@SuppressWarnings("serial")
 public class UndecoratedWindow extends JFrame {
 
 	private BufferedImage renderLayer;

@@ -1,13 +1,9 @@
 package svk.sglubos.engine.test;
 
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.input.KeyBoard;
 import svk.sglubos.engine.input.Mouse;
-import svk.sglubos.engine.utils.Timer;
 
 /**
  * Temporary class.
@@ -32,9 +28,6 @@ public class Game implements Runnable{
 		
 		Mouse.bind(window.getRenderCanvas());
 		KeyBoard.bind(window.getRenderCanvas());
-		
-		KeyBoard.register(KeyEvent.VK_ENTER);
-		KeyBoard.recordKeyChars();
 	}
 	
 	public void start(){
@@ -67,15 +60,14 @@ public class Game implements Runnable{
 			render();
 			fps++;
 			
-//			try {
-//				Thread.sleep(0);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
+			try {
+				Thread.sleep(6);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 				
 			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
 				System.out.println("[DEBUG] ticks: " + ticks + "fps: " + fps);
-//				System.out.println(Mouse.getRotation());
 				lastTimeDebugOutput += 1000;
 				fps = 0;
 				ticks = 0;
@@ -87,15 +79,7 @@ public class Game implements Runnable{
 	 * Updates game content.
 	 */
 	
-	int x = 300;
 	public void tick(){
-		if(KeyBoard.isPressed(KeyEvent.VK_ENTER)) {
-			System.out.println("ENTEEER");
-		}
-		if(x < 0) {
-			System.out.println(KeyBoard.getCharSequence());
-		}
-		x--;
 	}
 	
 	/**
