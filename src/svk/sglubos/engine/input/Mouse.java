@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.HashMap;
 import java.util.Map;
-
+//TODO Documentation
 public class Mouse extends MouseAdapter{
 	private static final Mouse instance = new Mouse();
 	private static Map<Integer, Boolean> buttons = new HashMap<Integer, Boolean>();

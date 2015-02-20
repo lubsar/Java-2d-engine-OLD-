@@ -5,7 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
-//TODO documment
+//TODO Documentation
 public class KeyBoard extends KeyAdapter{
 	private static final KeyBoard instance = new KeyBoard();
 	private static Map<Integer, Boolean> keys = new HashMap<Integer, Boolean>();

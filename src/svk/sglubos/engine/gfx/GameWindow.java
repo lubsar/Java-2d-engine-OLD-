@@ -173,7 +173,7 @@ public class GameWindow extends JFrame {
 		return screen;
 	}
 	
-	//TODO documment
+	//TODO Documentation
 	
 	public RenderCanvas getRenderCanvas() {
 		return canvas;
