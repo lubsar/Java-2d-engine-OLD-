@@ -3,8 +3,11 @@ package svk.sglubos.engine.gfx.animation;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
 import svk.sglubos.engine.gfx.sprite.SpriteSheet;
-
-//TODO Documentaton
+//TODO document
+/**
+ *<code>Sprite Animation</code> class provides ability to create basic animation from {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} objects.
+ *This class inherits from {@link svk.sglubos.engine.gfx.animation.Animation Animation} class.
+ */
 
 public class SpriteAnimation extends Animation {
 	protected Sprite[] sprites;

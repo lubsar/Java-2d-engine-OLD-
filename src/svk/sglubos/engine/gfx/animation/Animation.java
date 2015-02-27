@@ -1,6 +1,7 @@
 package svk.sglubos.engine.gfx.animation;
 
 import svk.sglubos.engine.gfx.Screen;
+import svk.sglubos.engine.utils.DebugStringBuilder;
 import svk.sglubos.engine.utils.MessageHandler;
 import svk.sglubos.engine.utils.Timer;
 import svk.sglubos.engine.utils.TimerTask;
@@ -580,6 +581,22 @@ public abstract class Animation {
 	 */
 	public int getCurrentFrame(){
 		return currentFrame;
+	}
+	//TODO document
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTab();
+		ret.append("frameDelay = " + frameDelay, " delayFormat = " + delayFormat, " frames = " + frames, " loop = " + loop, " running = " + running,
+				" reverse = " + reverse, " currentFrame = " + currentFrame, " startFrame = " + startFrame,
+				" endFrame = " + endFrame);
+		ret.appendLineSeparator();
+		ret.appendObjectToStringTabln("timer = ", timer);
+		ret.appendObjectToStringTabln("frameSwitch = ", frameSwitch);
+		ret.appendCloseBracketln();
+		
+		return ret.getString();
 	}
 	
 	/**

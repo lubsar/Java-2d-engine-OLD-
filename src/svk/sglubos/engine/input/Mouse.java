@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 //TODO Documentation
 public class Mouse extends MouseAdapter{
-	private static final Mouse instance = new Mouse();
+	private static final Mouse INSTANCE = new Mouse();
 	private static Map<Integer, Boolean> buttons = new HashMap<Integer, Boolean>();
 	
 	public static int x;
@@ -22,9 +22,9 @@ public class Mouse extends MouseAdapter{
 	private static int mouseWheelRotation;
 	
 	public static void bind(Component component) {
-		component.addMouseListener(instance);
-		component.addMouseMotionListener(instance);
-		component.addMouseWheelListener(instance);
+		component.addMouseListener(INSTANCE);
+		component.addMouseMotionListener(INSTANCE);
+		component.addMouseWheelListener(INSTANCE);
 		
 		int butts = MouseInfo.getNumberOfButtons();
 		for(int i = 0; i < butts; i++) {

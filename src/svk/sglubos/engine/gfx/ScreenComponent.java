@@ -1,6 +1,8 @@
 package svk.sglubos.engine.gfx;
 
 import java.awt.Graphics;
+
+import svk.sglubos.engine.utils.DebugStringBuilder;
 /**
  * This class provides ability to implement own rendering to {@link svk.sglubos.engine.gfx.Screen Screen}.<br>
  * This class provides abilities such as: changing {@link svk.sglubos.engine.gfx.Screen#pixels Screen pixels} and using {@link svk.sglubos.engine.gfx.Screen#g Screen graphics object}.<br>
@@ -102,5 +104,19 @@ public abstract class ScreenComponent {
 		g = null;
 		pixels = null;
 		screen = null;
+	}
+	
+	//TODO document
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTabln("bound = " + bound);
+		ret.appendTabln("g" + g.toString());
+		ret.appendTabln("screen = " + screen.toString());
+		ret.appendTabln("pixels = " + pixels.toString());
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

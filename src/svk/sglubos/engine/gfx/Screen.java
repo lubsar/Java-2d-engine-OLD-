@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import svk.sglubos.engine.gfx.sprite.Sprite;
+import svk.sglubos.engine.utils.DebugStringBuilder;
 import svk.sglubos.engine.utils.MessageHandler;
 
 /**
@@ -794,5 +795,27 @@ public class Screen {
 	 */
 	public BufferedImage getRenderLayer() {
 		return renderLayer;
+	}
+	
+	//TODO ducumment
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTab();
+		ret.append("width = " + width);
+		ret.append(" height = " + height);
+		ret.append(" ignoreOffset = " + ignoreOffset);
+		ret.append(" xOffset = " + xOffset);
+		ret.append(" yOffset = " + yOffset);
+		ret.appendLineSeparator();
+		
+		ret.appendObjectToStringTabln("defaultScreenColor = ", defaultScreenColor);
+		ret.appendObjectToStringTabln("g = ",g);
+		ret.appendObjectToStringTabln("renderLayer = ", renderLayer);
+		ret.appendObjectToStringTabln("pixels = ", pixels);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

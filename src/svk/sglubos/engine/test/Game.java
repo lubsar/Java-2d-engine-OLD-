@@ -1,16 +1,21 @@
 package svk.sglubos.engine.test;
 
+import java.awt.Color;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyEvent;
+
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
-import svk.sglubos.engine.input.KeyBoard;
+import svk.sglubos.engine.input.Keyboard;
 import svk.sglubos.engine.input.Mouse;
+import svk.sglubos.engine.utils.MessageHandler;
 
 /**
  * Temporary class.
  * Game loop & stuff for testing
  */
 
-public class Game implements Runnable{
+public class Game implements Runnable {
 	private Screen mainScreen;
 	private GameWindow window;
 	
@@ -23,11 +28,11 @@ public class Game implements Runnable{
 	 * Initializes game content before starting game loop; 
 	 */
 	public void init(){
-		window = new GameWindow(500, 500, "game", 1);
+		window = new GameWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), 500, 500, "game", 1, Color.black);
 		mainScreen = window.getScreen();
 		
 		Mouse.bind(window.getRenderCanvas());
-		KeyBoard.bind(window.getRenderCanvas());
+		Keyboard.bind(window.getRenderCanvas());
 	}
 	
 	public void start(){
@@ -80,6 +85,10 @@ public class Game implements Runnable{
 	 */
 	
 	public void tick(){
+		if(Keyboard.isPressed(KeyEvent.VK_ESCAPE)) {
+			MessageHandler.printMessage("DEBUG", "any keyPressed");
+			System.out.println(window.toString());
+		}
 	}
 	
 	/**

@@ -6,6 +6,8 @@ import java.awt.GraphicsDevice;
 
 import javax.swing.JFrame;
 
+import svk.sglubos.engine.utils.DebugStringBuilder;
+
 //TODO Documentation 
 /**
  * <code>GameWindow</code> class provides easy way to create {@link javax.swing.JFrame JFrame} which contains {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas}.<br>
@@ -234,5 +236,18 @@ public class GameWindow extends JFrame {
 			setWindowDecoration(false);
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
 		}
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(this.getClass(), hashCode());
+		ret.appendTabln(super.toString());
+		ret.appendObjectToStringTabln("screen = ", screen);
+		ret.appendObjectToStringTabln("canvas = ", canvas);
+		ret.appendObjectToStringTabln("device = ", device);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

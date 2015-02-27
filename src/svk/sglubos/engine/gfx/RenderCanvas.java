@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
+import svk.sglubos.engine.utils.DebugStringBuilder;
 import svk.sglubos.engine.utils.MessageHandler;
 
 /**
@@ -119,5 +120,18 @@ public class RenderCanvas extends Canvas {
 		    }
 		    bs.show();
 		} while (bs.contentsLost());
+	}
+	//TODO document
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTabln(super.toString());
+		ret.appendObjectToStringTabln("scale = ", scale);
+		ret.appendObjectToStringTabln("renderLayer = ", renderLayer);
+		ret.appendObjectToStringTabln("bs = ", bs);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }
