@@ -21,10 +21,11 @@ public class BufferedImageAnimation extends Animation {
 	
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
+		
 		ret.appendClassDataBracket(getClass(), hashCode());
 		ret.appendTabln(super.toString());
 		ret.appendObjectToStringTabln("images = ", images);
-		ret.appendCloseBracketln();
+		ret.appendCloseBracket();
 		
 		return ret.getString();
 	}

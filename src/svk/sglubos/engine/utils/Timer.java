@@ -1,5 +1,5 @@
 package svk.sglubos.engine.utils;
-//TODO Documentation
+//TODO Documentation and redesign
 public class Timer {
 	public static final byte DELAY_FORMAT_MILLISECS = 0x0;
 	public static final byte DELAY_FORMAT_TICKS = 0x1;
@@ -147,5 +147,19 @@ public class Timer {
 	
 	public boolean isRunning() {
 		return running;
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTab();
+		ret.append("running =" + running, " timeSwitch = " + timeSwitch, " currentTime = " + currentTime, " delay = " + delay, " timeformat = " + timeFormat,
+				" loop = " + loop, " numCycles = " + numCycles);
+		ret.appendLineSeparator();
+		ret.appendObjectToStringTabln("task = ", task);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

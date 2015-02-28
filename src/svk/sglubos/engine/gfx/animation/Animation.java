@@ -594,7 +594,7 @@ public abstract class Animation {
 		ret.appendLineSeparator();
 		ret.appendObjectToStringTabln("timer = ", timer);
 		ret.appendObjectToStringTabln("frameSwitch = ", frameSwitch);
-		ret.appendCloseBracketln();
+		ret.appendCloseBracket();
 		
 		return ret.getString();
 	}

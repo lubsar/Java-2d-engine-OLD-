@@ -1,5 +1,7 @@
 package svk.sglubos.engine.gfx.sprite;
 
+import svk.sglubos.engine.utils.DebugStringBuilder;
+
 /**
  * Contains integer array of pixels which can be rendered on {@link svk.sglubos.engine.gfx.Screen Screen}. <br>
  * 
@@ -58,5 +60,18 @@ public class Sprite {
 	 */
 	public int getHeight() {
 		return height;
+	}
+	//TODO document
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTab();
+		ret.append("width = " + width, " height = " + height);
+		ret.appendLineSeparator();
+		ret.appendObjectToStringTabln("pixels = ", pixels);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

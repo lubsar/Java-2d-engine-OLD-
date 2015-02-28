@@ -1,5 +1,5 @@
 package svk.sglubos.engine.utils;
-//TODO document build fancy string formater
+//TODO document build fancy string formatter
 public class DebugStringBuilder implements Strings{
 	private StringBuilder builder = new StringBuilder();
 	
@@ -52,7 +52,11 @@ public class DebugStringBuilder implements Strings{
 	
 	public void appendObjectToString(String string, Object object) {
 		builder.append(string);
-		builder.append(object.toString());
+		try{
+			builder.append(object.toString());			
+		} catch (NullPointerException e) {
+			builder.append("null");
+		}
 	}
 	
 	public void appendObjectToStringTab(String string, Object object) {
@@ -73,6 +77,10 @@ public class DebugStringBuilder implements Strings{
 			builder.append("null");
 		}
 		builder.append(LINE_SEPARATOR);
+	}
+	
+	public void appendObjectArrayln(String string, Object[] object) {
+		
 	}
 	
 	public void appendClassDataBracket(Class<?> clas, int hashcode) {

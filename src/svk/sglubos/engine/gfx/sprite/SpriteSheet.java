@@ -3,6 +3,8 @@ package svk.sglubos.engine.gfx.sprite;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 
+import svk.sglubos.engine.utils.DebugStringBuilder;
+
 /**
  * SpriteSheet class provides ability to create multiple {@link svk.sglubos.engine.gfx.sprite.Sprite sprites} from single {@link java.awt.image.BufferedImage BufferedImage}.<br>
  * Before getting sprites, sprites must be created, if you use this {@link #SpriteSheet(BufferedImage, int, int) constructor}, sprites of specified size are automatically created.
@@ -21,18 +23,6 @@ import java.awt.image.RasterFormatException;
  */
 public class SpriteSheet {
 	/**
-	 * {@link java.awt.image.BufferedImage BufferedImage} object which sprites and sub images are created from.<br>
-	 * This object is initialized in {@link #SpriteSheet(BufferedImage) constructor}.
-	 * 
-	 * 	@see #SpriteSheet(BufferedImage)
-	 *  @see #createSprites(int, int)
-	 *  @see #getSprite(int, int, int, int)
-	 *  @see #getSprites()
-	 *  @see #getSubImage(int, int, int, int)
-	 */
-	private BufferedImage image; 
-	
-	/**
 	 * Width of {@link #image} which sprites and sub images are created from.<br>
 	 * This variable is initialized in {@link #SpriteSheet(BufferedImage) constructor}.
 	 * 
@@ -49,6 +39,18 @@ public class SpriteSheet {
 	 * @see #image
 	 */
 	private int height;
+	
+	/**
+	 * {@link java.awt.image.BufferedImage BufferedImage} object which sprites and sub images are created from.<br>
+	 * This object is initialized in {@link #SpriteSheet(BufferedImage) constructor}.
+	 * 
+	 * 	@see #SpriteSheet(BufferedImage)
+	 *  @see #createSprites(int, int)
+	 *  @see #getSprite(int, int, int, int)
+	 *  @see #getSprites()
+	 *  @see #getSubImage(int, int, int, int)
+	 */
+	private BufferedImage image; 
 	
 	/**
 	 * Array of sprites created from {@link #image}, which are initialized in {@link #SpriteSheet(BufferedImage, int, int ) this construcotr} or by {@link #createSprites(int, int) createSprites(spriteWidth,spriteHeight)} method.
@@ -183,5 +185,19 @@ public class SpriteSheet {
 		}
 		
 		this.sprites = sprites;
+	}
+	//TODO documment
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTab();
+		ret.append("width = " + width, " height = " + height);
+		ret.appendLineSeparator();
+		ret.appendObjectToStringTabln("image = ", image);
+		ret.appendObjectToStringTabln("sprites = ", sprites);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

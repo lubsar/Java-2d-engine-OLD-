@@ -56,7 +56,6 @@ public class Keyboard extends KeyAdapter {
 		return pressed.size() > 0;
 	}
 	
-	
 	public static String getRecordedKeySequence() {
 		recordKeySequence = false;
 		String temp = keySequence;
@@ -64,4 +63,5 @@ public class Keyboard extends KeyAdapter {
 		
 		return temp;
 	}
+	
 }
