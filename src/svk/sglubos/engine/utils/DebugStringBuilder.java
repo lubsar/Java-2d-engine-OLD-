@@ -26,8 +26,8 @@ public class DebugStringBuilder implements Strings{
 	public void appendln(String... strings) {
 		for(String s : strings) {
 			builder.append(s);
-			builder.append(LINE_SEPARATOR);
 		}
+		builder.append(LINE_SEPARATOR);
 	}
 	
 	public void appendln() {
@@ -91,11 +91,6 @@ public class DebugStringBuilder implements Strings{
 	
 	public void appendCloseBracket() {
 		builder.append("}");
-	}
-	
-	public void appendCloseBracketln() {
-		builder.append("}");
-		builder.append(LINE_SEPARATOR);
 	}
 	
 	public String getString() {

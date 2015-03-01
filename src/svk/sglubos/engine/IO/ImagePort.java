@@ -68,12 +68,13 @@ public class ImagePort {
 	 * Saves specified {@link java.awt.image.BufferedImage image} to file at specified path, with specified name and format.<br>
 	 * Uses {@link javax.imageio.ImageIO#write(java.awt.image.RenderedImage, String, File) ImageIO.write(image, format, file)} method with arguments: 
 	 * image, formant, {@link java.io.File File} instance created with specified path + name.<br>
-	 * Catches {@link java.io.IOException IOException}.<br>
+	 * Catches any {@link java.lang.Exception Exception}.<br>
 	 * If caught, error message is printed through {@link svk.sglubos.engine.utils.MessageHandler message handler} and also stack trace is printed.<br>
 	 * 
 	 * <h1>Path & name:</h1>
-	 * If your path ends with: "/", the {@link java.io.File File} is created with path: <code>path + name + "." + format</code>, 
-	 * if path does not end with: "/", the {@link java.io.File File} is created with: <code>path + "/" + name + "." + format </code>.<br><br>
+	 * If path ends with: "/", the {@link java.io.File File} is created with path: <code>path + name + "." + format</code>, 
+	 * if path does not end with: "/" and is not empty, the {@link java.io.File File} is created with path: <code>path + "/" + name + "." + format</code>.<br>
+	 * if path is empty, the {@link java.io.File File} is created wit path: </code>name + "." + format</code>.<br><br>
 	 *  
 	 * @param image {@link java.awt.image.BufferedImage BufferedImage} which will be saved 
 	 * @param path path where image file will be saved
@@ -85,14 +86,17 @@ public class ImagePort {
 	public static void exportImage(BufferedImage image, String path, String name, String format) {
 		if(path.endsWith("/")) {
 			path += name + "." + format;
-		} else {
+		} else if(!path.isEmpty()) {
 			path += "/" + name + "." + format;
+		} else {
+			path += name + "." + format;
 		}
 		
 		try {
 			ImageIO.write(image,format , new File(path));
-		} catch (IOException e) {
-			MessageHandler.printMessage("IMAGE_PORT", MessageHandler.ERROR, "IOException occured when writing image: " + image);
+			System.out.println(new File(path).getAbsolutePath());
+		} catch (Exception e) {
+			MessageHandler.printMessage("IMAGE_PORT", MessageHandler.ERROR, "Exception occured when writing image " + image +" to: " + path);
 			e.printStackTrace();
 		}
 	}

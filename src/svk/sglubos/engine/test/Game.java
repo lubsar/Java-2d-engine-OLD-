@@ -8,6 +8,7 @@ import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.input.Keyboard;
 import svk.sglubos.engine.input.Mouse;
+import svk.sglubos.engine.io.ImagePort;
 import svk.sglubos.engine.utils.MessageHandler;
 
 /**
@@ -83,11 +84,19 @@ public class Game implements Runnable {
 	/**
 	 * Updates game content.
 	 */
-	
+	boolean saved = false;
 	public void tick(){
 		if(Keyboard.isPressed(KeyEvent.VK_ESCAPE)) {
 			MessageHandler.printMessage("DEBUG", "any keyPressed");
 			System.out.println(window.toString());
+		}
+		
+		if(Keyboard.isPressed(KeyEvent.VK_S)) {
+			if(!saved) {
+				saved = true;
+				ImagePort.exportImage(mainScreen.getRenderLayer(),null, null, null);
+			}
+			
 		}
 	}
 	
