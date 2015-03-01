@@ -64,6 +64,18 @@ public class ImagePort {
 		return image;
 	}
 	
+	//TODO document
+	public static BufferedImage loadImage(File file) {
+		BufferedImage image = null;
+		try{
+			image = ImageIO.read(file);			
+		}catch (IOException e){
+			MessageHandler.printMessage("IMAGE_PORT", MessageHandler.ERROR, "IOException occured when loading image:" + file);
+			e.printStackTrace();
+		}
+		return image;
+	}
+	
 	/**
 	 * Saves specified {@link java.awt.image.BufferedImage image} to file at specified path, with specified name and format.<br>
 	 * Uses {@link javax.imageio.ImageIO#write(java.awt.image.RenderedImage, String, File) ImageIO.write(image, format, file)} method with arguments: 
