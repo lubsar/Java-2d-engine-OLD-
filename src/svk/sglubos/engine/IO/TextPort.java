@@ -100,16 +100,6 @@ public class TextPort {
 		return  (String[]) ret.toArray();
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public static void saveStringToFile(String string, File file) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));

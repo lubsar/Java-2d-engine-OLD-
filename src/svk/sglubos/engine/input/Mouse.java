@@ -7,8 +7,23 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.HashMap;
 import java.util.Map;
-//TODO Documentation
+
+/**
+ * This class handles mouse input and data can be statically accessed. This class is extended by {@link java.awt.event.MouseAdapter MouseAdapter} 
+ * which is used to listen for mouse events.<br>
+ * <h1>Functions</h1>
+ * Mouse keeps track of coordinates of cursor relative to component to which is 
+ * {@link #INSTANCE instance} of this class bound using {@link #bind(Component)} method and if the cursor is inside this component too.
+ * Mouse button press state is also tracked by Mouse. The mouse button's states are stored in {@link java.util.HashMap HashMap object}.
+ * To obtain state for specific mouse button use method {@link #isButtonPressed(int)} where parameter is mouse button.<br> 
+ * You can obtain value of modifiersEx of the latest {@link java.awt.event.MouseEvent MouseEvent} by statically accessing {@link #mouseEventModifiersEx} variable.<br>
+ *  MouseWheel rotation is also tracked. If mouse wheel was rotated, 
+ * the {@link Mouse#mouseWheelRotated} is <code>true</code> and the rotation can be obtained by {@link #getRotation()} method.<br>
+ * The {@link #getRotation()} methods resets the value of {@link #mouseWheelRotation} and also sets the {@link #mouseWheelRotated} to <code>false</code>.<br>
+ * The {@link #mouseWheelRotation} and {@link #mouseWheelRotated} can be reset also by {@link #resetMouseWheelRotation()} method.<br>
+ */
 public class Mouse extends MouseAdapter{
+	
 	private static final Mouse INSTANCE = new Mouse();
 	private static Map<Integer, Boolean> buttons = new HashMap<Integer, Boolean>();
 	
