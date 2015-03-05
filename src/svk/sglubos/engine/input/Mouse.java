@@ -4,9 +4,12 @@ import java.awt.Component;
 import java.awt.MouseInfo;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.util.HashMap;
 import java.util.Map;
+
+import svk.sglubos.engine.utils.MessageHandler;
 
 /**
  * This class handles mouse input and data can be statically accessed. This class is extended by {@link java.awt.event.MouseAdapter MouseAdapter} 
@@ -20,23 +23,38 @@ import java.util.Map;
  *  MouseWheel rotation is also tracked. If mouse wheel was rotated, 
  * the {@link Mouse#mouseWheelRotated} is <code>true</code> and the rotation can be obtained by {@link #getRotation()} method.<br>
  * The {@link #getRotation()} methods resets the value of {@link #mouseWheelRotation} and also sets the {@link #mouseWheelRotated} to <code>false</code>.<br>
- * The {@link #mouseWheelRotation} and {@link #mouseWheelRotated} can be reset also by {@link #resetMouseWheelRotation()} method.<br>
+ * The {@link #mouseWheelRotation} and {@link #mouseWheelRotated} can be reset also by {@link #resetMouseWheelRotation()} method.<br><br>
+ * 
+ * @see #getX()
+ * @see #getY()
+ * @see #getModifiersEx()
+ * @see #isMouseWheelRotated() 
+ * @see #isCursorInsideOfComponent()
+ * @see #getRotation()
+ * @see #resetMouseWheelRotation()
+ * @see #isButtonPressed(int)
  */
 public class Mouse extends MouseAdapter{
-	
 	private static final Mouse INSTANCE = new Mouse();
 	private static Map<Integer, Boolean> buttons = new HashMap<Integer, Boolean>();
 	
-	public static int x;
-	public static int y;
+	private static boolean bound;
 	
-	public static int mouseEventModifiersEx;
-	public static boolean mouseWheelRotated;
-	public static boolean isInsideofComponent;
+	private static int x;
+	private static int y;
+	
+	private static int mouseEventModifiersEx;
+	private static boolean mouseWheelRotated;
+	private static boolean insideofComponent;
 	
 	private static int mouseWheelRotation;
 	
 	public static void bind(Component component) {
+		if(bound) {
+			MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "Mouse is bound to a component");
+			return;
+		}
+		
 		component.addMouseListener(INSTANCE);
 		component.addMouseMotionListener(INSTANCE);
 		component.addMouseWheelListener(INSTANCE);
@@ -45,6 +63,30 @@ public class Mouse extends MouseAdapter{
 		for(int i = 0; i < butts; i++) {
 			buttons.put(1 + i, false);
 		}
+		
+		bound = true;
+	}
+	
+	public static void unbind(Component component) {
+		if(!bound) {
+			MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "Mouse is not bound to any component");
+			return;
+		}
+		
+		MouseListener[] listeners = component.getMouseListeners();
+		
+		for(MouseListener mouse : listeners) {
+			if(mouse.equals(INSTANCE)) {
+				component.removeMouseListener(INSTANCE);
+				component.removeMouseMotionListener(INSTANCE);
+				component.removeMouseWheelListener(INSTANCE);
+				
+				bound = false;
+				return;
+			}
+		}
+		
+		MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "Mouse was not bound to component: " + component.toString());
 	}
 	
 	@Override
@@ -63,14 +105,14 @@ public class Mouse extends MouseAdapter{
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		isInsideofComponent = true;
+		insideofComponent = true;
 		
 		mouseEventModifiersEx = e.getModifiersEx();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		isInsideofComponent = false;
+		insideofComponent = false;
 		
 		mouseEventModifiersEx = e.getModifiersEx();
 	}
@@ -91,12 +133,6 @@ public class Mouse extends MouseAdapter{
 		mouseEventModifiersEx = e.getModifiersEx();
 	}
 	
-	public static int getRotation() {
-		int rot = mouseWheelRotation;
-		resetMouseWheelRotation();
-		return rot;
-	}
-	
 	public static void resetMouseWheelRotation() {
 		mouseWheelRotated = false;
 		mouseWheelRotation = 0;
@@ -104,5 +140,35 @@ public class Mouse extends MouseAdapter{
 	
 	public static boolean isButtonPressed(int button) {
 		return buttons.get(button);
+	}
+	
+	public static int getRotation() {
+		int rot = mouseWheelRotation;
+		resetMouseWheelRotation();
+		return rot;
+	}
+	
+	public static int getX() {
+		return x;
+	}
+	
+	public static int getY() {
+		return y;
+	}
+	
+	public static boolean isBound() {
+		return bound;
+	}
+	
+	public static int getModifiersX() {
+		return mouseEventModifiersEx;
+	}
+	
+	public static boolean isCursorInsideOfComponent() {
+		return insideofComponent;
+	}
+	
+	public static boolean wasMousewheelRotated() {
+		return mouseWheelRotated;
 	}
 }
