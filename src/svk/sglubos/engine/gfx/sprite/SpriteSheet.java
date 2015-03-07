@@ -3,7 +3,7 @@ package svk.sglubos.engine.gfx.sprite;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 
-import svk.sglubos.engine.utils.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 
 /**
  * SpriteSheet class provides ability to create multiple {@link svk.sglubos.engine.gfx.sprite.Sprite sprites} from single {@link java.awt.image.BufferedImage BufferedImage}.<br>

@@ -5,20 +5,45 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import svk.sglubos.engine.utils.debug.MessageHandler;
 //TODO Documentation
 public class Keyboard extends KeyAdapter {
 	private static final Keyboard INSTANCE = new Keyboard();
+	private static Component bounding;
 	private static List<Integer> pressed = new ArrayList<Integer>();
 	
 	private static String keySequence = "";
 	private static boolean recordKeySequence;
 	
-	public static int modifiersEx;
+	private static boolean bound;
+	
+	private static int modifiersEx;
 	
 	private Keyboard() {}
 	
 	public static void bind(Component compo) {
+		if(bound) {
+			MessageHandler.printMessage("KEYBOARD","INFO", "Mouse is already bound to: " + bounding.toString());
+			return;
+		}
+		
 		compo.addKeyListener(INSTANCE);
+		bounding = compo;
+		
+		bound = true;
+	}
+	
+	public static void unbind() {
+		if(!bound) {
+			MessageHandler.printMessage("KEYBOARD","INFO", "Mouse was not bound to any component");
+			return;
+		}
+		
+		bounding.addKeyListener(INSTANCE);
+		
+		bounding = null;
+		bound = false;
 	}
 	
 	@Override
@@ -62,6 +87,10 @@ public class Keyboard extends KeyAdapter {
 		keySequence = "";
 		
 		return temp;
+	}
+	
+	public static int getModifiersEx() {
+		return modifiersEx;
 	}
 	
 }

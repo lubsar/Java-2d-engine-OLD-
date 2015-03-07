@@ -1,10 +1,10 @@
 package svk.sglubos.engine.gfx.animation;
 
 import svk.sglubos.engine.gfx.Screen;
-import svk.sglubos.engine.utils.DebugStringBuilder;
-import svk.sglubos.engine.utils.MessageHandler;
 import svk.sglubos.engine.utils.Timer;
 import svk.sglubos.engine.utils.TimerTask;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.MessageHandler;
 
 
 /**

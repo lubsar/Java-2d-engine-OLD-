@@ -1,4 +1,4 @@
-package svk.sglubos.engine.utils;
+package svk.sglubos.engine.utils.debug;
 /**
  * Handles printing of messages to console. <br>
  * Message has specified tag, which indicates if message is {@link #WARNING warning}, {@link #INFO information}, {@link #ERROR error} or you can specify own tag.<br>

@@ -1,4 +1,7 @@
-package svk.sglubos.engine.utils;
+package svk.sglubos.engine.utils.debug;
+
+import svk.sglubos.engine.utils.Strings;
+
 //TODO document build fancy string formatter
 public class DebugStringBuilder implements Strings{
 	private StringBuilder builder = new StringBuilder();
@@ -9,7 +12,7 @@ public class DebugStringBuilder implements Strings{
 	}
 	
 	public void appendTab() {
-		builder.append(THREE_SPACE);
+		builder.append(TABULATOR);
 	}
 	
 	public void appendln(String string) {
@@ -39,7 +42,7 @@ public class DebugStringBuilder implements Strings{
 	}
 	
 	public void appendTabln(String string) {
-		builder.append(THREE_SPACE);
+		builder.append(TABULATOR);
 		builder.append(string);
 		builder.append(LINE_SEPARATOR);
 	}
@@ -60,12 +63,12 @@ public class DebugStringBuilder implements Strings{
 	}
 	
 	public void appendObjectToStringTab(String string, Object object) {
-		builder.append(THREE_SPACE);
+		builder.append(TABULATOR);
 		appendObjectToString(string, object);
 	}
 	
 	public void appendObjectToStringTabln(String string, Object object) {
-		builder.append(THREE_SPACE);
+		builder.append(TABULATOR);
 		appendObjectToStringln(string, object);
 	}
 	

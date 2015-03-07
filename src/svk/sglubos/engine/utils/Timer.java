@@ -1,4 +1,8 @@
 package svk.sglubos.engine.utils;
+
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.MessageHandler;
+
 //TODO Documentation and redesign
 public class Timer {
 	public static final byte DELAY_FORMAT_MILLISECS = 0x0;

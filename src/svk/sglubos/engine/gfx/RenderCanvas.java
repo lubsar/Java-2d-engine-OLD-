@@ -6,8 +6,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
-import svk.sglubos.engine.utils.DebugStringBuilder;
-import svk.sglubos.engine.utils.MessageHandler;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.MessageHandler;
 
 /**
  * RenderCanvas provides easy way to display rendered game content

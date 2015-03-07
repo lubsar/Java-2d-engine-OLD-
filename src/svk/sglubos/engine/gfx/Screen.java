@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import svk.sglubos.engine.gfx.sprite.Sprite;
-import svk.sglubos.engine.utils.DebugStringBuilder;
-import svk.sglubos.engine.utils.MessageHandler;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.MessageHandler;
 
 /**
  * Handles rendering of basic shapes, images, texts, sprites and supports implementation of own rendering.<br>

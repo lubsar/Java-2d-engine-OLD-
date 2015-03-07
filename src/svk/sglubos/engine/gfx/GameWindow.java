@@ -6,7 +6,7 @@ import java.awt.GraphicsDevice;
 
 import javax.swing.JFrame;
 
-import svk.sglubos.engine.utils.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 
 //TODO Documentation 
 /**

@@ -3,7 +3,7 @@ package svk.sglubos.engine.gfx.animation;
 import java.awt.image.BufferedImage;
 
 import svk.sglubos.engine.gfx.Screen;
-import svk.sglubos.engine.utils.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 
 //TODO Documentation
 public class BufferedImageAnimation extends Animation {

@@ -2,7 +2,7 @@ package svk.sglubos.engine.gfx;
 
 import java.awt.Graphics;
 
-import svk.sglubos.engine.utils.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 /**
  * This class provides ability to implement own rendering to {@link svk.sglubos.engine.gfx.Screen Screen}.<br>
  * This class provides abilities such as: changing {@link svk.sglubos.engine.gfx.Screen#pixels Screen pixels} and using {@link svk.sglubos.engine.gfx.Screen#g Screen graphics object}.<br>

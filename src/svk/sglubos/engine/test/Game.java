@@ -9,7 +9,7 @@ import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.input.Keyboard;
 import svk.sglubos.engine.input.Mouse;
 import svk.sglubos.engine.io.ImagePort;
-import svk.sglubos.engine.utils.MessageHandler;
+import svk.sglubos.engine.utils.debug.MessageHandler;
 
 /**
  * Temporary class.

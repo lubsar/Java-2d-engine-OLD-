@@ -3,7 +3,7 @@ package svk.sglubos.engine.gfx.animation;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.gfx.sprite.Sprite;
 import svk.sglubos.engine.gfx.sprite.SpriteSheet;
-import svk.sglubos.engine.utils.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 //TODO document
 /**
  *<code>Sprite Animation</code> class provides ability to create basic animation from {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} objects.
