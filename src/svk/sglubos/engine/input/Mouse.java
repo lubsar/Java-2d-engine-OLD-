@@ -12,7 +12,8 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
 
 /**
  * This class handles mouse input and provides static access to data. This class is extended by {@link java.awt.event.MouseAdapter MouseAdapter} 
- * which is used to listen for mouse events.<br>
+ * which is used to listen for various mouse events such as {@link java.awt.event.MouseEvent MouseEvent} and {@link java.awt.event.MouseWheelEvent MouseWheelEvent}.<br>
+ * 
  * <h1>Functions</h1>
  * Mouse keeps track of coordinates of cursor relative to component to which is 
  * {@link #INSTANCE instance} of this class bound using {@link #bind(Component)} method and if the cursor is inside this component too.
@@ -34,6 +35,10 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
  * @see #getRotation()
  * @see #resetMouseWheelRotation()
  * @see #isButtonPressed(int)
+ * 
+ * @see java.awt.event.MouseAdapter
+ * @see java.awt.event.MouseEvent
+ * @see java.awt.event.MouseWheelEvent
  */
 public class Mouse extends MouseAdapter{
 	/**
@@ -44,6 +49,18 @@ public class Mouse extends MouseAdapter{
 	 */
 	private static final Mouse INSTANCE = new Mouse();
 	
+	/**
+	 * {@link java.awt.Component Component} to which can be <code>Mouse</code> bound by {@link #bind(Component)} method 
+	 *  and to unbind <code>Mouse</code> use {@link #unbind()} method. 
+	 *  The binding gives the <code>Mouse</code> ability to listen to mouse events such as {@link java.awt.event.MouseEvent MouseEvent} 
+	 *  and {@link java.awt.event.MouseWheelEvent MouseWheelEvent}. The <code> Mouse can be bound to only one {@link java.awt.Component Component} at time.<br>
+	 *  
+	 *  @see java.awt.Component
+	 *  @see java.awt.event.MouseEvent
+	 *  @see java.awt.event.MouseWheelEvent
+	 *  @see #bind(Component)
+	 *  @see #unbind()
+	 */
 	private static Component bouding;
 	
 	/**
@@ -137,7 +154,28 @@ public class Mouse extends MouseAdapter{
 	 */
 	private static int mouseWheelRotation;
 	
-	
+	/**
+	 * Binds <code>Mouse</code> to the specified {@link java.awt.Component Component} which gives <code>Mouse</code> ability to listen to various mouse events 
+	 * such as {@link java.awt.event.MouseEvent MouseEvent} and {@link #java.awt.event.MouseWheelEvent MouseWheelEvent}.<br> 
+	 * To unbind <code>Mouse</code> use {@link #unbind()} method.
+	 * 
+	 * <h1>Binding</h1>
+	 * if the <code>Mouse</code> is already bound info message is printed by {@link svk.sglubos.engine.utils.debug.MessageHandler MessageHandler} 
+	 *  and return statement is called. And if bound is <code>false</code> the binding is processed.
+	 * To the specified {@link java.awt.Component Component} is added {@link #INSTANCE instance of this class} as a {@link java.awt.event.MouseListener MouseListener}, 
+	 * {@link java.awt.event.MouseWheelListener MouseWheelListener} and {@link java.awt.event.MouseMotionListener MouseMotionListener}. 
+	 * Reference to the specified {@link java.awt.Component Component} is stored to {@link #bouding}. The {@link #buttons } map is initialized with keys from <code>1</code> to
+	 * value obtained by {@link java.awt.MouseInfo#getNumberOfButtons() MouseInfo.getNumberOfButtons()} <code>+ 1</code>. 
+	 * And the {@link #bound} is set to <code>true</code><br><br>
+	 * 
+	 * @param component component to which will be <code>Mouse</code> bound to<br><br>
+	 * 
+	 * @see #unbind()		
+	 * @see #buttons
+	 * 
+	 * @see java.awt.Component
+	 * @see java.awt.event.MouseAdapter
+	 */
 	public static void bind(Component component) {
 		if(bound) {
 			MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "Mouse is already bound to: " + bouding.toString());
@@ -158,6 +196,22 @@ public class Mouse extends MouseAdapter{
 		bound = true;
 	}
 	
+	/**
+	 * Unbinds <code>Mouse</code> from {@link #bouding component} to which the <code>Mouse</code> was bound by {@link #bind(Component)} method 
+	 * which removes <code>Mouse's</code> ability to listen to various mouse events such as {@link java.awt.event.MouseEvent MouseEvent} and {@link java.awt.event.MouseWheelEvent MouseWheelEvent}.<br>
+	 * <h1>Unbinding</h1>
+	 * If the <code>Mouse</code> was not bound (the {@link #bound} is <code>false</code>), the message is printed through {@link svk.sglubos.engine.utils.debug.MessageHandler MessageHandler} and return statement is called.
+	 * And if the {@link #bound} is <code>true</code> the unbinding is processed. From the {@link #bouding Component } to which <code>Mouse</code> was bound is {@link #INSTANCE} removed as the {@link java.awt.event.MouseListener MouseListener}, 
+	 * as the {@link java.awt.event.MouseWheelListener MouseWheelListener} and as the {@link java.awt.event.MouseMotionListener MouseMotionListener}. 
+	 * The {@link #bouding reference} to the {@link java.awt.Component Component} to which the <code>Mouse</code> was bound is set to <code>null</code>.
+	 * And the {@link #bound} is set to <code>false</code>.<br><br> 
+	 * 
+	 * @see #bind()		
+	 * @see #bound
+	 * 
+	 * @see java.awt.Component
+	 * @see java.awt.event.MouseAdapter
+	 */
 	public static void unbind() {
 		if(!bound) {
 			MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "Mouse is not bound to any component");
@@ -172,13 +226,40 @@ public class Mouse extends MouseAdapter{
 		bound = false;
 	}
 	
+	/**
+	 * Overridden {@link java.awt.event.MouseAdapter#mousePressed(MouseEvent) MouseAdapter.mousePressed(MouseEvent) method} from {@link java.awt.event.MouseAdapter MouseAdapter} which is used to handle presses of the mouse buttons.<br>
+	 * <h1>Handling</h1>
+	 * The pressed button's state is stored in {@link #buttons} {@link java.util.HashMap HashMap} with the key {@link java.awt.event.MouseEvent#getButton() MouseEvent.getButton()} 
+	 * and with the value <code>true</code>. 
+	 * And the {@link #mouseEventModifiersEx}  is set to {@link java.awt.event.MouseEvent#getModifiersEx() MouseEvent.getModifiersEx()} from this listened event.<br>
+	 * 
+	 * @see #buttons
+	 * @see #isButtonPressed(int)
+	 * @see #mouseEventModifiersEx
+	 * @see java.awt.event.MouseEvent
+	 *  
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		buttons.put(e.getButton(), true);
 		
 		mouseEventModifiersEx = e.getModifiersEx();
 	}
-
+	
+	/**
+	 * Overridden {@link java.awt.event.MouseAdapter#mouseReleased(MouseEvent) MouseAdapter.mouseReleased(MouseEvent) method} from {@link java.awt.event.MouseAdapter MouseAdapter} 
+	 * which is used to handle releases of the mouse buttons.<br>
+	 * <h1>Handling</h1>
+	 * The released button's state is stored in {@link #buttons} {@link java.util.HashMap HashMap} with the key {@link java.awt.event.MouseEvent#getButton() MouseEvent.getButton()} 
+	 * and with the value <code>false</code>. 
+	 * And the {@link #mouseEventModifiersEx}  is set to {@link java.awt.event.MouseEvent#getModifiersEx() MouseEvent.getModifiersEx()} from this listened event.<br>
+	 * 
+	 * @see #buttons
+	 * @see #isButtonPressed(int)
+	 * @see #mouseEventModifiersEx
+	 * @see java.awt.event.MouseEvent
+	 *  
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		buttons.put(e.getButton(), false);
@@ -186,20 +267,60 @@ public class Mouse extends MouseAdapter{
 		mouseEventModifiersEx = e.getModifiersEx();
 	}
 
+	/**
+	 * Overridden {@link java.awt.event.MouseAdapter#mouseEntered(MouseEvent) MouseAdapter.mouseEntered(MouseEvent) method} from {@link java.awt.event.MouseAdapter MouseAdapter} 
+	 * which is used to handle if the cursor enters the {@link #bouding Component} to which is <code>Mouse</code> bound.<br>
+	 * <h1>Handling</h1>
+	 * The {@link #insideofComponent} is set to <code>true</code>.
+	 * And the {@link #mouseEventModifiersEx}  is set to {@link java.awt.event.MouseEvent#getModifiersEx() MouseEvent.getModifiersEx()} from this listened event.<br>
+	 * 
+	 * @see #insideofComponent
+	 * @see #isCursorInsideOfComponent()
+	 * @see #mouseEventModifiersEx
+	 * @see #bouding
+	 * @see java.awt.event.MouseEvent
+	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		insideofComponent = true;
 		
 		mouseEventModifiersEx = e.getModifiersEx();
 	}
-
+	
+	/**
+	 * Overridden {@link java.awt.event.MouseAdapter#mouseExited(MouseEvent) MouseAdapter.mouseExited(MouseEvent) method} from {@link java.awt.event.MouseAdapter MouseAdapter} 
+	 * which is used to handle if the cursor exits the {@link #bouding Component} to which is <code>Mouse</code> bound.<br>
+	 * <h1>Handling</h1>
+	 * The {@link #insideofComponent} is set to <code>false</code>.
+	 * And the {@link #mouseEventModifiersEx}  is set to {@link java.awt.event.MouseEvent#getModifiersEx() MouseEvent.getModifiersEx()} from this listened event.<br>
+	 * 
+	 * @see #insideofComponent
+	 * @see #isCursorInsideOfComponent()
+	 * @see #mouseEventModifiersEx
+	 * @see #bouding
+	 * @see java.awt.event.MouseEvent
+	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
 		insideofComponent = false;
 		
 		mouseEventModifiersEx = e.getModifiersEx();
 	}
-
+	
+	/**
+	 * Overridden {@link java.awt.event.MouseAdapter#mouseWheelMoved(MouseWheelEvent) MouseAdapter.mouseWheelMoved(MouseEvent) method} from {@link java.awt.event.MouseAdapter MouseAdapter} 
+	 * which is used to handle if the mouse wheel is rotated.<br>
+	 * <h1>Handling</h1>
+	 * The {@link #mouseWheelRotated} is set to <code>true</code>. 
+	 * The value obtained by {@link java.awt.event.MouseWheelEvent#getWheelRotation() MouseWheelEvent.getWheelRotation()} method is added to {@link #mouseWheelRotation} variable.<br>
+	 * And the {@link #mouseEventModifiersEx}  is set to {@link java.awt.event.MouseEvent#getModifiersEx() MouseEvent.getModifiersEx()} from this listened event.<br>
+	 * 
+	 * @see #getRotation()
+	 * @see #resetMouseWheelRotation()
+	 * @see #isCursorInsideOfComponent()
+	 * @see #mouseEventModifiersEx
+	 * @see java.awt.event.MouseWheelEvent
+	 */
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		mouseWheelRotated = true;
@@ -207,7 +328,22 @@ public class Mouse extends MouseAdapter{
 		
 		mouseEventModifiersEx = e.getModifiersEx();
 	}
-
+	
+	/**
+	 * Overridden {@link java.awt.event.MouseAdapter#mouseMoved(MouseEvent) MouseAdapter.mouseMoved(MouseEvent) method} from {@link java.awt.event.MouseAdapter MouseAdapter} 
+	 * which is used to handle if the cursor is moved inside of {@link #bouding Component} to which is <code>Mouse</code> bound.<br>
+	 * <h1>Handling</h1>
+	 * Sets the value of {@link #x} to value obtained by {@link java.awt.event.MouseEvent#getX() MouseEvent.getX()}, 
+	 * sets the value of {@link #y} to value obtained by {@link java.awt.event.MouseEvent#getY() MouseEvent.getY()}.
+	 * And the {@link #mouseEventModifiersEx}  is set to {@link java.awt.event.MouseEvent#getModifiersEx() MouseEvent.getModifiersEx()} from this listened event.<br>
+	 * 
+	 * @see #x
+	 * @see #getX()
+	 * @see #y
+	 * @see #getY()
+	 * @see #mouseEventModifiersEx
+	 * @see java.awt.event.MouseEvent
+	 */
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		x = e.getX();
