@@ -11,7 +11,7 @@ import java.util.List;
 import svk.sglubos.engine.gfx.sprite.Sprite;
 import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 import svk.sglubos.engine.utils.debug.MessageHandler;
-
+//TODO redocument
 /**
  * Handles rendering of basic shapes, images, texts, sprites and supports implementation of own rendering.<br>
  * <code>BufferedImage</code> {@link #renderLayer} contains all rendered graphics
@@ -167,7 +167,7 @@ public class Screen {
 	
 	/**
 	 * Draws filled rectangle with specified position, size and color.<br>
-	 * Uses {@link #renderFilledRectangle(int, int, int, int) renderFilledRectangle(x, y, width, height)} method.
+	 * Uses {@link java.awt.Graphics#drawFilledRectangle(int, int, int, int) g.drawFilledRectangle(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
@@ -176,8 +176,19 @@ public class Screen {
 	 * @param color color of rectangle
 	 */
 	public void renderFilledRectangle(int x, int y, int width, int height,	Color color) {
-		setColor(color);
-		renderFilledRectangle(x, y, width, height);
+		if (color == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
+		}
+		
+		g.setColor(color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.fillRect(x, y, width, height);
 	}
 	
 	/**
@@ -193,15 +204,16 @@ public class Screen {
 	 */
 	public void renderFilledRectangle(int x, int y, int width, int height) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.fillRect(x, y, width, height);
 	}
 	
 	/**
 	 * Draws rectangle with specified position, size and color. <br>
-	 * Uses {@link #renderRectangle(int, int, int, int) renderRectangle(x,y,width,height)} method.
+	 * Uses {@link java.awt.Graphics#drawRectangle(int, int, int, int) g.drawRectangle(x,y,width,height)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
@@ -210,8 +222,19 @@ public class Screen {
 	 * @param color color of rectangle
 	 */
 	public void renderRectangle(int x, int y, int width, int height, Color color) {
-		setColor(color);
-		renderRectangle(x, y, width, height);
+		if (color == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
+		}
+		
+		g.setColor(color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawRect(x, y, width, height);
 	}
 	
 	/**
@@ -227,9 +250,10 @@ public class Screen {
 	 */
 	public void renderRectangle(int x, int y, int width, int height) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.drawRect(x, y, width, height);
 	}
 
@@ -247,9 +271,10 @@ public class Screen {
 	 */
 	public void renderImage(BufferedImage img, int x, int y, int width, int height) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.drawImage(img, x, y, width, height, null);
 	}
 	
@@ -265,15 +290,16 @@ public class Screen {
 	 */
 	public void renderImage(BufferedImage img, int x, int y) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset; 
+			y -= yOffset;
 		}
+		
 		g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
 	}
 	
 	/**
 	 * Draws String with specified position, font and color.<br>
-	 * Uses {@link #renderString(String, int, int, Font) renderString(text, x, y, font)} method.
+	 * Uses {@link java.awt.Graphics#drawString(String, int, int) g.drawString(text, x, y)} method.
 	 * 
 	 * @param text text which will be drawn
 	 * @param x horizontal coordinate
@@ -284,13 +310,30 @@ public class Screen {
 	 *@see java.awt.Font
 	 */
 	public void renderString(String text, int x, int y, Font font, Color color) {
-		setColor(color);
-		renderString(text, x, y, font);
+		if (color == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
+		}
+		
+		if (font == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen font can not be set to null");
+			throw new IllegalArgumentException("Screen font cannot be set to null");
+		}
+		
+		g.setColor(color);
+		g.setFont(font);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawString(text, x, y);
 	}
 	
 	/**
 	 * Draws String with specified position and font. Uses current color set in Graphics object.<br>
-	 * Uses {@link #renderString(String, int, int) renderString(text, x, y)} method.
+	 * Uses {@link java.awt.Graphics#drawString(String, int, int) g.drawString(text, x, y)} method.
 	 * 
 	 * @param text text which will be drawn
 	 * @param x horizontal coordinate
@@ -301,13 +344,24 @@ public class Screen {
 	 * @see java.awt.Font
 	 */
 	public void renderString(String text, int x, int y, Font font) {
-		setFont(font);
-		renderString(text,x,y);
+		if (font == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen font can not be set to null");
+			throw new IllegalArgumentException("Screen font cannot be set to null");
+		}
+		
+		g.setFont(font);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawString(text, x, y);
 	}
 	
 	/**
 	 * Draws String with specified position. Uses current color and font set in Graphics object.<br>
-	 * Uses {@link java.awt.Graphics2D#drawString(String, int, int) g.drawString(text, x, y)} method.
+	 * Uses {@link java.awt.Graphics#drawString(String, int, int) g.drawString(text, x, y)} method.
 	 * 
 	 * @param text text which will be drawn
 	 * @param x horizontal coordinate
@@ -317,45 +371,13 @@ public class Screen {
 	 * @see #setFont(Font)
 	 */
 	public void renderString(String text, int x, int y) {
+		
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
-		g.drawString(text, x,y);
-	}
-	
-	/**
-	 * Draws oval of specified position, size and color.<br>
-	 * Uses {@link #renderOval(int, int, int, int) renderOval(x, y, width, height)} method.
-	 * 
-	 * @param x horizontal coordinate
-	 * @param y vertical coordinate
-	 * @param width width of oval
-	 * @param height height of oval
-	 * @param color color of oval
-	 */
-	public void renderOval(int x, int y, int width, int height, Color color) {
-		setColor(color);
-		renderOval(x, y, width, height);
-	}
-	
-	/**
-	 * Draws oval with specified position and size. Uses current color set in Graphics object<br>
-	 * Uses {@link java.awt.Graphics#drawOval(int, int, int, int) g.drawOval(x, y, width, height)} method.
-	 * 
-	 * @param x horizontal coordinate
-	 * @param y vertical coordinate
-	 * @param width width of oval
-	 * @param height height of oval
-	 * 
-	 * @see #setColor(Color)
-	 */
-	public void renderOval(int x, int y, int width, int height) {
-		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
-		}
-		g.drawOval(x,y, width, height);
+		
+		g.drawString(text, x, y);
 	}
 	
 	/**
@@ -371,8 +393,19 @@ public class Screen {
 	 * @see #setColor(Color)
 	 */
 	public void renderFilledOval(int x, int y, int width, int height, Color color) {
-		setColor(color);
-		renderFilledOval(x, y, width, height);
+		if (color == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
+		}
+		
+		g.setColor(color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.fillOval(x, y, width, height);
 	}
 	
 	/**
@@ -388,15 +421,62 @@ public class Screen {
 	 */
 	public void renderFilledOval(int x, int y, int width, int height) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.fillOval(x, y, width, height);
+	}
+	
+	/**
+	 * Draws oval of specified position, size and color.<br>
+	 * Uses {@link java.awt.Graphics.#drawOval(int, int, int, int) g.drawOval(x, y, width, height)} method.
+	 * 
+	 * @param x horizontal coordinate
+	 * @param y vertical coordinate
+	 * @param width width of oval
+	 * @param height height of oval
+	 * @param color color of oval
+	 */
+	public void renderOval(int x, int y, int width, int height, Color color) {
+		if (color == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
+		}
+		
+		g.setColor(color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawOval(x, y, width, height);
+	}
+	
+	/**
+	 * Draws oval with specified position and size. Uses current color set in Graphics object<br>
+	 * Uses {@link java.awt.Graphics#drawOval(int, int, int, int) g.drawOval(x, y, width, height)} method.
+	 * 
+	 * @param x horizontal coordinate
+	 * @param y vertical coordinate
+	 * @param width width of oval
+	 * @param height height of oval
+	 * 
+	 * @see #setColor(Color)
+	 */
+	public void renderOval(int x, int y, int width, int height) {
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawOval(x, y, width, height);
 	}
 
 	/**
 	 * Draws line from specified starting point to specified ending point with specified color.<br>
-	 * Uses {@link #renderLine(int, int, int, int) renderLine(x, y, xa, ya)} method.
+	 * Uses {@link java.awt.Graphics#drawLine(int, int, int, int) g.drawLine(x, y, xa, ya)} method.
 	 * 
 	 * @param x horizontal coordinate of starting point
 	 * @param y vertical coordinate of starting point
@@ -405,8 +485,21 @@ public class Screen {
 	 * @param color color of line
 	 */
 	public void renderLine(int x, int y, int xa, int ya, Color color) {
-		setColor(color);
-		renderLine(x, y, xa, ya);
+		if (color == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
+		}
+		
+		g.setColor(color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+			xa -= xOffset;
+			ya -= yOffset;
+		}
+		
+		g.drawLine(x, y, xa, ya);
 	}
 	
 	/**
@@ -422,17 +515,18 @@ public class Screen {
 	 */
 	public void renderLine(int x, int y, int xa, int ya) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
-			xa = offsetCoordinate(xa,xOffset);
-			ya = offsetCoordinate(ya,yOffset);
+			x -= xOffset;
+			y -= yOffset;
+			xa -= xOffset;
+			ya -= yOffset;
 		}
+		
 		g.drawLine(x, y, xa, ya);
 	}
 	
 	/**
 	 * Draws filled arc with specified position, size, angles and color.<br>
-	 * Uses {@link #renderFilledArc(int, int, int, int, int, int) rendeFilledrArc(x, y, width, height, startAngle, arcAngle)} method.
+	 * Uses {@link java.awt.Graphics#drawFilledArc(int, int, int, int, int, int) g.drawFilledrArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
@@ -445,8 +539,19 @@ public class Screen {
 	 * @see java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
-		setColor(color);
-		renderFilledArc(x, y, width, height, startAngle, arcAngle, color);
+		if (color == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
+		}
+		
+		g.setColor(color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.fillArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
 	/**
@@ -465,15 +570,16 @@ public class Screen {
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle){
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.fillArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
 	/**
 	 * Draws arc with specified position, size, angles and color.<br>
-	 * Uses {@link #renderArc(int, int, int, int, int, int) renderArc(x, y, width, height, startAngle, arcAngle)} method.
+	 * Uses {@link java.awt.Graphics#drawArc(int, int, int, int, int, int) g.drawArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
@@ -486,8 +592,19 @@ public class Screen {
 	 * @see java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
-		setColor(color);
-		renderArc(x, y, width, height, startAngle, arcAngle);
+		if (color == null) {
+			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
+		}
+		
+		g.setColor(color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
 	/**
@@ -506,9 +623,10 @@ public class Screen {
 	 */
 	public void renderArc(int x, int y, int width, int height, int startAngle,	int arcAngle) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.drawArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
@@ -529,8 +647,8 @@ public class Screen {
 		int[] spritePixels = sprite.getPixels();
 		
 		if(!ignoreOffset){
-			xCoord = offsetCoordinate(xCoord,xOffset);
-			yCoord = offsetCoordinate(yCoord,yOffset);
+			xCoord -= xOffset;
+			yCoord -= yOffset;
 		}
 		
 		int spriteWidth = sprite.getWidth();
@@ -573,8 +691,8 @@ public class Screen {
 		int[] spritePixels = sprite.getPixels();
 		
 		if(!ignoreOffset){
-			xCoord = offsetCoordinate(xCoord,xOffset);
-			yCoord = offsetCoordinate(yCoord,yOffset);
+			xCoord -= xOffset;
+			yCoord -= yOffset;
 		}
 		
 		int spriteWidth = sprite.getWidth();
@@ -661,23 +779,6 @@ public class Screen {
 	}
 	
 	/**
-	 * Offsets specified coordinate by specified value. <br>
-	 * Offseting coordinate means that coordinate is subtracted by offset.
-	 * 
-	 * @param coord coordinate which will be offset
-	 * @param offset value which is coordinate offset<br><br>
-	 * 
-	 * @return coord - offset <br><br>
-	 * 
-	 * @see #xOffset
-	 * @see #yOffset
-	 * @see #ignoreOffset
-	 */
-	protected int offsetCoordinate(int coord, int offset){
-		return coord - offset;
-	}
-	
-	/**
 	 * Sets color in {@link  #g Graphics object} to specified color.<br>
 	 * <strong> If parameter color is null, message is printed and color in {@link  #g Graphics object} keeps the same. </strong>
 	 * 
@@ -688,8 +789,8 @@ public class Screen {
 	 */
 	public void setColor(Color color) {
 		if (color == null) {
-			MessageHandler.printMessage(MessageHandler.ERROR, "Screen color cannot be set to null, color stays seto to current color");
-			return;
+			MessageHandler.printMessage(MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
 		}
 		g.setColor(color);
 	}
