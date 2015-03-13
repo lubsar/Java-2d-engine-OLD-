@@ -1,6 +1,7 @@
 package svk.sglubos.engine.input;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.MouseInfo;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import svk.sglubos.engine.utils.debug.MessageHandler;
-
+//TODO add cursor customization
 /**
  * This class handles mouse input and provides static access to data. This class is extended by {@link java.awt.event.MouseAdapter MouseAdapter} 
  * which is used to listen for various mouse events such as {@link java.awt.event.MouseEvent MouseEvent} and {@link java.awt.event.MouseWheelEvent MouseWheelEvent}.<br>
@@ -471,5 +472,9 @@ public class Mouse extends MouseAdapter{
 	 */
 	public static boolean wasMousewheelRotated() {
 		return mouseWheelRotated;
+	}
+	
+	public static void setCursor(Cursor c) {
+		component.setCursor(c);
 	}
 }

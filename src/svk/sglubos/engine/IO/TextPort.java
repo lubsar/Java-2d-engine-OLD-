@@ -11,10 +11,9 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import svk.sglubos.engine.utils.Strings;
+import svk.sglubos.engine.utils.Constants;
 //TODO document, exceptions, saving, refactor (remove methods / reduce code duplication)
 public class TextPort {
-
 	public static String loadTextAsString(String path) {
 		File f = new File(path);
 		return loadTextAsString(f);
@@ -26,7 +25,7 @@ public class TextPort {
 	}
 	
 	public static String loadTextAsString(File file) {
-		return loadTextAsString(file, Strings.LINE_SEPARATOR);
+		return loadTextAsString(file, Constants.LINE_SEPARATOR);
 	}
 	
 	public static String loadTextAsString(File file, String separator) {
@@ -40,7 +39,7 @@ public class TextPort {
 	}
 	
 	public static String loadTextAsString(Reader reader) {
-		return loadTextAsString(reader, Strings.LINE_SEPARATOR);
+		return loadTextAsString(reader, Constants.LINE_SEPARATOR);
 	}
 	
 	public static String loadTextAsString(Reader reader, String separator) {
@@ -123,7 +122,7 @@ public class TextPort {
 	}
 	
 	public static void saveStringToFileSeparateLines(String string, File file) {
-		String[] strings = string.split(Strings.LINE_SEPARATOR);
+		String[] strings = string.split(Constants.LINE_SEPARATOR);
 		saveStringArrayToFile(strings, file, true);
 	}
 	

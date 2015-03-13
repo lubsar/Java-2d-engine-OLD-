@@ -86,12 +86,12 @@ public class Game implements Runnable {
 	 */
 	boolean saved = false;
 	public void tick(){
-		if(Keyboard.isPressed(KeyEvent.VK_ESCAPE)) {
+		if(Keyboard.isKeyPressed(KeyEvent.VK_ESCAPE)) {
 			MessageHandler.printMessage("DEBUG", "any keyPressed");
 			System.out.println(window.toString());
 		}
 		
-		if(Keyboard.isPressed(KeyEvent.VK_S)) {
+		if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
 			if(!saved) {
 				saved = true;
 				ImagePort.exportImage(mainScreen.getRenderLayer(),null, null, null);

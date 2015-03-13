@@ -1,9 +1,9 @@
 package svk.sglubos.engine.utils.debug;
 
-import svk.sglubos.engine.utils.Strings;
+import svk.sglubos.engine.utils.Constants;
 
 //TODO document build fancy string formatter
-public class DebugStringBuilder implements Strings{
+public class DebugStringBuilder implements Constants{
 	private StringBuilder builder = new StringBuilder();
 	
 	
