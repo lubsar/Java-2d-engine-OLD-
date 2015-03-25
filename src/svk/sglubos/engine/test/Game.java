@@ -1,15 +1,13 @@
 package svk.sglubos.engine.test;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.event.KeyEvent;
 
 import svk.sglubos.engine.gfx.GameWindow;
 import svk.sglubos.engine.gfx.Screen;
 import svk.sglubos.engine.input.Keyboard;
 import svk.sglubos.engine.input.Mouse;
-import svk.sglubos.engine.io.ImagePort;
-import svk.sglubos.engine.utils.debug.MessageHandler;
 
 /**
  * Temporary class.
@@ -19,6 +17,8 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
 public class Game implements Runnable {
 	private Screen mainScreen;
 	private GameWindow window;
+	
+	String msg = "";
 	
 	//Constructor
 	public Game(){
@@ -31,6 +31,7 @@ public class Game implements Runnable {
 	public void init(){
 		window = new GameWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), 500, 500, "game", 1, Color.black);
 		mainScreen = window.getScreen();
+		mainScreen.setFont(new Font("null", Font.BOLD, 15));
 		
 		Mouse.bind(window.getRenderCanvas());
 		Keyboard.bind(window.getRenderCanvas());
@@ -86,17 +87,9 @@ public class Game implements Runnable {
 	 */
 	boolean saved = false;
 	public void tick(){
-		if(Keyboard.isKeyPressed(KeyEvent.VK_ESCAPE)) {
-			MessageHandler.printMessage("DEBUG", "any keyPressed");
-			System.out.println(window.toString());
-		}
-		
-		if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
-			if(!saved) {
-				saved = true;
-				ImagePort.exportImage(mainScreen.getRenderLayer(),null, null, null);
-			}
-			
+		if(Keyboard.isAnyKeyPressed()) {
+			msg += Keyboard.getRecordedKeySequence();
+			Keyboard.recordKeyCharacters();
 		}
 	}
 	
@@ -105,6 +98,9 @@ public class Game implements Runnable {
 	 */
 	public void render(){
 		mainScreen.prepare();
+		
+		mainScreen.setColor(Color.white);
+		mainScreen.renderString(msg, 30, 30);
 		
 		mainScreen.disposeGraphics();
 		window.showRenderedContent();

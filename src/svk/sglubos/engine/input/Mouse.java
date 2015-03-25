@@ -17,11 +17,12 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
  * 
  * <h1>Functions</h1>
  * Mouse keeps track of coordinates of cursor relative to component to which is 
- * {@link #INSTANCE instance} of this class bound using {@link #bind(Component)} method and if the cursor is inside this component too.
+ * {@link #INSTANCE instance} of this class bound using {@link #bind(Component)} method and if the cursor is inside this component too.<br>
+ * <strong>The Mouse can not be bound to more than one {@link java.awt.Component Component} at the same time !</strong><br>
  * Mouse button press state is also tracked by Mouse. The mouse button's states are stored in {@link java.util.HashMap HashMap object}.
  * To obtain state for specific mouse button use method {@link #isButtonPressed(int)} where parameter is mouse button.<br> 
  * You can obtain value of modifiersEx of the latest {@link java.awt.event.MouseEvent MouseEvent} by {@link #getModifiersEx()} method.<br>
- *  MouseWheel rotation is also tracked. If mouse wheel was rotated, 
+ * MouseWheel rotation is also tracked. If mouse wheel was rotated, 
  * the {@link #wasMousewheelRotated() } is <code>true</code> and the rotation can be obtained by {@link #getRotation()} method.<br>
  * The {@link #getRotation()} methods resets the value of {@link #mouseWheelRotation} and also sets the {@link #mouseWheelRotated} to <code>false</code>.<br>
  * The {@link #mouseWheelRotation} and {@link #mouseWheelRotated} can be reset also by {@link #resetMouseWheelRotation()} method.<br><br>

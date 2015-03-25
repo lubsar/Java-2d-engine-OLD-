@@ -41,7 +41,7 @@ public class MessageHandler {
 	 * @see #printMessage(String, String, String)
 	 */
 	public static void printMessage(String tag, String message) {
-		printMessage("ENGINE", tag, message);
+		System.out.println("ENGINE" + ": [" +tag + "] " + message );
 	}
 	
 	/**
