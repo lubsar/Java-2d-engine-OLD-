@@ -1,17 +1,16 @@
 package svk.sglubos.engine.input;
 
 import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.MouseInfo;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.util.HashMap;
 import java.util.Map;
 
 import svk.sglubos.engine.utils.debug.MessageHandler;
-//TODO add cursor customization
-/**
+//TODO document
+/** 
  * This class handles mouse input and provides static access to data. This class is extended by {@link java.awt.event.MouseAdapter MouseAdapter} 
  * which is used to listen for various mouse events such as {@link java.awt.event.MouseEvent MouseEvent} and {@link java.awt.event.MouseWheelEvent MouseWheelEvent}.<br>
  * 
@@ -50,20 +49,6 @@ public class Mouse extends MouseAdapter{
 	 * @see #unbind()
 	 */
 	private static final Mouse INSTANCE = new Mouse();
-	
-	/**
-	 * {@link java.awt.Component Component} to which can be <code>Mouse</code> bound by {@link #bind(Component)} method 
-	 *  and to unbind <code>Mouse</code> use {@link #unbind()} method. 
-	 *  The binding gives the <code>Mouse</code> ability to listen to mouse events such as {@link java.awt.event.MouseEvent MouseEvent} 
-	 *  and {@link java.awt.event.MouseWheelEvent MouseWheelEvent}. The <code> Mouse can be bound to only one {@link java.awt.Component Component} at time.<br>
-	 *  
-	 *  @see java.awt.Component
-	 *  @see java.awt.event.MouseEvent
-	 *  @see java.awt.event.MouseWheelEvent
-	 *  @see #bind(Component)
-	 *  @see #unbind()
-	 */
-	private static Component component;
 	
 	/**
 	 * This {@link java.util.Map Map} keeps track of state of mouse buttons.<br>
@@ -156,6 +141,9 @@ public class Mouse extends MouseAdapter{
 	 */
 	private static int mouseWheelRotation;
 	
+	private static byte boundTo;
+	public static final byte MAX_BOUND_COMPONENTS = Byte.MAX_VALUE;
+	
 	/**
 	 * Binds <code>Mouse</code> to the specified {@link java.awt.Component Component} which gives <code>Mouse</code> ability to listen to various mouse events 
 	 * such as {@link java.awt.event.MouseEvent MouseEvent} and {@link #java.awt.event.MouseWheelEvent MouseWheelEvent}.<br> 
@@ -179,23 +167,23 @@ public class Mouse extends MouseAdapter{
 	 * @see java.awt.event.MouseAdapter
 	 */
 	public static void bind(Component component) {
-		if(bound) {
-			MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "Mouse is already bound to: " + Mouse.component.toString());
-			return;
+		if(boundTo < MAX_BOUND_COMPONENTS) {
+			MouseListener[] listeners = component.getMouseListeners();
+			for(MouseListener list : listeners ) {
+				if(list.equals(INSTANCE)){
+					MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "The mouse is already bound to this component " + component.toString());
+					return;
+				}
+			}
+			
+			component.addMouseListener(INSTANCE);
+			component.addMouseMotionListener(INSTANCE);
+			component.addMouseWheelListener(INSTANCE);
+			
+			boundTo++;
+		} else {
+			MessageHandler.printMessage("MOUSE", MessageHandler.ERROR, "Maximum number of bound components was reached !");
 		}
-		
-		component.addMouseListener(INSTANCE);
-		component.addMouseMotionListener(INSTANCE);
-		component.addMouseWheelListener(INSTANCE);
-		
-		int butts = MouseInfo.getNumberOfButtons();
-		for(int i = 0; i < butts; i++) {
-			buttons.put(i, false);
-		}
-		
-		Mouse.component = component;
-		
-		bound = true;
 	}
 	
 	/**
@@ -214,18 +202,23 @@ public class Mouse extends MouseAdapter{
 	 * @see java.awt.Component
 	 * @see java.awt.event.MouseAdapter
 	 */
-	public static void unbind() {
-		if(!bound) {
-			MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "Mouse is not bound to any component");
-			return;
+	public static void unbind(Component component) {
+		if(boundTo > 0) {
+			MouseListener[] listeners = component.getMouseListeners();
+			for(MouseListener list : listeners ) {
+				if(list.equals(INSTANCE)){
+					component.removeMouseListener(INSTANCE);
+					component.removeMouseMotionListener(INSTANCE);
+					component.removeMouseWheelListener(INSTANCE);
+					boundTo--;
+					return;
+				}
+			}
+			MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "MOUSE was not bound to this component" + component.toString());
+			
+		} else {
+			MessageHandler.printMessage("MOUSE", MessageHandler.INFO, "MOUSE was not bound to any component.");
 		}
-		
-		component.removeMouseListener(INSTANCE);
-		component.removeMouseMotionListener(INSTANCE);
-		component.removeMouseWheelListener(INSTANCE);
-				
-		component = null;
-		bound = false;
 	}
 	
 	/**
@@ -473,9 +466,5 @@ public class Mouse extends MouseAdapter{
 	 */
 	public static boolean wasMousewheelRotated() {
 		return mouseWheelRotated;
-	}
-	
-	public static void setCursor(Cursor c) {
-		component.setCursor(c);
 	}
 }
