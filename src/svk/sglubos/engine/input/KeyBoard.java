@@ -9,7 +9,7 @@ import java.util.Map;
 
 import svk.sglubos.engine.utils.debug.MessageHandler;
 
-//TODO focus ? 
+//TODO document
 public class Keyboard extends KeyAdapter {
 	private static final Keyboard INSTANCE = new Keyboard();
 	public static final byte MAX_BOUND_COMPONENTS = Byte.MAX_VALUE;
@@ -31,6 +31,7 @@ public class Keyboard extends KeyAdapter {
 			}
 			
 			component.addKeyListener(INSTANCE);
+			component.requestFocusInWindow();
 			
 			boundTo++;
 		} else {

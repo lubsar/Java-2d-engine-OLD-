@@ -176,12 +176,7 @@ public class Screen {
 	 * @param color color of rectangle
 	 */
 	public void renderFilledRectangle(int x, int y, int width, int height,	Color color) {
-		if (color == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
-		}
-		
-		g.setColor(color);
+		setColor(color);
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -222,12 +217,7 @@ public class Screen {
 	 * @param color color of rectangle
 	 */
 	public void renderRectangle(int x, int y, int width, int height, Color color) {
-		if (color == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
-		}
-		
-		g.setColor(color);
+		setColor(color);
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -310,18 +300,8 @@ public class Screen {
 	 *@see java.awt.Font
 	 */
 	public void renderString(String text, int x, int y, Font font, Color color) {
-		if (color == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
-		}
-		
-		if (font == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen font can not be set to null");
-			throw new IllegalArgumentException("Screen font cannot be set to null");
-		}
-		
-		g.setColor(color);
-		g.setFont(font);
+		setFont(font);
+		setColor(color);
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -344,12 +324,7 @@ public class Screen {
 	 * @see java.awt.Font
 	 */
 	public void renderString(String text, int x, int y, Font font) {
-		if (font == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen font can not be set to null");
-			throw new IllegalArgumentException("Screen font cannot be set to null");
-		}
-		
-		g.setFont(font);
+		setFont(font);
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -371,7 +346,6 @@ public class Screen {
 	 * @see #setFont(Font)
 	 */
 	public void renderString(String text, int x, int y) {
-		
 		if(!ignoreOffset){
 			x -= xOffset;
 			y -= yOffset;
@@ -393,12 +367,7 @@ public class Screen {
 	 * @see #setColor(Color)
 	 */
 	public void renderFilledOval(int x, int y, int width, int height, Color color) {
-		if (color == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
-		}
-		
-		g.setColor(color);
+		setColor(color);
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -439,12 +408,7 @@ public class Screen {
 	 * @param color color of oval
 	 */
 	public void renderOval(int x, int y, int width, int height, Color color) {
-		if (color == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
-		}
-		
-		g.setColor(color);
+		setColor(color);
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -485,12 +449,7 @@ public class Screen {
 	 * @param color color of line
 	 */
 	public void renderLine(int x, int y, int xa, int ya, Color color) {
-		if (color == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
-		}
-		
-		g.setColor(color);
+		setColor(color);
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -539,12 +498,7 @@ public class Screen {
 	 * @see java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
-		if (color == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
-		}
-		
-		g.setColor(color);
+		setColor(color);
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -592,12 +546,7 @@ public class Screen {
 	 * @see java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
-		if (color == null) {
-			MessageHandler.printMessage("SCREEN",MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
-		}
-		
-		g.setColor(color);
+		setColor(color);
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -792,6 +741,7 @@ public class Screen {
 			MessageHandler.printMessage(MessageHandler.ERROR, "Screen color cannot be set to null");
 			throw new IllegalArgumentException("Screen color cannot be set to null");
 		}
+		
 		g.setColor(color);
 	}
 	

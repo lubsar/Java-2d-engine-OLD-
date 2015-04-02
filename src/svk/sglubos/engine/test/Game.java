@@ -17,6 +17,7 @@ import svk.sglubos.engine.input.Mouse;
 public class Game implements Runnable {
 	private Screen mainScreen;
 	private GameWindow window;
+	private GameWindow windows;
 	
 	String msg = "";
 	
@@ -30,11 +31,14 @@ public class Game implements Runnable {
 	 */
 	public void init(){
 		window = new GameWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), 500, 500, "game", 1, Color.black);
+		windows = new GameWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), 500, 500, "game", 1, Color.black);
 		mainScreen = window.getScreen();
 		mainScreen.setFont(new Font("null", Font.BOLD, 15));
 		
 		Mouse.bind(window.getRenderCanvas());
+		Mouse.bind(windows.getRenderCanvas());
 		Keyboard.bind(window.getRenderCanvas());
+		Keyboard.recordKeyCharacters();
 	}
 	
 	public void start(){
@@ -67,11 +71,11 @@ public class Game implements Runnable {
 			render();
 			fps++;
 			
-			try {
-				Thread.sleep(6);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				Thread.sleep(6);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 				
 			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
 				System.out.println("[DEBUG] ticks: " + ticks + "fps: " + fps);
@@ -85,11 +89,12 @@ public class Game implements Runnable {
 	/**
 	 * Updates game content.
 	 */
-	boolean saved = false;
+	
 	public void tick(){
 		if(Keyboard.isAnyKeyPressed()) {
 			msg += Keyboard.getRecordedKeySequence();
 			Keyboard.recordKeyCharacters();
+			System.out.println( mainScreen.getWidth() * mainScreen.getHeight());
 		}
 	}
 	
@@ -99,8 +104,11 @@ public class Game implements Runnable {
 	public void render(){
 		mainScreen.prepare();
 		
-		mainScreen.setColor(Color.white);
-		mainScreen.renderString(msg, 30, 30);
+		for(int y = 0; y < mainScreen.getHeight(); y++) {
+			for(int x = 0; x < mainScreen.getWidth(); x++) {
+				mainScreen.renderFilledRectangle(x, y, 1, 1,new Color(255,23,125));
+			}
+		}
 		
 		mainScreen.disposeGraphics();
 		window.showRenderedContent();
