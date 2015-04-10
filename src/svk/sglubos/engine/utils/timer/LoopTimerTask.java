@@ -1,6 +1,7 @@
 package svk.sglubos.engine.utils.timer;
 
 public class LoopTimerTask extends TimerTask {
+	public static final int INFINITE = -1;
 	private int cycles;
 	
 	public LoopTimerTask(byte timeFormat, double delay, int cycles, TimerCallback callback) {
@@ -15,7 +16,7 @@ public class LoopTimerTask extends TimerTask {
 		if(nextCallback <= 0) {
 			callback.callback();
 			
-			if(cycles == -1) {
+			if(cycles == INFINITE) {
 				nextCallback = delay;
 				return;
 			} else if (cycles == 0) {

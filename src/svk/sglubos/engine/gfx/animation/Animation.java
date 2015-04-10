@@ -1,12 +1,14 @@
 package svk.sglubos.engine.gfx.animation;
 
 import svk.sglubos.engine.gfx.Screen;
-import svk.sglubos.engine.utils.Timer;
-import svk.sglubos.engine.utils.TimerTask;
 import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 import svk.sglubos.engine.utils.debug.MessageHandler;
+import svk.sglubos.engine.utils.timer.LoopTimerTask;
+import svk.sglubos.engine.utils.timer.Timer;
+import svk.sglubos.engine.utils.timer.TimerCallback;
+import svk.sglubos.engine.utils.timer.TimerTask;
 
-
+//TODO document - new Timer
 /**
  * Provides abilities to create basic animations.<br>
  * This class handles timing, starting and stopping, and also provides reverse, but not specific rendering. 
@@ -55,7 +57,7 @@ public abstract class Animation {
 	 * @see #getDelayFormat()
 	 * @see #setDelayFormat(byte)
 	 */
-	protected long frameDelay;
+	protected double frameDelay;
 	
 	/**
 	 * Format of {@link #frameDelay delay} between frame switches.<br>
@@ -206,41 +208,15 @@ public abstract class Animation {
 	protected int endFrame;
 	
 	/**
-	 * {@link svk.sglubos.engine.utils.Timer Timer} object which handles timing between frame switches.<br>
-	 * This object is initialized in {@link #Animation(long, int, int, int, byte) constructor}.<br>
-	 * <p>
-	 * The timer handles timing between frame switches.<br>
-	 * Timer does cycles long {@link #frameDelay}s value in unit {@link #delayFormat}. 
-	 * The {@link #frameDelay} can be set by {@link #setFrameDelay(long)} method 
-	 * and the {@link #delayFormat} can be set by {@link #setDelayFormat(byte)} method.
-	 * <h1>Avaible formats: </h1>
-	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_MILLISECS DELAY_FORMAT_MILLISECS}<br>
-	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_SECS DELAY_FORMAT_SECS}<br>
-	 * {@link svk.sglubos.engine.utils.Timer#DELAY_FORMAT_TICKS DELAY_FORMAT_TICKS}<br>
-	 *	<p> 
-	 * Every time timer completes cycle, {@link svk.sglubos.engine.utils.TimerTask TimerTask} {@link #frameSwitch}s 
-	 * {@link svk.sglubos.engine.utils.TimerTask#timeSwitch() timeSwitch()} method is called, which calls {@link #switchFrame()} method.
-	 * The {@link #switchFrame()} method switches to the next frame.<br> 
-	 * 
-	 * @see svk.sglubos.engine.utils.Timer
-	 * @see svk.sglubos.engine.utils.TimerTask
-	 * @see #setFrameDelay(long)
-	 * @see #setDelayFormat(byte)
-	 * @see #switchFrame()
-	 * @see #delayFormat
-	 * @see #frameDelay
-	 * @see #frameSwitch
-	 */
-	protected Timer timer;
-	
-	/**
 	 * {@link svk.sglubos.engine.utils.TimerTask TimerTask} which calls {@link #switchFrame()} method every time {@link #timer} finishes cycle.<br>
 	 * 
 	 * @see #timer
 	 * @see #switchFrame()
 	 * @see svk.sglubos.engine.utils.TimerTask
 	 */
-	protected TimerTask frameSwitch = () -> switchFrame();
+	protected TimerCallback frameSwitch  = () -> switchFrame();
+	
+	protected TimerTask task;
 	
 	/**
 	 * Constructs new animation with specified {@link #frameDelay delay between frame switches}, {@link #delayFormat format of delay} and {@link #frames number of frames}.
@@ -258,9 +234,10 @@ public abstract class Animation {
 	 * @see #startFrame
 	 * @see #endFrame
 	 */
-	public Animation(long frameDelay, byte timeFormat, int frames) {
+	public Animation(double frameDelay, byte timeFormat, int frames) {
 		this(frameDelay, 0, frames - 1, frames, timeFormat);
 	}
+	//TODO document
 	
 	/**
 	 * Constructs new animation with specified {@link #frameDelay delay between frame switches}, 
@@ -287,13 +264,12 @@ public abstract class Animation {
 	 * @param frames number of animation frames
 	 * @param timeFormat format of delay (time unit)
 	 */
-	public Animation(long frameDelay, int startFrame, int endFrame, int frames, byte timeFormat) {
+	public Animation(double frameDelay, int startFrame, int endFrame, int frames, byte timeFormat) {
 		this.frameDelay = frameDelay;
 		this.delayFormat = timeFormat;
 		this.frames = frames;
 		
 		initStartAndEnd(startFrame, endFrame);
-		timer = new Timer(frameSwitch, timeFormat, frameDelay);
 	}
 	
 	/**
@@ -318,9 +294,11 @@ public abstract class Animation {
 		}
 		
 		if(loop) {
-			timer.startInfiniteCycle();
+			task = new LoopTimerTask(delayFormat, frameDelay, LoopTimerTask.INFINITE, frameSwitch);
+			Timer.addTask(task);
 		} else {
-			timer.startLoop(endFrame - startFrame);
+			task = new LoopTimerTask(delayFormat, frameDelay, endFrame - startFrame, frameSwitch);
+			Timer.addTask(task);
 		}
 		
 		currentFrame = startFrame;
@@ -350,9 +328,11 @@ public abstract class Animation {
 			return;
 		}
 		if(loop) {
-			timer.startInfiniteCycle();
+			task = new LoopTimerTask(delayFormat, frameDelay, LoopTimerTask.INFINITE, frameSwitch);
+			Timer.addTask(task);
 		} else {
-			timer.startCycle();
+			task = new LoopTimerTask(delayFormat, frameDelay, endFrame - startFrame, frameSwitch);
+			Timer.addTask(task);
 		}
 		
 		currentFrame = endFrame;
@@ -374,25 +354,8 @@ public abstract class Animation {
 	 * @see #timer
 	 */
 	public void stop() {
-		timer.stop();
+		Timer.removeTask(task);
 		running = false;
-	}
-	
-	/**
-	 * Updates the {@link #timer} of animation if {@link #running} is <code>true</code>, 
-	 * the {@link #timer} handles timing of frame switches and needs to be updated for the functionality.<br>
-	 * The {@link #timer} timer calls {@link #switchFrame()} method, which updates the value of {@link #currentFrame}
-	 * after specific {@link #frameDelay delay}.<br>
-	 * 
-	 * @see #timer
-	 * @see #start(boolean)
-	 * @see #startReverse(boolean)
-	 * @see #stop()
-	 */
-	public void tick() {
-		if(running){
-			timer.update();
-		}
 	}
 	
 	/**
@@ -477,13 +440,13 @@ public abstract class Animation {
 	 * @see #setDelayFormat(byte)
 	 * @see #getDelayFormat()
 	 */
-	public void setFrameDelay(long frameDelay) {
+	public void setFrameDelay(double frameDelay) {
 		if(frameDelay < 0) {
 			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Invalind animation frame delay, delay can not be less than zero " + frameDelay);
 			throw new IllegalArgumentException("Frame delay can not be less than 0: " + frameDelay);
 		}
 		this.frameDelay = frameDelay;
-		timer.setDelay(frameDelay);
+		task.setDelay(frameDelay);
 	}
 	
 	/**
@@ -495,7 +458,7 @@ public abstract class Animation {
 	 * @see #getDelayFormat()
 	 * @see #setDelayFormat(byte)
 	 */
-	public long getFrameDelay() {
+	public double getFrameDelay() {
 		return frameDelay;
 	}
 	
@@ -592,7 +555,7 @@ public abstract class Animation {
 				" reverse = " + reverse, " currentFrame = " + currentFrame, " startFrame = " + startFrame,
 				" endFrame = " + endFrame);
 		ret.appendLineSeparator();
-		ret.appendObjectToStringTabln("timer = ", timer);
+		ret.appendObjectToStringTabln("task = ", task);
 		ret.appendObjectToStringTabln("frameSwitch = ", frameSwitch);
 		ret.appendCloseBracket();
 		

@@ -22,4 +22,24 @@ public abstract class TimerTask {
 	public boolean isDone() {
 		return done;
 	}
+
+	public double getDelay() {
+		return delay;
+	}
+
+	public void setDelay(double delay) {
+		this.delay = delay;
+	}
+
+	public TimerCallback getCallback() {
+		return callback;
+	}
+
+	public void setCallback(TimerCallback callback) {
+		this.callback = callback;
+	}
+
+	public void setTimeFormat(byte timeFormat) {
+		this.timeFormat = timeFormat;
+	}
 }
