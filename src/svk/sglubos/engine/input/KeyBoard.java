@@ -94,6 +94,10 @@ public class Keyboard extends KeyAdapter {
 		return boundTo > 0;
 	}
 	
+	public static boolean isBound() {
+		return boundTo > 0;
+	}
+	
 	public static String getRecordedKeySequence() {
 		recordKeySequence = false;
 		String temp = recordedKeyChars;
