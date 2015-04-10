@@ -24,6 +24,37 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
  * After calling the {@link #getRotation()} method the rotation is returned and then set to <code>0</code> and the {@link #mouseWheelRotated} is set to <code>false</code>.<br>
  * 
  * <h1>Binding</h1>
+ * If a {@link java.awt.Component Component is bound to the <code>Mouse</code>,
+ * the <code>Mouse</code> gets ability to listen for the various mouse events ({@link java.awt.event.MouseEvent MouseEvent}, {@link java.awt.event.MouseWheelEvent MouseWheelEvent}) performed on that {@link java.awt.Component Component} 
+ * and if the {@link java.awt.Component Component} is unbind from the <code>Mouse</code>, the <code>Mouse</code> loses ability to listen for those events.<br><br>
+ * 
+ * To bind {@link java.awt.Component Component} to the <code>Mouse</code> use {@link #bind(Component)} method.
+ * The parameter is {@link java.awt.Component Component} which will be bound to <code>Mouse</code>.
+ * To this {@link java.awt.Component Component} is {@link #INSTANCE instance of this class} added as a {@link java.awt.event.MouseListener MouseListener}, {@link java.awt.event.MouseWheelListener MouseWheelListener} and as a {@link java.awt.event.MouseMotionListener MouseMotionListener}.
+ * To adding {@link #INSTANCE instance} as the {@link java.awt.event.MouseListener MouseListener} is used {@link java.awt.Component#addMouseListener(MouseListener) Component.addMouseListener(mouseListener)},
+ * to adding {@link #INSTANCE instance} as the {@link java.awt.event.MouseWheelListener MouseWheelListener} is used {@link java.awt.Component#addMouseWheelListener(MouseWheelListener) Component.addMouseWheelListener(mouseWheelListener)} and
+ * to adding {@link #INSTANCE instance} as the {@link java.awt.event.MouseMotionListener MouseMotionListener} is used {@link java.awt.Component#addMouseMotionListener(MouseMotionListener) Component.addMouseMotionListener(mouseMotionListener)} method.<br>
+ * To unbind {@link java.awt.Component Component} from the <code>Mouse</code> use {@link #unbind(Component)} method.
+ * The parameter is {@link java.awt.Component Component} which will be unbound from the <code>Mouse</code>.
+ * If this {@link java.awt.Component Component} was bound to <code>Mouse</code>,  
+ * the {@link #INSTANCE instance of this class} removed as the {@link java.awt.event.MouseListener MouseListener}, {@link java.awt.event.MouseWheelListener MouseWheelListener} and as the {@link java.awt.event.MouseMotionListener MouseMotionListener}.
+ * To removing {@link #INSTANCE instance} as the {@link java.awt.event.MouseListener MouseListener} is used {@link java.awt.Component#removeMouseListener(MouseListener) Component.removeMouseListener(mouseListener)},
+ * to removing {@link #INSTANCE instance} as the {@link java.awt.event.MouseWheelListener MouseWheelListener} is used {@link java.awt.Component#removeMouseWheelListener(MouseWheelListener) Component.removeMouseWheelListener(mouseWheelListener)} and
+ * to removing {@link #INSTANCE instance} as the {@link java.awt.event.MouseMotionListener MouseMotionListener} is used {@link java.awt.Component#removeMouseMotionListener(MouseMotionListener) Component.removeMouseMotionListener(mouseMotionListener)} method.<br><br>
+ * 
+ * The number of bound {@link java.awt.Component Components} is stored in {@link #boundTo} variable.
+ * When the {@link java.awt.Component Component} is bound, the value of {@link #boundTo} is increased by <code>1</code> 
+ * and if the {@link java.awt.Component Component} is removed, the value of that variable is decreased by <code>1</code>.
+ * The maximum number of bound {@link java.awt.Component Components} at the same time is the value of {@link #MAX_BOUND_COMPONENTS}, 
+ * which is <code>127</code>.<br>
+ * To test if a {@link java.awt.Component Component} is bound to the <code>Mouse</code> use {@link #isBound()} method, 
+ * which returns <code>true</code> if at least <code>1</code> {@link java.awt.Component Component} is bound to <code>Mouse</code>
+ * and if there is not any {@link java.awt.Component Component} bound to <code>Mouse</code>, the {@link #isBound()} method returns <code>false</code>.<br>
+ * The {@link #inside} stores the reference to the bound {@link java.awt.Component Component} inside of which is cursor. 
+ * The {@link #isCursorInsideOfBoundComponent()} returns <code>true</code> if this reference does not equals to <code>null</code> 
+ * and if this reference equals to <code>null</code> the returned value is <code>false</code>.
+ * To test if the mouse cursor is inside of specific {@link java.awt.Component Component} which is bound to the <code>Mouse</code> use {@link #isCursorInsideOfComponent(Component)} method, 
+ * which returns <code>true</code> if the cursor is inside of specified {@link java.awt.Component Component} (if this {@link java.awt.Component Component} equals {@link #inside}) otherwise it returns <code>false</code>.<br><br>  
  * 
  * @see java.awt.event.MouseAdapter
  * @see java.awt.event.MouseEvent
