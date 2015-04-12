@@ -293,6 +293,11 @@ public abstract class Animation {
 			return;
 		}
 		
+		if(!Timer.isInitialized()) {
+			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Timer is not initialized !");
+			throw new IllegalStateException("Timer is not initialized !");
+		}
+		
 		if(loop) {
 			task = new LoopTimerTask(delayFormat, frameDelay, LoopTimerTask.INFINITE, frameSwitch);
 			Timer.addTask(task);
@@ -327,6 +332,12 @@ public abstract class Animation {
 			currentFrame = endFrame;
 			return;
 		}
+		
+		if(!Timer.isInitialized()) {
+			MessageHandler.printMessage("ANIMATION", MessageHandler.ERROR, "Timer is not initialized !");
+			throw new IllegalStateException("Timer is not initialized !");
+		}
+		
 		if(loop) {
 			task = new LoopTimerTask(delayFormat, frameDelay, LoopTimerTask.INFINITE, frameSwitch);
 			Timer.addTask(task);
@@ -392,13 +403,13 @@ public abstract class Animation {
 			currentFrame++;			
 		}
 		
-		if(currentFrame == startFrame) {
+		if(currentFrame < startFrame) {
 			if(loop){
 				currentFrame = endFrame;							
 			}else {
 				stop();
 			}
-		} else if (currentFrame == endFrame) {
+		} else if (currentFrame > endFrame) {
 			if(loop){
 				currentFrame = startFrame;							
 			}else {
@@ -545,6 +556,11 @@ public abstract class Animation {
 	public int getCurrentFrame(){
 		return currentFrame;
 	}
+	
+	public boolean isRunning() {
+		return running;
+	}
+	
 	//TODO document
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
