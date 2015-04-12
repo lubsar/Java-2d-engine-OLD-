@@ -600,6 +600,9 @@ public class Screen {
 			yCoord -= yOffset;
 		}
 		
+		xCoord--;
+		yCoord--;
+		
 		int spriteWidth = sprite.getWidth();
 		int spriteHeight = sprite.getHeight();
 		
@@ -615,7 +618,7 @@ public class Screen {
 					continue;
 				}
 				
-				if(pixelY > 0 && pixelY < this.height && pixelX > 0 && pixelX < this.width){
+				if(pixelY >= 0 && pixelY < this.height && pixelX >= 0 && pixelX < this.width){
 					this.pixels[pixelX + pixelY * this.width] = spritePixels[x + y * spriteWidth];
 				}
 			}
@@ -654,7 +657,7 @@ public class Screen {
 		int scaledPixelY;
 		
 		for(int y = 0; y < spriteHeight; y++){
-			pixelY = y *scale + yCoord;
+			pixelY = y * scale + yCoord;
 			for(int x = 0; x < spriteWidth; x++){
 				pixelX = x * scale + xCoord;
 				
