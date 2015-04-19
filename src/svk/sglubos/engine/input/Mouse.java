@@ -1,6 +1,23 @@
+/*
+ *	Copyright 2015 ¼ubomír Hlavko
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package svk.sglubos.engine.input;
 
 import java.awt.Component;
+import java.awt.MouseInfo;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -31,16 +48,16 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
  * To bind {@link java.awt.Component Component} to the <code>Mouse</code> use {@link #bind(Component)} method.
  * The parameter is {@link java.awt.Component Component} which will be bound to <code>Mouse</code>.
  * To this {@link java.awt.Component Component} is {@link #INSTANCE instance of this class} added as a {@link java.awt.event.MouseListener MouseListener}, {@link java.awt.event.MouseWheelListener MouseWheelListener} and as a {@link java.awt.event.MouseMotionListener MouseMotionListener}.
- * To adding {@link #INSTANCE instance} as the {@link java.awt.event.MouseListener MouseListener} is used {@link java.awt.Component#addMouseListener(MouseListener) Component.addMouseListener(mouseListener)},
- * to adding {@link #INSTANCE instance} as the {@link java.awt.event.MouseWheelListener MouseWheelListener} is used {@link java.awt.Component#addMouseWheelListener(MouseWheelListener) Component.addMouseWheelListener(mouseWheelListener)} and
- * to adding {@link #INSTANCE instance} as the {@link java.awt.event.MouseMotionListener MouseMotionListener} is used {@link java.awt.Component#addMouseMotionListener(MouseMotionListener) Component.addMouseMotionListener(mouseMotionListener)} method.<br>
+ * To add {@link #INSTANCE instance} as the {@link java.awt.event.MouseListener MouseListener} is used {@link java.awt.Component#addMouseListener(MouseListener) Component.addMouseListener(mouseListener)},
+ * to add {@link #INSTANCE instance} as the {@link java.awt.event.MouseWheelListener MouseWheelListener} is used {@link java.awt.Component#addMouseWheelListener(MouseWheelListener) Component.addMouseWheelListener(mouseWheelListener)} and
+ * to add {@link #INSTANCE instance} as the {@link java.awt.event.MouseMotionListener MouseMotionListener} is used {@link java.awt.Component#addMouseMotionListener(MouseMotionListener) Component.addMouseMotionListener(mouseMotionListener)} method.<br>
  * To unbind {@link java.awt.Component Component} from the <code>Mouse</code> use {@link #unbind(Component)} method.
  * The parameter is {@link java.awt.Component Component} which will be unbound from the <code>Mouse</code>.
  * If this {@link java.awt.Component Component} was bound to <code>Mouse</code>,  
  * the {@link #INSTANCE instance of this class} removed as the {@link java.awt.event.MouseListener MouseListener}, {@link java.awt.event.MouseWheelListener MouseWheelListener} and as the {@link java.awt.event.MouseMotionListener MouseMotionListener}.
- * To removing {@link #INSTANCE instance} as the {@link java.awt.event.MouseListener MouseListener} is used {@link java.awt.Component#removeMouseListener(MouseListener) Component.removeMouseListener(mouseListener)},
- * to removing {@link #INSTANCE instance} as the {@link java.awt.event.MouseWheelListener MouseWheelListener} is used {@link java.awt.Component#removeMouseWheelListener(MouseWheelListener) Component.removeMouseWheelListener(mouseWheelListener)} and
- * to removing {@link #INSTANCE instance} as the {@link java.awt.event.MouseMotionListener MouseMotionListener} is used {@link java.awt.Component#removeMouseMotionListener(MouseMotionListener) Component.removeMouseMotionListener(mouseMotionListener)} method.<br><br>
+ * To remove {@link #INSTANCE instance} as the {@link java.awt.event.MouseListener MouseListener} is used {@link java.awt.Component#removeMouseListener(MouseListener) Component.removeMouseListener(mouseListener)},
+ * to remove {@link #INSTANCE instance} as the {@link java.awt.event.MouseWheelListener MouseWheelListener} is used {@link java.awt.Component#removeMouseWheelListener(MouseWheelListener) Component.removeMouseWheelListener(mouseWheelListener)} and
+ * to remove {@link #INSTANCE instance} as the {@link java.awt.event.MouseMotionListener MouseMotionListener} is used {@link java.awt.Component#removeMouseMotionListener(MouseMotionListener) Component.removeMouseMotionListener(mouseMotionListener)} method.<br><br>
  * 
  * The number of bound {@link java.awt.Component Components} is stored in {@link #boundTo} variable.
  * When the {@link java.awt.Component Component} is bound, the value of {@link #boundTo} is increased by <code>1</code> 
@@ -74,9 +91,48 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
  * @see #isBound()
  */
 public class Mouse extends MouseAdapter{
+	/**
+	 * Instance of <code>Mouse</code> which is used in {@link svk.sglubos.engine.input.Mouse binding process}.<br>
+	 * 
+	 * @see #bind(Component)
+	 * @see #unbind(Component)
+	 * @see Mouse
+	 */
 	private static final Mouse INSTANCE = new Mouse();
 	
-	private static Map<Integer, MouseEvent> pressedButtons = new HashMap<Integer, MouseEvent>();
+	/**
+	 * {@link java.util.HashMap HashMap} which stores the {@link java.awt.event.MouseEvent MouseEvents} of the pressed mouse buttons with the keys which represents the number of mouse button.<br><br>
+	 * 
+	 * If a mouse button is pressed, the {@link java.awt.event.MouseEvent MouseEvent} of pressing this button is handled by the overridden method {@link #mousePressed(MouseEvent)}.
+	 * The {@link #mousePressed(MouseEvent)} method obtains the number of the pressed button from the {@link java.awt.event.MouseEvent MouseEvent} which handles, by {@link java.awt.event.MouseEvent#getButton() MouseEvent.getButton()} method.
+	 * This number is used as the key with which is this {@link java.awt.event.MouseEvent MouseEvent} stored. 
+	 * To store (put) is used method {@link java.util.HashMap#put(Object, Object) HashMap.put(key,value)}, 
+	 * the key is the number of button and the value is the {@link java.awt.event.MouseEvent MouseEvent}<br><br>
+	 * 
+	 * If the mouse button is release,d the {@link java.awt.event.MouseEvent MouseEvent} of releasing this button is handled by the overridden method {@link #mouseReleased(MouseEvent)}.
+	 * The {@link #mouseReleased(MouseEvent)} method obtains the number of the released button from the {@link java.awt.event.MouseEvent MouseEvent} which handles, by {@link java.awt.event.MouseEvent#getButton() MouseEvent.getButton} method.
+	 * This number is used as the key to remove press {@link java.awt.event.MouseEvent MouseEvent} from this map.
+	 * To remove is used method {@link java.util.HashMap#remove(Object) HashMap.remove(key)}, 
+	 * where the key is the number of button.<br><br>
+	 * 
+	 * To test if specific mouse button use {@link #isButtonPressed(int)} method with parameter which represents the number of button, which represents the key in {@link java.util.HashMap HashMap}. 
+	 * That method returns <code>true</code> if this {@link java.util.HashMap HasMap} contains {@link java.awt.event.MouseEvent press MouseEvent} on that specific key.
+	 * If this {@link java.util.HashMap HashMap} does not contain the {@link java.awt.event.MouseEvent press MouseEvent},
+	 * this method returns <code>false</code>.<br><br>
+	 * 
+	 * To obtain {@link java.awt.event.MouseEvent press MouseEvent} use {@link #getButtonPressEvent(int)} method with parameter which represents the number of button, which represents the key in {@link java.util.HashMap HashMap}.
+	 * That method returns {@link java.awt.event.MouseEvent MouseEvent} if this {@link java.util.HashMap HashMap} contains {@link java.awt.event.MouseEvent press MouseEvent} on that specific key.
+	 * If this {@link java.util.HashMap HashMap} does not contain the {@link java.awt.event.MouseEvent press MouseEvent} or the key is invalid, that method returns <code>null</code>.<br><br>
+	 *  
+	 * @see java.util.HashMap
+	 * @see java.awt.event.MouseEvent
+	 *
+	 * @see #mousePressed(MouseEvent)
+	 * @see #mouseReleased(MouseEvent)
+	 * @see #isButtonPressed(int)
+	 * @see #getButtonPressEvent(int)
+	 */
+	private static Map<Integer, MouseEvent> pressedButtons = new HashMap<Integer, MouseEvent>((int) (MouseInfo.getNumberOfButtons() / 0.75) + 1);
 	
 	private static int x;
 	
@@ -90,6 +146,9 @@ public class Mouse extends MouseAdapter{
 	
 	private static byte boundTo;
 	public static final byte MAX_BOUND_COMPONENTS = Byte.MAX_VALUE;
+	
+	private Mouse() {
+	}
 	
 	public static void bind(Component component) {
 		if(boundTo < MAX_BOUND_COMPONENTS) {

@@ -15,6 +15,9 @@ public class Timer {
 	private static double msPTick;
 	private static List<TimerTask> tasks = new ArrayList<TimerTask>();
 	
+	private Timer() {
+	}
+	
 	public static void init(int updatesPerSecond) {
 		Timer.msPTick = 1000 / updatesPerSecond;
 		initialized = true;
@@ -40,7 +43,7 @@ public class Timer {
 			TimerTask task = iter.next();
 			
 			if(task.isDone()) {
-				tasks.remove(task);
+				iter.remove();
 			} else {
 				switch(task.getTimeFormat()){
 				case TIME_FORMAT_MILLISECONDS:
@@ -55,5 +58,9 @@ public class Timer {
 				}
 			}
 		}
+	}
+	
+	public static boolean isInitialized() {
+		return initialized;
 	}
 }

@@ -20,6 +20,8 @@ public class Keyboard extends KeyAdapter {
 	
 	private static byte boundTo;
 	
+	private Keyboard() {}
+	
 	public static void bind(Component component) {
 		if(boundTo < MAX_BOUND_COMPONENTS) {
 			KeyListener[] listeners = component.getKeyListeners();
