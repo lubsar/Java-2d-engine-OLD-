@@ -16,7 +16,7 @@
 package svk.sglubos.engine.gfx.sprite;
 
 import svk.sglubos.engine.utils.debug.DebugStringBuilder;
-
+//TODO redocument
 /**
  * Contains integer array of pixels which can be rendered on {@link svk.sglubos.engine.gfx.Screen Screen}. <br>
  * 
