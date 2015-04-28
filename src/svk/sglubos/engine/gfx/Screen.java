@@ -326,7 +326,7 @@ public class Screen {
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
 	 * @param font font of text
-	 * @param color color of text <br>
+	 * @param color color of text 
 	 * <p>
 	 * @see java.awt.Font
 	 */

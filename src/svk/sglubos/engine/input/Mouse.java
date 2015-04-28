@@ -29,7 +29,7 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
 /**
  * <code>Mouse</code> class is extended by {@link java.awt.event.MouseAdapter}, 
  * which gives the <code>Mouse</code> abilities to handle mouse events such as {@link java.awt.event.MouseEvent MouseEvent} and {@link java.awt.event.MouseWheelEvent MouseWheelEvent}
- * which are performed on {@link java.awt.Component Components} to which is <code>Mouse</code> bound.<br>
+ * which are performed on {@link java.awt.Component Components} to which is <code>Mouse</code> bound.
  * <p>
  * The <code>Mouse</code> keeps track of pressed mouse buttons and press events of those buttons.
  * The mouse button press {@link java.awt.event.MouseEvent MouseEvents} are stored in {@link java.util.HashMap HashMap} {@link #pressedButtons} with the keys, 
@@ -78,6 +78,7 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
  * @see java.awt.event.MouseWheelEvent
  * @see java.awt.event.Component
  * @see java.util.HashMap
+ * 
  * @see #isButtonPressed(int)
  * @see #getButtonPressEvent(int)
  * @see #getX()
@@ -137,7 +138,6 @@ public class Mouse extends MouseAdapter{
 	/**
 	 * Horizontal mouse cursor coordinate of mouse cursor, relative to {@link java.awt.Component Component} to which is mouse bound and inside of which is the cursor.
 	 * The {@link java.awt.Component Component} inside of which is the mouse cursor is stored in {@link #inside inside} object.<br><br>
-	 * 
 	 * 
 	 * 
 	 */

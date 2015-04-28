@@ -174,7 +174,7 @@ public class SpriteSheet {
 	/**
 	 * Initializes array of {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} objects {@link #sprites}.<br>
 	 * These sprite objects contains pixels obtained from {@link #image sprite sheet image file}.
-	 * Each {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} has size specified by arguments of this method.<br>
+	 * Each {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} has size specified by arguments of this method.
 	 * <p>
 	 * Maximum number of sprites with specified size is created, first sprite (sprite at index 0) has all pixels from 0, 0 to spriteWidth-1, spriteHeight-1.
 	 * Sprites are stored in array from left to right and from top to bottom. (sprite at index 0 is first sprite in top line and sprite at index sprites.length-1 is the last sprite in bottom line).

@@ -481,7 +481,7 @@ public abstract class Animation {
 	 * 
 	 * @param frameDelay delay between frame
 	 * <p>
-	 * @throws java.lang.IllegalArgumentException IllegalArgumentException if frame delay is bellow 0<br><br>
+	 * @throws java.lang.IllegalArgumentException IllegalArgumentException if frame delay is bellow 0
 	 * <p>
 	 * @see #getFrameDelay()
 	 * @see #frameDelay
