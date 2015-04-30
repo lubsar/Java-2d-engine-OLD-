@@ -19,6 +19,7 @@ package svk.sglubos.engine.gfx;
 import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
@@ -42,7 +43,7 @@ import svk.sglubos.engine.utils.debug.DebugStringBuilder;
  * the full screen mode can be set by {@link #setFullScreenMode(boolean)} method.
  * <p>
  * <code>GameWindow</code> does not handle {@link svk.sglubos.engine.gfx.Screen#prepare() screen prepare method} and {@link svk.sglubos.engine.gfx.Screen#disposeGraphics() screen dispose graphics method}, so you have to do it manually.
- * To update the <code>GameWindow</code> every frame you have to call {@link #showRenderedContent()} method.
+ * To update the <code>GameWindow</code> have to call {@link #showRenderedContent()} method.
  * 
  * <h1>Example: Render method called every frame: </h1>
  * <pre>{@code
@@ -59,7 +60,7 @@ import svk.sglubos.engine.utils.debug.DebugStringBuilder;
  * myGameWindow.showRenderedContent();
  * }</pre>
  * <p>
- * @see #GameWindow(int, int, String, double, Color) constructor
+ * @see #GameWindow(GraphicsDevice, int, int, String, double, Color) constructor
  * @see #getRenderCanvas()
  * @see #getScreen()
  * @see #setDisplayMode(DisplayMode)
@@ -73,33 +74,54 @@ import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame {
 	/**
-	 * {@link svk.sglubos.engine.gfx.Screen Screen} object which provides ability to draw game content, 
-	 * which is displayed in this {@link javax.swing.JFrame JFrame} through {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas} {@link #canvas}.
+	 * {@link svk.sglubos.engine.gfx.Screen Screen} object which provides ability to render game content.
+	 * <p> 
+	 * The content rendered by this {@link svk.sglubos.engine.gfx.Screen Screen} object is displayed {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas} {@link #canvas}.
+	 * The {@link #canvas} is displayed in the <code>GameWindow</code>.
 	 * <p>
-	 * This Screen object is initialized in {@link #GameWindow(int, int, String, double, Color) constructor}.
-	 * This Screen object can  be obtained by {@link #getScreen()} method.
+	 * The <code>screen</code> is used to initialize {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas} {@link #canvas} in {@link #GameWindow(GraphicsDevice, int, int, String, double, Color) constructor}.
+	 * Reference to the <code>screen</code> can be obtained by {@link #getScreen()} method.
 	 * <p>
-	 * @see svk.sglubos.engine.gfx.Screen
+	 * The <code>screen</code> is initialized in {@link #GameWindow(GraphicsDevice, int, int, String, double, Color) constructor}.
+	 * The {@link svk.sglubos.engine.gfx.Screen Screen} object is initialized with {@link svk.sglubos.engine.gfx.Screen#Screen(int, int, Color) constructor}
+	 * with arguments: <code>width</code>(integer), <code>height</code>(integer), and <code>color</code>({@link #java.awt.Color Color object}), which is used to clear the screen. 
+	 * <p>
+	 * @see #GameWindow(GraphicsDevice, int, int, String, double, Color) constructor
 	 * @see #getScreen()
-	 * @see #GameWindow(int, int, String, double, Color) constructor
+	 * @see #canvas
+	 * @see svk.sglubos.engine.gfx.Screen
+	 * @see svk.sglubos.engine.gfx.RenderCanvas
+	 * @see svk.sglubos.engine.gfx.Screen#Screen(int, int, Color) constructor of {@link svk.sglubos.engine.gfx.Screen Screen class} 
+	 * @see java.awt.Color
 	 */
 	protected Screen screen;
 	
 	/**
-	 * {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas object} which provides ability to display content rendered by {@link #screen} in this {@link javax.swing.JFrame JFrame}.
+	 * {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas} object which provides ability to display content rendered by {@link #screen} in this {@link javax.swing.JFrame JFrame}.
 	 * <p>
-	 * The <code>canvas</code> is initialized in {@link #GameWindow(int, int, String, double, Color) constructor}. 
+	 * The content rendered by {@link #screen} can be displayed by {@link #showRenderedContent()} which calls the {@link svk.sglubos.engine.gfx.RenderCanvas#showRenderedContent() RenderCanvas.showRenderedContent()} method,
+	 * which repaints the content rendered by {@link #screen}. That method must be called every frame after the content is rendered. 
+	 * The reference to <code>canvas</code> can be obtained by {@link #getRenderCanvas()} method.
+	 * <p>
+	 * The <code>canvas</code> is initialized in {@link #GameWindow(GraphicsDevice, int, int, String, double, Color) constructor} with {@link svk.sglubos.engine.gfx.RenderCanvas#RenderCanvas(Screen, double)constructor} of {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas} class
+	 * with arguments: <code>screen</code>({@link svk.sglubos.engine.gfx.Screen screen} {@link #screen} object), which renders content which is displayed in this canvas and <code>scale</code>(double),
+	 * which represents how many times the content rendered by {@link #screen} should be scaled inside of this {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas}. 
 	 * 
 	 * <h1>WARNING:</h1>
 	 * Canvas is flickering while manually resizing JFrame !
 	 * 
-	 * @see svk.sglubos.engine.gfx.RenderCanvas
-	 * @see #GameWindow(int, int, String, double, Color) constructor
+	 * @see #GameWindow(GraphicsDevice, int, int, String, double, Color) constructor
+	 * @see #showRenderedContent()
 	 * @see #getRenderCanvas()
 	 * @see #screen
+	 * @see svk.sglubos.engine.gfx.RenderCanvas
+	 * @see svk.sglubos.engine.gfx.RenderCanvas#RenderCanvas(Screen, double) constructor of {@link svk.sglubos.engine.gfx.RenderCanvas RenderCavnas class}
 	 */
 	protected RenderCanvas canvas;
 	
+	/**
+	 * 
+	 */
 	protected GraphicsDevice device;
 	
 	/**
@@ -114,7 +136,7 @@ public class GameWindow extends JFrame {
 	 * @see #GameWindow(int, int, String, double, Color)
 	 */
 	public GameWindow(int screenWidth, int screenHeight, String title) {
-		this(screenWidth, screenHeight, title, 1.0, Color.black);
+		this(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), screenWidth, screenHeight, title, 1.0, Color.black);
 	}
 	
 	/**
@@ -130,7 +152,7 @@ public class GameWindow extends JFrame {
 	 * @see #GameWindow(int, int, String, double, Color)
 	 */
 	public GameWindow(int screenWidth,int screenHeight, String title, double canvasScale){
-		this(screenWidth, screenHeight, title, canvasScale, Color.black);
+		this(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), screenWidth, screenHeight, title, 1.0, Color.black);
 	}
 	
 	/**
@@ -146,7 +168,7 @@ public class GameWindow extends JFrame {
 	 * @see #GameWindow(int, int, String, double, Color)
 	 */
 	public GameWindow(int screenWidth, int screenHeight, String title, Color defaultScreenColor){
-		this(screenWidth, screenHeight, title, 1.0, defaultScreenColor);
+		this(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), screenWidth, screenHeight, title, 1.0, defaultScreenColor);
 	}
 	/**
 	 * Constructs new {@link GameWindow} object with specified width and height of screen, title, canvas scale and with specified default screen color.
@@ -179,6 +201,10 @@ public class GameWindow extends JFrame {
 	 * @see svk.sglubos.engine.gfx.RenderCanvas
 	 */
 	public GameWindow(int screenWidth, int screenHeight, String title, double canvasScale, Color defaultScreenColor) {
+		this(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), screenWidth, screenHeight, title, canvasScale, defaultScreenColor);
+	}
+	
+	public GameWindow(GraphicsDevice device, int screenWidth, int screenHeight, String title, double canvasScale, Color defaultScreenColor) {
 		super(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -192,10 +218,6 @@ public class GameWindow extends JFrame {
 		setVisible(true);
 		
 		canvas.init(2);
-	}
-	
-	public GameWindow(GraphicsDevice device, int screenWidth, int screenHeight, String title, double scale, Color defaultColor) {
-		this(screenWidth, screenHeight, title, scale, defaultColor);
 		this.device = device;
 	}
 	
