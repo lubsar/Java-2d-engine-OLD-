@@ -120,7 +120,9 @@ public class GameWindow extends JFrame {
 	protected RenderCanvas canvas;
 	
 	/**
-	 * 
+	 * {@link java.awt.GraphicsDevice GraphicsDevice} which is used to set full screen mode and to set display mode.
+	 * <p>
+	 * The 
 	 */
 	protected GraphicsDevice device;
 	
