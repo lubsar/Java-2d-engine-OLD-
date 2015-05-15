@@ -188,7 +188,7 @@ public class Screen {
 		this.height = height;
 		this.defaultScreenColor = defaultColor;
 	}
-	
+		
 	/**
 	 * Draws filled rectangle with specified position, size and color.
 	 * <p>

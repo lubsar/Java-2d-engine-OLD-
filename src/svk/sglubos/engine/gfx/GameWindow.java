@@ -120,93 +120,56 @@ public class GameWindow extends JFrame {
 	protected RenderCanvas canvas;
 	
 	/**
-	 * {@link java.awt.GraphicsDevice GraphicsDevice} which is used to set full screen mode and to set display mode.
+	 * {@link java.awt.GraphicsDevice GraphicsDevice} which is used to set full screen mode and {@link java.awt.DisplayMode display mode}.
 	 * <p>
-	 * The 
+	 * The <code>device</code> is used for setting display mode in {@link #setDisplayMode(DisplayMode)} method which has one {@link java.awt.DisplayMode DisplayMode} parameter,
+	 * which represent the display mode which will be set.
+	 * The display mode is set by {@link java.awt.GraphicsDevice#setDisplayMode(DisplayMode) GraphicsDevice.setDisplayMode(DisplayMode)} method.
+	 * The full screen mode can be set by {@link #setFullScreenMode(boolean)} method which has one boolean parameter,
+	 * which determines if the <code>GameWindow</code> will be set to full screen mode or to window mode.
+	 * The full screen mode is set by {@link java.awt.GraphicsDevice#setFullScreenWindow(java.awt.Window) GraphicsDevice.setFullScreenWindow(Window)} method.
+	 * <p>
+	 * The <code>device</code> is initialized in {@link #GameWindow(GraphicsDevice, int, int, String, double, Color) constructor}
+	 * 
+	 * @see #GameWindow(GraphicsDevice, int, int, String, double, Color) constructor
+	 * @see #setDisplayMode(DisplayMode)
+	 * @see #setFullScreenMode(boolean)
+	 * @see java.awt.GraphicsDevice
+	 * @see java.awt.DisplayMode
+	 * @see java.awt.GraphicsDevice#setDisplayMode(DisplayMode) GraphicsDevice.setDisplayMode(DisplayMode)
+	 * @see java.awt.GraphicsEnvironment
+	 * @see java.awt.GraphicsDevice#setFullScreenWindow(java.awt.Window) GraphicsDevice.setFullScreenWindow(Window)
 	 */
 	protected GraphicsDevice device;
 	
-	/**
-	 * Constructs new {@link GameWindow} object with specified width and height of screen, title, with canvas scale: 1.0 and with default screen color Color.black.
-	 * <p>
-	 * Uses {@link #GameWindow(int, int, String, double, Color) this(width, height, title, 1.0, Color.black)} constructor.
-	 * 
-	 * @param screenWidth width of Screen
-	 * @param screenHeight height of Screen
-	 * @param title title of Game Window
-	 * <p>
-	 * @see #GameWindow(int, int, String, double, Color)
-	 */
 	public GameWindow(int screenWidth, int screenHeight, String title) {
-		this(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), screenWidth, screenHeight, title, 1.0, Color.black);
+		this(screenWidth, screenHeight, title, 1.0, Color.black, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 	}
 	
-	/**
-	 * Constructs new {@link GameWindow} object with specified width and height of screen, title and scale and with default screen color Color.black.
-	 * <p>
-	 * Uses {@link #GameWindow(int, int, String, double, Color) this(width, height, title, canvasScale, Color.black)} constructor.
-	 * 
-	 * @param screenWidth width of Screen
-	 * @param screenHeight height of Screen
-	 * @param title title of Game Window
-	 * @param canvasScale value of which is canvas scaled of screen
-	 * <p>
-	 * @see #GameWindow(int, int, String, double, Color)
-	 */
 	public GameWindow(int screenWidth,int screenHeight, String title, double canvasScale){
-		this(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), screenWidth, screenHeight, title, 1.0, Color.black);
+		this(screenWidth, screenHeight, title, 1.0, Color.black,GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 	}
 	
-	/**
-	 * Constructs new {@link GameWindow} object with specified width and height of screen, title and color and with canvas scale 1.0.
-	 * <p>
-	 * Uses {@link #GameWindow(int, int, String, double, Color) this(width, height, title, 1.0, defaultScreenColor)} constructor.
-	 * 
-	 * @param screenWidth width of Screen
-	 * @param screenHeight height of Screen
-	 * @param title title of Game Window
-	 * @param defaultScreenColor color with which is screen colored 
-	 * <p>
-	 * @see #GameWindow(int, int, String, double, Color)
-	 */
 	public GameWindow(int screenWidth, int screenHeight, String title, Color defaultScreenColor){
-		this(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), screenWidth, screenHeight, title, 1.0, defaultScreenColor);
-	}
-	/**
-	 * Constructs new {@link GameWindow} object with specified width and height of screen, title, canvas scale and with specified default screen color.
-	 *	
-	 * <h1>Initializes: </h1>
-	 * {@link javax.swing.JFrame#JFrame(String) JFrame constructor} with parameter title which sets window title to title passed by this constructor<br>
-	 * Sets {@link javax.swing.JFrame#setDefaultCloseOperation(int) JFrame default close operation} to {@link javax.swing.JFrame#EXIT_ON_CLOSE} which shuts down entire application. <br>
-	 * Makes JFrame not resizable.
-	 *	
-	 * <h2>WARNING:</h2>
-	 * Canvas is flickering while manually resizing JFrame !
-	 * <p>
-	 * {@link #screen Screen object} with parameters: <code>screenWidth</code>,<code> screenHeight </code>and <code>defaultScreenColor</code>, creates screen of specified size and with specified default color.<br>
-	 * {@link #canvas RenderCanvas object} with parameters: <code>screen</code>, <code>canvasScale</code>, creates canvas with dimensions of screen times scale.<br>
-	 * Adds canvas onto the window. <br>
-	 * Packs the JFrame which in this case sets size of window depended on size of canvas.
-	 * Sets JFame to visible state. <br>
-	 * Sets JFrame location relative to <code>null </code> which centers JFrame.<br>
-	 * Calls {@link svk.sglubos.engine.gfx.RenderCanvas#init(int)} with argument <code>2</code> which initializes {@link svk.sglubos.engine.gfx.RenderCanvas#bs render canvas BufferStrategy} with 2 buffers.
-	 * <p>
-	 * @param screenWidth width of screen
-	 * @param screenHeight height of screen
-	 * @param title title of JFrame
-	 * @param canvasScale scale of canvas which displays screen
-	 * @param defaultScreenColor defaultScreenColor of screen
-	 * <p>
-	 * @see svk.sglubos.engine.gfx.Screen
-	 * @see #getScreen()
-	 * @see javax.swing.JFrame
-	 * @see svk.sglubos.engine.gfx.RenderCanvas
-	 */
-	public GameWindow(int screenWidth, int screenHeight, String title, double canvasScale, Color defaultScreenColor) {
-		this(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), screenWidth, screenHeight, title, canvasScale, defaultScreenColor);
+		this(screenWidth, screenHeight, title, 1.0, defaultScreenColor, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 	}
 	
-	public GameWindow(GraphicsDevice device, int screenWidth, int screenHeight, String title, double canvasScale, Color defaultScreenColor) {
+	public GameWindow(int screenWidth, int screenHeight, String title, double canvasScale, Color defaultScreenColor) {
+		this(screenWidth, screenHeight, title, canvasScale, defaultScreenColor, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
+	}
+	
+	/**
+	 * Constructs new <code>GameWindow</code> object with specific parameters: width and height of screen, title of JFrame, scale of screen in RenderCanvas, default color of screen and GraphicsDevice.
+	 * 
+	 * @param device
+	 * @param screenWidth
+	 * @param screenHeight
+	 * @param title
+	 * @param canvasScale
+	 * @param defaultScreenColor
+	 */
+	
+	public GameWindow(int screenWidth, int screenHeight, String title, double canvasScale, Color defaultScreenColor, GraphicsDevice device) {
 		super(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -249,21 +212,16 @@ public class GameWindow extends JFrame {
 	}
 	
 	public void setFullScreenMode(boolean fullScreen) {
-		if(device == null) {
-			return;
-		}
-		
-		if(!device.isFullScreenSupported()) {
+		if(device == null || !device.isFullScreenSupported()) {
 			simulateFullScreen(fullScreen);
-			return;
-		}
-		
-		if(fullScreen){
-			setWindowDecoration(true);
-			device.setFullScreenWindow(this);
 		} else {
-			setWindowDecoration(false);
-			device.setFullScreenWindow(null);
+			if(fullScreen){
+				setWindowDecoration(true);
+				device.setFullScreenWindow(this);
+			} else {
+				setWindowDecoration(false);
+				device.setFullScreenWindow(null);
+			}
 		}
 	}
 	

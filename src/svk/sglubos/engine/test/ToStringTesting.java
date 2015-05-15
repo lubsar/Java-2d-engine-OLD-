@@ -1,7 +1,6 @@
 package svk.sglubos.engine.test;
 
 import java.awt.Color;
-import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 
 import svk.sglubos.engine.gfx.GameWindow;
@@ -15,7 +14,7 @@ import svk.sglubos.engine.utils.timer.Timer;
 public class ToStringTesting {
 	
 	private Screen screen = new Screen(500, 500, Color.red);
-	private GameWindow window = new GameWindow(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), 500, 500, "test", 1.0, Color.RED);
+	private GameWindow window = new GameWindow(500, 500, "test", 1.0, Color.RED);
 	private RenderCanvas canvas = new RenderCanvas(screen, 1.5);
 	
 	private BufferedImageAnimation bimAnimation = new BufferedImageAnimation(null, 100,Timer.TIME_FORMAT_MILLISECONDS, 200);
