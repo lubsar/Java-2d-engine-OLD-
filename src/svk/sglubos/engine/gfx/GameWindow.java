@@ -88,13 +88,13 @@ public class GameWindow extends JFrame {
 	 * This <code>Screen</code> object is initialized with {@link svk.sglubos.engine.gfx.Screen#Screen(int, int, Color) constructor}
 	 * with arguments: <code>width</code>(integer), <code>height</code>(integer), and <code>color</code>({@link #java.awt.Color Color object}), which is used to clear the screen. 
 	 * <p>
-	 * @see #GameWindow(int, int, String, double, Color,GraphicsDevice) constructor
+	 * @see #GameWindow(int, int, String, double, Color,GraphicsDevice) 	constructor
 	 * @see #getScreen()
 	 * @see #canvas
 	 * <p>
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see svk.sglubos.engine.gfx.RenderCanvas
-	 * @see svk.sglubos.engine.gfx.Screen#Screen(int, int, Color) constructor of {@link svk.sglubos.engine.gfx.Screen Screen class}
+	 * @see svk.sglubos.engine.gfx.Screen#Screen(int, int, Color)			constructor of {@link svk.sglubos.engine.gfx.Screen Screen class}
 	 * <p> 
 	 * @see java.awt.Color
 	 */
@@ -148,18 +148,96 @@ public class GameWindow extends JFrame {
 	 */
 	protected GraphicsDevice device;
 	
+	/**
+	 * Constructs new <code>GameWindow</code> object with specific parameters: width and height of <code>screen</code> and title of <code>JFrame</code>.
+	 * 
+	 * <h1>Construction:</h1>
+	 * Uses {@link #GameWindow(int, int, String, double, Color, GraphicsDevice)} constructor.
+	 * The <code>constructor</code> is called with arguments: <code>screenWidth</code>, <code>screenHeight</code> 
+	 * and <code>title</code> parameters of this constructor and with default values <code>screenScale: 1.0</code>, <code>defaultScreenColor: Color.black</code> 
+	 * and with default <code>graphicsDevice</code> obtained from {@link java.awt.GraphicsEnvironment GraphicsEnvironmet} by {@link java.awt.GraphicsEnvironment#getDefaultScreenDevice() GraphicsEnvrinonment.getDefaultScreenDevice()} method.
+	 * <p> 
+	 * @param screenWidth	width of the {@link #screen}
+	 * @param screenHeight	height of the <code>screen</code>
+	 * @param title			title of the <code>JFrame</code>
+	 * <p>
+	 * @see #GameWindow(int, int, String, double, Color, GraphicsDevice) main constructor
+	 * @see #screen
+	 * <p>
+	 * @see java.awt.GraphicsEnvironment
+	 * @see java.awt.GraphicsEnvironment#getDefaultScreenDevice() GraphicsEnvironment.getDefaultScreenDevice()
+	 */
 	public GameWindow(int screenWidth, int screenHeight, String title) {
 		this(screenWidth, screenHeight, title, 1.0, Color.black, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 	}
 	
-	public GameWindow(int screenWidth,int screenHeight, String title, double canvasScale){
-		this(screenWidth, screenHeight, title, 1.0, Color.black,GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
+	/**
+	 * Constructs new <code>GameWindow</code> object with specific parameters: width and height of <code>screen</code>, title of <code>JFrame</code> and scale of screen in render canvas.
+	 * 
+	 * <h1>Construction:</h1>
+	 * Uses {@link #GameWindow(int, int, String, double, Color, GraphicsDevice)} constructor.
+	 * The <code>constructor</code> is called with arguments: <code>screenWidth</code>, <code>screenHeight</code>, <code>title</code> and <code>screenScale</code>  parameters of this constructor and with default values: <code>defaultScreenColor: Color.black</code> 
+	 * and with default <code>graphicsDevice</code> obtained from {@link java.awt.GraphicsEnvironment GraphicsEnvironmet} by {@link java.awt.GraphicsEnvironment#getDefaultScreenDevice() GraphicsEnvrinonment.getDefaultScreenDevice()} method.
+	 * <p> 
+	 * @param screenWidth	width of the {@link #screen}
+	 * @param screenHeight	height of the <code>screen</code>
+	 * @param title			title of the <code>JFrame</code>
+	 * @param screenScale	scale of the <code>screen</code> in {@link #canvas}
+	 * <p>
+	 * @see #GameWindow(int, int, String, double, Color, GraphicsDevice) main constructor
+	 * @see #screen
+	 * @see #canvas
+	 * <p>
+	 * @see java.awt.GraphicsEnvironment
+	 * @see java.awt.GraphicsEnvironment#getDefaultScreenDevice() GraphicsEnvironment.getDefaultScreenDevice()
+	 */
+	public GameWindow(int screenWidth,int screenHeight, String title, double screenScale){
+		this(screenWidth, screenHeight, title, 1.0, Color.black, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 	}
 	
+	/**
+	 * Constructs new <code>GameWindow</code> object with specific parameters: width and height of <code>screen</code>, title of <code>JFrame</code> and defaultScreenColor of <code>screen</code>.
+	 * 
+	 * <h1>Construction:</h1>
+	 * Uses {@link #GameWindow(int, int, String, double, Color, GraphicsDevice)} constructor.
+	 * The <code>constructor</code> is called with arguments: <code>screenWidth</code>, <code>screenHeight</code>, <code>title</code> and <code>defaultScreenColor</code>  parameters of this constructor and with default values: <code>screenScale: 1.0</code> 
+	 * and with default <code>graphicsDevice</code> obtained from {@link java.awt.GraphicsEnvironment GraphicsEnvironmet} by {@link java.awt.GraphicsEnvironment#getDefaultScreenDevice() GraphicsEnvrinonment.getDefaultScreenDevice()} method.
+	 * <p> 
+	 * @param screenWidth			width of the {@link #screen}
+	 * @param screenHeight			height of the <code>screen</code>
+	 * @param title					title of the <code>JFrame</code>
+	 * @param defaultScreenColor	default color of the <code>screen</code>
+	 * <p>
+	 * @see #GameWindow(int, int, String, double, Color, GraphicsDevice) main constructor
+	 * @see #screen
+	 * <p>
+	 * @see java.awt.GraphicsEnvironment
+	 * @see java.awt.GraphicsEnvironment#getDefaultScreenDevice() GraphicsEnvironment.getDefaultScreenDevice()
+	 */
 	public GameWindow(int screenWidth, int screenHeight, String title, Color defaultScreenColor){
 		this(screenWidth, screenHeight, title, 1.0, defaultScreenColor, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 	}
 	
+	/**
+	 * Constructs new <code>GameWindow</code> object with specific parameters: width and height of <code>screen</code>, title of <code>JFrame</code>, scale of the <code>screen</code> anddefaultScreenColor of the <code>screen</code>.
+	 * 
+	 * <h1>Construction:</h1>
+	 * Uses {@link #GameWindow(int, int, String, double, Color, GraphicsDevice)} constructor.
+	 * The <code>constructor</code> is called with arguments: <code>screenWidth</code>, <code>screenHeight</code>, <code>title</code> <code>screenScale</code> and <code>defaultScreenColor</code> parameters of this constructor and with default values: 
+	 *  default <code>graphicsDevice</code> obtained from {@link java.awt.GraphicsEnvironment GraphicsEnvironmet} by {@link java.awt.GraphicsEnvironment#getDefaultScreenDevice() GraphicsEnvrinonment.getDefaultScreenDevice()} method.
+	 * <p> 
+	 * @param screenWidth			width of the {@link #screen}
+	 * @param screenHeight			height of the <code>screen</code>
+	 * @param title					title of the <code>JFrame</code>
+	 * @param defaultScreenColor	default color of the <code>screen</code>
+	 * <p>
+	 * @see #GameWindow(int, int, String, double, Color, GraphicsDevice) main constructor
+	 * @see #screen
+	 * @see #canvas
+	 * <p>
+	 * @see java.awt.GraphicsEnvironment
+	 * @see java.awt.GraphicsEnvironment#getDefaultScreenDevice() GraphicsEnvironment.getDefaultScreenDevice()
+	 */
 	public GameWindow(int screenWidth, int screenHeight, String title, double canvasScale, Color defaultScreenColor) {
 		this(screenWidth, screenHeight, title, canvasScale, defaultScreenColor, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 	}
@@ -167,33 +245,42 @@ public class GameWindow extends JFrame {
 	/**
 	 * Constructs new <code>GameWindow</code> object with specific parameters: width and height of <code>screen</code>, title of <code>JFrame</code>, scale of <code>screen</code> in <code>RenderCanvas</code>, default color of <code>screen</code> and <code>GraphicsDevice</code>.
 	 * 
-	 * <h1>Initializes:</h1>
-	 * Super class {@link javax.swing.JFrame JFrame} with <code>String</code> argument <code>title</code>, which represents the title of <code>JFrame</code>.
+	 * <h1>Construction:</h1>
+	 * Super class is initialized {@link javax.swing.JFrame#JFrame(String) JFrame(String)} constructor with <code>String</code> argument <code>title</code>, which represents the title of <code>JFrame</code>.
 	 * Also sets the <code>JFrame</code> default close operation to {@link JFrame#EXIT_ON_CLOSE} 
 	 * and makes the <code>JFrame</code> non resizable by calling {@link javax.swing.JFrame#setResizable(boolean) JFrame.setResizable(boolean)} method with argument <code>false</code>.
 	 * Then {@link #canvas} is added to the <code>JFrame</code> by {@link javax.swing.JFrame#add(java.awt.Component)Jframe.add(Component)} method.
 	 * After the <code>canvas</code> is added, the <code>JFrame</code> is packed by {@link javax.swing.JFrame#pack() JFrame.pack()},
 	 * then the frame is centered by {@link javax.swing.JFrame#setLocationRelativeTo(java.awt.Component) Jframe.setLocationRelativeTo(Component)} method called with argument <code>null</code>.
 	 * Lastly the <code>JFrame</code> is set to visible state by calling {@link javax.swing.JFrame#setVisible(boolean) JFrame.setVisible(boolean)} method with argument <code>true</code>.<br>
-	 * {@link svk.sglubos.engine.gfx.Screen Screen} object {@link #screen} with arguments <code>screenWidth</code>, <code>screenHeight</code> and <code>defaultScreenColor</code> passed as a parameters of this constructor.<br>
-	 * {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas} object {@link #canvas} with arguments <code>screen</code> and with <code>scale</code> passed as a parameter of this constructor.
-	 * The <code>canvas</code> is initialized with {@link svk.sglubos.engine.gfx.RenderCanvas#init(int) RenderCanvas.init(int)} method called wihth argument <code>2</code>
+	 * Initializes {@link svk.sglubos.engine.gfx.Screen Screen} object {@link #screen} with arguments <code>screenWidth</code>, <code>screenHeight</code> and <code>defaultScreenColor</code> passed as a parameters of this constructor.<br>
+	 * Initializes {@link svk.sglubos.engine.gfx.RenderCanvas RenderCanvas} object {@link #canvas} with arguments <code>screen</code> and with <code>scale</code> passed as a parameter of this constructor.
+	 * The <code>canvas</code> is initialized by {@link svk.sglubos.engine.gfx.RenderCanvas#init(int) RenderCanvas.init(int)} method called wihth argument <code>2</code>
 	 * {@link java.awt.GraphicsDevice GraphicsDevice} object {@link #device} with reference <code>GraphicsDevice>passed as a parameter of this constructor.
 	 * <p>
-	 * @param graphicsDevice				{@link java.awt.GraphicsDevice GraphicsDevice} used by this <code>GameWindow</code>
+	 * @param graphicsDevice		{@link java.awt.GraphicsDevice GraphicsDevice} used by this <code>GameWindow</code>
 	 * @param screenWidth			width of the {@link #screen}
-	 * @param screenHeight			height of the {@link #screen}
+	 * @param screenHeight			height of the <code>screen</code>
 	 * @param title					title of the {@link javax.swing.JFrame JFrame}
-	 * @param screenScale			scale of the {@link #screen}
-	 * @param defaultScreenColor	default {@link java.awt.Color Color} of {@link #screen}
+	 * @param screenScale			scale of the <code>screen</code>
+	 * @param defaultScreenColor	default {@link java.awt.Color Color} of <code>screen</code>
 	 * <p>
-	 * @see #GameWindow(int, int, String) 								constructor which constructs <code>GameWindow</code> with default <code>screenScale</code>, <code>screenColor</code> and <code>graphicsDevice</code>
-	 * @see #GameWindow(int, int, String, Color) constructor			constructor which constructs <code>GameWindow</code> with default <code>screenScale</code> and <code>graphicsDevice</code>
-	 * @see #GameWindow(int, int, String, double) constructor			constructor which constructs <code>GameWindow</code> with default <code>screenColor</code> and <code>graphicsDevice</code>
-	 * @see #GameWindow(int, int, String, double, Color) constructor	constructor which constructs <code>graphicsDevice</code>
-	 * @see 
+	 * @see #GameWindow(int, int, String) 					constructor which constructs <code>GameWindow</code> with default <code>screenScale</code>, <code>screenColor</code> and <code>graphicsDevice</code>
+	 * @see #GameWindow(int, int, String, Color) 			constructor which constructs <code>GameWindow</code> with default <code>screenScale</code> and <code>graphicsDevice</code>
+	 * @see #GameWindow(int, int, String, double) 			constructor which constructs <code>GameWindow</code> with default <code>screenColor</code> and <code>graphicsDevice</code>
+	 * @see #GameWindow(int, int, String, double, Color) 	constructor which constructs <code>GameWindow</code> with default <code>graphicsDevice</code>
+	 * @see #screen
+	 * @see #canvas
+	 * @see #device
+	 * <p>
+	 * @see svk.sglubos.engine.gfx.Screen#Screen(int, int, Color) 				constructor of the Screen class
+	 * @see svk.sglubos.engine.gfx.RenderCanvas#RenderCanvas(Screen, double) 	constructor of the RenderCanvas class
+	 * @see svk.sglubos.engine.gfx.RenderCanvas#init(int) 						RenderCanvas.init()
+	 * <p>
+	 * @see javax.swing.JFrame
+	 * @see java.awt.GraphicsDevice
+	 * @see javax.swing.JFrame#JFrame(String)constructor of JFrame class
 	 */
-	
 	public GameWindow(int screenWidth, int screenHeight, String title, double screenScale, Color defaultScreenColor, GraphicsDevice graphicsDevice) {
 		super(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
