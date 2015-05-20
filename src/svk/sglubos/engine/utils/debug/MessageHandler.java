@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 package svk.sglubos.engine.utils.debug;
+
+import java.io.PrintStream;
+
 /**
  * Handles printing of messages to console. <br>
  * Message has specified tag, which indicates if message is {@link #WARNING warning}, {@link #INFO information}, {@link #ERROR error} or you can specify own tag.<br>
@@ -46,6 +49,9 @@ public class MessageHandler {
 	 */
 	public static final String ERROR = "ERROR";
 	
+	public static PrintStream printStream = System.out;
+	public static PrintStream errorStream = System.err;
+	
 	/**
 	 * Prints specified message with default prefix: "ENGINE" and specified tag. <br>
 	 * Uses {@link #printMessage(String, String, String) printMessage("ENGINE", tag, message)} method.
@@ -56,7 +62,12 @@ public class MessageHandler {
 	 * @see #printMessage(String, String, String)
 	 */
 	public static void printMessage(String tag, String message) {
-		System.out.println("ENGINE" + ": [" +tag + "] " + message );
+		if(tag.equals(ERROR)) {
+			errorStream.println("ENGINE" + ": [" +ERROR + "] " + message );
+			return;
+		}
+			
+		printStream.println("ENGINE" + ": [" +tag + "] " + message );
 	}
 	
 	/**
@@ -74,7 +85,7 @@ public class MessageHandler {
 	 */
 	public static void printMessage(String prefix, String tag, String message) {
 		if(tag.equals(ERROR)){
-			System.err.println(prefix + ": [" +tag + "] " + message );
+			errorStream.println(prefix + ": [" + ERROR + "] " + message );
 			return;
 		}
 		System.out.println(prefix + ": [" +tag + "] " + message );
