@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package svk.sglubos.engine.utils.timer;
-//TODO toString, document
 public class BasicTimerTask extends TimerTask {
 	public BasicTimerTask(byte timeFormat, double delay, TimerCallback callback) {
 		super(timeFormat, delay, callback);

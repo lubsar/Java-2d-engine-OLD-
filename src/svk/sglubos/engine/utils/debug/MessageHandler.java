@@ -17,50 +17,14 @@ package svk.sglubos.engine.utils.debug;
 
 import java.io.PrintStream;
 
-/**
- * Handles printing of messages to console. <br>
- * Message has specified tag, which indicates if message is {@link #WARNING warning}, {@link #INFO information}, {@link #ERROR error} or you can specify own tag.<br>
- * Tag is displayed in square brackets. <br>
- * Messages start with prefix. Default tag is "ENGINE", but you can also specify prefix.<br>
- * Prefix is on start of printed message. 
- * 
- * @see #printMessage(String, String) printMessage(tag ,message)
- * @see #printMessage(String,String, String) printMessage(prefix, tag, message)
- */
 public class MessageHandler {
-	/**
-	 * Message tag with value: "WARNING"
-	 * 
-	 * @see #printMessage(String, String)
-	 */
 	public static final String WARNING = "WARNING";
-	
-	/**
-	 * Message tag with value: "INFO"
-	 * 
-	 * @see #printMessage(String, String)
-	 */
 	public static final String INFO = "INFO";
-	
-	/**
-	 * Message tag with value: "ERROR" if used, message is printed as an error.
-	 * 
-	 * @see #printMessage(String, String)
-	 */
 	public static final String ERROR = "ERROR";
 	
-	public static PrintStream printStream = System.out;
-	public static PrintStream errorStream = System.err;
+	private static PrintStream printStream = System.out;
+	private static PrintStream errorStream = System.err;
 	
-	/**
-	 * Prints specified message with default prefix: "ENGINE" and specified tag. <br>
-	 * Uses {@link #printMessage(String, String, String) printMessage("ENGINE", tag, message)} method.
-	 *  
-	 * @param tag message tag
-	 * @param message message text<br><br>
-	 * 
-	 * @see #printMessage(String, String, String)
-	 */
 	public static void printMessage(String tag, String message) {
 		if(tag.equals(ERROR)) {
 			errorStream.println("ENGINE" + ": [" +ERROR + "] " + message );
@@ -70,24 +34,19 @@ public class MessageHandler {
 		printStream.println("ENGINE" + ": [" +tag + "] " + message );
 	}
 	
-	/**
-	 * Prints specified message with specified prefix and tag. <br>
-	 * Uses {@link System#out}'s println(String) method and if you use {@link #ERROR} tag, message is printed by: {@link System#err}`s println(String)} method.<br>
-	 * 
-	 * <h1> Message structure:</h1>
-	 * prefix: [tag] message<br><br>
-	 * 
-	 * @param prefix message prefix
-	 * @param tag message tag
-	 * @param message message text<br><br>
-	 * 
-	 * @see #printMessage(String, String, String)
-	 */
 	public static void printMessage(String prefix, String tag, String message) {
 		if(tag.equals(ERROR)){
 			errorStream.println(prefix + ": [" + ERROR + "] " + message );
 			return;
 		}
 		System.out.println(prefix + ": [" +tag + "] " + message );
+	}
+	
+	public static void setPrintStream(PrintStream stream) {
+		printStream = stream;
+	}
+	
+	public static void setErrorStream(PrintStream stream) {
+		errorStream = stream;
 	}
 }

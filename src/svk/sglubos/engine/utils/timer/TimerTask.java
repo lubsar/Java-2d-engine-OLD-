@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package svk.sglubos.engine.utils.timer;
-//TODO toString, document
+
 public abstract class TimerTask {
 	protected boolean done;
 	protected double nextCallback;

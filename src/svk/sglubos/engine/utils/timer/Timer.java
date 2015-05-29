@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import svk.sglubos.engine.utils.debug.MessageHandler;
-//TODO toString, document
+
 public class Timer {
 	public static final byte TIME_FORMAT_MILLISECONDS = 1;
 	public static final byte TIME_FORMAT_TICKS = 2;
