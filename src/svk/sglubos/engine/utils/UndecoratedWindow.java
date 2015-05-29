@@ -7,7 +7,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
-
+//TODO
 @SuppressWarnings("serial")
 public class UndecoratedWindow extends JFrame {
 

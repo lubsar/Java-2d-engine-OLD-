@@ -171,6 +171,7 @@ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
   of any other Contributor, and only if You agree to indemnify,
   defend, and hold each Contributor harmless for any liability
   incurred by, or claims asserted against, such Contributor by reason
+<<<<<<< HEAD
   of your accepting any such warranty or additional liability.
 
 END OF TERMS AND CONDITIONS
@@ -199,3 +200,6 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+=======
+  of your accepting any such warranty or additional liability.
+>>>>>>> experimental

@@ -1,7 +1,24 @@
+/*
+ *	Copyright 2015 ¼ubomír Hlavko
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package svk.sglubos.engine.gfx.sprite;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
+
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 
 /**
  * SpriteSheet class provides ability to create multiple {@link svk.sglubos.engine.gfx.sprite.Sprite sprites} from single {@link java.awt.image.BufferedImage BufferedImage}.<br>
@@ -21,18 +38,6 @@ import java.awt.image.RasterFormatException;
  */
 public class SpriteSheet {
 	/**
-	 * {@link java.awt.image.BufferedImage BufferedImage} object which sprites and sub images are created from.<br>
-	 * This object is initialized in {@link #SpriteSheet(BufferedImage) constructor}.
-	 * 
-	 * 	@see #SpriteSheet(BufferedImage)
-	 *  @see #createSprites(int, int)
-	 *  @see #getSprite(int, int, int, int)
-	 *  @see #getSprites()
-	 *  @see #getSubImage(int, int, int, int)
-	 */
-	private BufferedImage image; 
-	
-	/**
 	 * Width of {@link #image} which sprites and sub images are created from.<br>
 	 * This variable is initialized in {@link #SpriteSheet(BufferedImage) constructor}.
 	 * 
@@ -49,6 +54,18 @@ public class SpriteSheet {
 	 * @see #image
 	 */
 	private int height;
+	
+	/**
+	 * {@link java.awt.image.BufferedImage BufferedImage} object which sprites and sub images are created from.<br>
+	 * This object is initialized in {@link #SpriteSheet(BufferedImage) constructor}.
+	 * 
+	 * 	@see #SpriteSheet(BufferedImage)
+	 *  @see #createSprites(int, int)
+	 *  @see #getSprite(int, int, int, int)
+	 *  @see #getSprites()
+	 *  @see #getSubImage(int, int, int, int)
+	 */
+	private BufferedImage image; 
 	
 	/**
 	 * Array of sprites created from {@link #image}, which are initialized in {@link #SpriteSheet(BufferedImage, int, int ) this construcotr} or by {@link #createSprites(int, int) createSprites(spriteWidth,spriteHeight)} method.
@@ -157,7 +174,7 @@ public class SpriteSheet {
 	/**
 	 * Initializes array of {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} objects {@link #sprites}.<br>
 	 * These sprite objects contains pixels obtained from {@link #image sprite sheet image file}.
-	 * Each {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} has size specified by arguments of this method.<br>
+	 * Each {@link svk.sglubos.engine.gfx.sprite.Sprite Sprite} has size specified by arguments of this method.
 	 * <p>
 	 * Maximum number of sprites with specified size is created, first sprite (sprite at index 0) has all pixels from 0, 0 to spriteWidth-1, spriteHeight-1.
 	 * Sprites are stored in array from left to right and from top to bottom. (sprite at index 0 is first sprite in top line and sprite at index sprites.length-1 is the last sprite in bottom line).
@@ -183,5 +200,20 @@ public class SpriteSheet {
 		}
 		
 		this.sprites = sprites;
+	}
+	
+	//TODO documment
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTab();
+		ret.append("width = " + width, " height = " + height);
+		ret.appendLineSeparator();
+		ret.appendObjectToStringTabln("image = ", image);
+		ret.appendObjectToStringTabln("sprites = ", sprites);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

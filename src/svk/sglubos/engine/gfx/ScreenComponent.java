@@ -1,9 +1,26 @@
+/*
+ *	Copyright 2015 ¼ubomír Hlavko
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package svk.sglubos.engine.gfx;
 
 import java.awt.Graphics;
+
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 /**
- * This class provides ability to implement own rendering to {@link svk.sglubos.engine.gfx.Screen Screen}.<br>
- * This class provides abilities such as: changing {@link svk.sglubos.engine.gfx.Screen#pixels Screen pixels} and using {@link svk.sglubos.engine.gfx.Screen#g Screen graphics object}.<br>
+ * This class provides ability to implement own rendering to {@link svk.sglubos.engine.gfx.Screen Screen}.
+ * This class provides abilities such as: changing {@link svk.sglubos.engine.gfx.Screen#pixels Screen pixels} and using {@link svk.sglubos.engine.gfx.Screen#g Screen graphics object}.
  * 
  * <h1>Implementation:</h1>
  * To implement own rendering to specific {@link svk.sglubos.engine.gfx.Screen Screen} object, pass object of own class extended by this class
@@ -22,9 +39,10 @@ import java.awt.Graphics;
  */
 public abstract class ScreenComponent {
 	/**
-	 * Graphics object which has abilities to draw to {@link svk.sglubos.engine.gfx.Screen Screen} object, to which is this component bound.<br>
+	 * Graphics object which has abilities to draw to {@link svk.sglubos.engine.gfx.Screen Screen} object, to which is this component bound.
+	 * <p>
 	 * This object is initialized in {@link #bind(Screen, Graphics, int[])} method, where obtains its ability to draw into the {@link svk.sglubos.engine.gfx.Screen Screen} object 
-	 * and this abilities can be removed by {@link #unbind()} method.<br><br>
+	 * and this abilities can be removed by {@link #unbind()} method.
 	 * 
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see #bind(Screen, Graphics, int[])
@@ -33,8 +51,9 @@ public abstract class ScreenComponent {
 	protected Graphics g;
 	
 	/**
-	 * {@link svk.sglubos.engine.gfx.Screen Screen} object to which is this component bound.<br>
-	 * This object is initialized in {@link #bind(Screen, Graphics, int[])} method.<br>
+	 * {@link svk.sglubos.engine.gfx.Screen Screen} object to which is this component bound.
+	 * <p>
+	 * This object is initialized in {@link #bind(Screen, Graphics, int[])} method.
 	 * 
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see #bind(Screen, Graphics, int[])
@@ -43,9 +62,10 @@ public abstract class ScreenComponent {
 	protected Screen screen;
 	
 	/**
-	 * Integer array which contains {@link svk.sglubos.engine.gfx.Screen#pixels pixels} of {@link svk.sglubos.engine.gfx.Screen Screen} object to which is this component bound.<br>
+	 * Integer array which contains {@link svk.sglubos.engine.gfx.Screen#pixels pixels} of {@link svk.sglubos.engine.gfx.Screen Screen} object to which is this component bound.
+	 * <p>
 	 * Changing values in this array causes to change pixels of actual {@link svk.sglubos.engine.gfx.Screen Screen object}.
-	 * This object is initialized in {@link #bind(Screen, Graphics, int[])} method where obtains its abilities.<br>
+	 * This object is initialized in {@link #bind(Screen, Graphics, int[])} method where obtains its abilities.
 	 * 
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see svk.sglubos.engine.gfx.Screen#pixels
@@ -55,7 +75,7 @@ public abstract class ScreenComponent {
 	protected int[] pixels;
 	
 	/**
-	 * Boolean which determines if this component is bound to any {@link svk.sglubos.engine.gfx.Screen Screen} object.<br>
+	 * Boolean which determines if this component is bound to any {@link svk.sglubos.engine.gfx.Screen Screen} object.
 	 * 
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see #bind(Screen, Graphics, int[])
@@ -64,7 +84,8 @@ public abstract class ScreenComponent {
 	protected boolean bound;
 	
 	/**
-	 * This method makes component able to render into the specific {@link svk.sglubos.engine.gfx.Screen Screen} object.<br>
+	 * This method makes component able to render into the specific {@link svk.sglubos.engine.gfx.Screen Screen} object.
+	 * <p>
 	 * <strong>This method should not be called manually, to add component to specific {@link svk.sglubos.engine.gfx.Screen Screen} object </stong> 
 	 * use its {@link svk.sglubos.engine.gfx.Screen#addScreenComponent(ScreenComponent) addScreenComponent(component)} method.
 	 *
@@ -72,12 +93,12 @@ public abstract class ScreenComponent {
 	 * {@link #g Graphics object} with argument passed in this method, gets abilities to draw into the specific screen object.<br>
 	 * {@link #screen Screen object} with argument passed in this method, gets abilities to get info about screen which is this object bound to.<br>
 	 * {@link #pixels Pixels array} with argument passed in this method, gets abilities to change screen pixels.<br>
-	 * {@link #bound Boolean bound} with true, determines that this object is bound to specific screen object.<br><br>
+	 * {@link #bound Boolean bound} with true, determines that this object is bound to specific screen object.
 	 * 
 	 * @param screen screen object providing all information about itself
 	 * @param g {@link java.awt.Graphics} object which can draw into the screen
 	 * @param pixels pixels of screen<br><br>
-	 * 
+	 * <p>
 	 * @see svk.sglubos.engine.gfx.Screen
 	 * @see svk.sglubos.engine.gfx.Screen#addScreenComponent(ScreenComponent)
 	 * @see svk.sglubos.engine.gfx.Screen#removeScreenComponent(ScreenComponent)
@@ -89,7 +110,8 @@ public abstract class ScreenComponent {
 		this.screen = screen;
 	}
 	/**
-	 * This method removes components abilities to render into the specific {@link svk.sglubos.engine.gfx.Screen Screen} object.<br>
+	 * This method removes components abilities to render into the specific {@link svk.sglubos.engine.gfx.Screen Screen} object.
+	 * <p>
 	 * <strong>This method should not be called manually, to remove component from specific {@link svk.sglubos.engine.gfx.Screen Screen} object</strong>
 	 * use its {@link svk.sglubos.engine.gfx.Screen#removeScreenComponent(ScreenComponent) removeScreenComponent(component)} method.
 	 *
@@ -102,5 +124,19 @@ public abstract class ScreenComponent {
 		g = null;
 		pixels = null;
 		screen = null;
+	}
+	
+	//TODO document
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTabln("bound = " + bound);
+		ret.appendTabln("g" + g.toString());
+		ret.appendTabln("screen = " + screen.toString());
+		ret.appendTabln("pixels = " + pixels.toString());
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

@@ -1,3 +1,18 @@
+/*
+ *	Copyright 2015 ¼ubomír Hlavko
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package svk.sglubos.engine.gfx;
 
 import java.awt.Color;
@@ -6,25 +21,25 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import svk.sglubos.engine.gfx.sprite.Sprite;
-import svk.sglubos.engine.utils.MessageHandler;
-
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.MessageHandler;
+//TODO redocument
 /**
- * Handles rendering of basic shapes, images, texts, sprites and supports implementation of own rendering.<br>
- * <code>BufferedImage</code> {@link #renderLayer} contains all rendered graphics
- * and this <code>BufferedImage</code> is returned by method <code>getRenderLayer()</code>.
- *<p>
- * A java.awt.Graphics object which can draw on renderLayer is returned by method <code>getGraphics()</code>.
- * </p>
+ * Handles rendering of basic shapes, images, texts, {@link svk.sglubos.engine.gfx.sprite.Sprite sprites} and supports implementation of own rendering.
  * <p>
- * Before rendering game content every frame you need to call <code>prepare()</code> method, which creates new Graphics object
- * and fills entire screen with defaultColor passed in constructor of this class.  
- * After rendering game content you need to call <code>disposeGraphics()</code> method which disposes Graphics object to release system resources.
- * </p>
- * <h1>Example:render method called every frame </h1>
+ * {@link java.awt.image.BufferedImage BufferedImage}{@link #renderLayer} contains all rendered graphics
+ * and this {@link java.awt.image.BufferedImage} is returned by method {@link #getRenderLayer()}.
+ * A {@link java.awt.Graphics Graphics} {@link #g object} which can draw on renderLayer is returned by method {@link #getGraphics()}.
  * <p>
+ * Before rendering game content every frame you need to call {@link #clear()} method, which creates new {@link java.awt.Graphics Graphics} object
+ * and fills entire screen with {@link #defaultScreenColor} passed in {@link #Screen(int, int, Color) constructor} of this class.  
+ * After rendering game content you need to call {@link #disposeGraphics()} method which disposes Graphics object to release system resources.
+ * 
+ * <h1>Example:render method called every frame</h1>
  * <code>
  * void render() {<br>
  * 		//start with preparation<br>
@@ -37,17 +52,17 @@ import svk.sglubos.engine.utils.MessageHandler;
  * 		screen.dispose();<br>
  * }	
  * </code>
- * <h1>Rendering expansion </h1>
+ * 
+ * <h1>Rendering expansion (implementation of own rendering)</h1>
  * The <code> Screen</code> also provides ability to use your own rendering by {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent abstract class}.<br>
- * The <code> ScreenComponent </code> class provides ability to access {@link #g screen graphics object} but also {@link #pixels screen pixels array}, and also to <code> screen class instance to which is added. <br>
+ * The <code> ScreenComponent </code> class provides ability to access {@link #g screen graphics object} but also {@link #pixels screen pixels array}, and also to <code>screen</code> class instance to which is added.<br>
  * To make your screen component communicate with screen, add object of your component to the {@link #components ArrayList of ScreenComponents} by using {@link #addScreenComponent(ScreenComponent)} method.<br>
- * To remove your screen component use method {@link #removeScreenComponent(ScreenComponent)}.<br>   
+ * To remove your screen component use method {@link #removeScreenComponent(ScreenComponent)}.  
  * <p>
  * @see java.awt.Graphics
  * @see svk.sglubos.engine.gfx.sprite.Sprite
  * @see #setOffset(int, int) offseting of screen
- * 
- * @see #prepare()
+ * @see #clear()
  * @see #disposeGraphics()
  * @see #addScreenComponent(ScreenComponent)
  */
@@ -64,7 +79,8 @@ public class Screen {
 	protected int height;
 	
 	/**
-	 * Horizontal offset of screen in pixels. Default value 0.<br>
+	 * Horizontal offset of screen in pixels. Default value 0.
+	 * <p>
 	 * Offset can be set by {@link #setOffset(int, int) setOffset(xOffset, yOffset)} method.
 	 * 
 	 * @see #setOffset(int xOffset,int yOffset)
@@ -72,7 +88,8 @@ public class Screen {
 	protected int xOffset = 0;
 	
 	/**
-	 * Vertical offset of screen in pixels. Default value 0.<br>
+	 * Vertical offset of screen in pixels. Default value 0.
+	 * <p>
 	 * Offset can be set by {@link #setOffset(int, int) setOffset(xOffset, yOffset)} method.
 	 * 
 	 * @see #setOffset(int xOffset,int yOffset)
@@ -80,7 +97,8 @@ public class Screen {
 	protected int yOffset = 0;
 	
 	/**
-	 * If true offsets are ignored when rendering content, else position of rendered content is offset. <br>
+	 * If true offsets are ignored when rendering content, else position of rendered content is offset.
+	 * <p>
 	 * Can be set by {@link #setIngoreOffset(boolean) setIgnoreOffset(boolean ignoreOffset)} method.
 	 * 
 	 *  @see #xOffset xOffset
@@ -90,43 +108,53 @@ public class Screen {
 	protected boolean ignoreOffset;
 	
 	/**
-	 * Color used in {@link #prepare()} method, entire screen is filled with this color when {@link #prepare()} is called.<br>
+	 * Color used in {@link #clear()} method, entire screen is filled with this color when {@link #clear()} is called.
+	 * <p>
 	 * The value of this color is initialized in constructor and is last passed parameter in {@link #Screen(int, int, Color) constructor}.
 	 */
 	protected Color defaultScreenColor;
 	
 	/**
-	 * BufferedImage which contains all rendered graphics. To display your rendered graphics display this image.<br>
+	 * BufferedImage which contains all rendered graphics. To display your rendered graphics display this image.
+	 * <p>
 	 * The renderLayer is initialized in {@link #Screen(int, int, Color) constructor}.<br>
-	 * This image is returned by {@link #getRenderLayer()} method. <br>
+	 * This image is returned by {@link #getRenderLayer()} method.
+	 * 
+	 * @see #getRenderLayer()
 	 */
 	protected BufferedImage renderLayer;
 	
 	/**
-	 * {@link java.awt.Graphics} object which provides ability to draw on renderLayer.<br>
-	 * This object is initialized in method {@link #prepare()}. <br>
-	 * It should be initialized every frame before rendering and disposed at the end of rendering for better performance. <br>
+	 * {@link java.awt.Graphics} object which provides ability to draw on {@link #renderLayer renderLayer}.
+	 * <p>
+	 * This object is initialized in method {@link #clear()}.<br>
+	 * It should be initialized every frame before rendering and disposed at the end of rendering for better performance.<br>
+	 * This object can be obtained by {@link #getGraphics()} method.
 	 * 
-	 * @see #prepare()
+	 * @see #clear()
 	 * @see #renderLayer
 	 * @see #disposeGraphics()
+	 * @see #getGraphics()
 	 */
 	protected Graphics g;
 	
 	/**
-	 * Array of screen pixels, changing values changes colors of pixels of screen. <br>
-	 * This array used for example to render {@link svk.sglubos.engine.gfx.sprite.Sprite sprites} and is passed in initialization of screen {@link #components components}<br>
+	 * Array of screen pixels, changing values changes colors of screen pixels.
+	 * <p>
+	 * This array used to render {@link svk.sglubos.engine.gfx.sprite.Sprite sprites} and is passed in initialization of screen {@link #components components}<br>
 	 * This array is initialized in {@link #Screen(int, int, Color) constructor} of this class.
 	 * 
-	 *@see svk.sglubos.engine.gfx.sprite.Sprite 
-	 *@see svk.sglubos.engine.gfx.ScreenComponent
+	 * @see svk.sglubos.engine.gfx.sprite.Sprite 
+	 * @see svk.sglubos.engine.gfx.ScreenComponent
 	 */
 	protected int[] pixels;
 	
 	/**
-	 * {@link java.util.List} object which stores all {@link svk.sglubos.engine.gfx.ScreenComponent} objects which have ability to use {@link #g graphics object} and change {@link #pixels Screen pixels} on their own. <br>
+	 * {@link java.util.List} object which stores all {@link svk.sglubos.engine.gfx.ScreenComponent} objects which have ability to use {@link #g graphics object} and change {@link #pixels Screen pixels} on their own.
+	 * <p>
 	 * Objects can be added by {@link #addScreenComponent(ScreenComponent)} method and removed by {@link #removeScreenComponent(ScreenComponent)} method. <br>
-	 * If component is added component gains ability to use {@link #g Graphics object} and change {@link #pixels}. If that component is removed by {@link #removeScreenComponent(ScreenComponent)} method, it looses this abilities. 
+	 * If component is added component gains ability to use {@link #g Graphics object} and change {@link #pixels}. 
+	 * If that component is removed by {@link #removeScreenComponent(ScreenComponent)} method, it looses this abilities. 
 	 *  
 	 *  @see svk.sglubos.engine.gfx.ScreenComponent
 	 *  @see #addScreenComponent(ScreenComponent)
@@ -135,38 +163,37 @@ public class Screen {
 	protected List<ScreenComponent> components = new ArrayList<ScreenComponent>();
 	
 	/**
-	 * Constructs new object of Screen class.<br>
+	 * Constructs new object of Screen class.
 	 * 
 	 * <h1>Initializes:</h1><br> 
 	 * <code>BufferedImage {@link #renderLayer}</code> with arguments: <code>width</code>, <code>height</code> and <code>BufferedImage.TYPE_IN_RGB</code>.<br>
 	 * <code>Int array {@link #pixels}</code> with data got from data buffer of Raster of renderLayer: 
-	 * <br><code>((DataBufferInt) renderLayer.getRaster().getDataBuffer()).getData()</code> <br>
+	 * <br><code>((DataBufferInt) renderLayer.getRaster().getDataBuffer()).getData()</code>
 	 * <p>
 	 * <code>Int {@link #width}</code> with value of passed parameter width <br>
 	 * <code>Int {@link #height}</code> with value of passed parameter height <br>
 	 * <code>Color </code> {@link #defaultScreenColor} with value of passed parameter defaultColor
-	 * </p> 
-	 * <p>
+	 * 
 	 * @param width (width of screen)
 	 * @param height (height of screen)
 	 * @param defaultColor (entire screen is filled with this color in method <code>prepare()</code>)
-	 * </p>
-	 * 
+	 * <p>
 	 * @see java.awt.image.BufferedImage
 	 */
 	public Screen(int width, int height, Color defaultColor) {
 		renderLayer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt)renderLayer.getRaster().getDataBuffer()).getData();
-		g = renderLayer.getGraphics();
+		g = renderLayer.createGraphics();
 		
 		this.width = width;
 		this.height = height;
 		this.defaultScreenColor = defaultColor;
 	}
-	
+		
 	/**
-	 * Draws filled rectangle with specified position, size and color.<br>
-	 * Uses {@link #renderFilledRectangle(int, int, int, int) renderFilledRectangle(x, y, width, height)} method.
+	 * Draws filled rectangle with specified position, size and color.
+	 * <p>
+	 * Uses {@link java.awt.Graphics#drawFilledRectangle(int, int, int, int) g.drawFilledRectangle(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
@@ -176,31 +203,40 @@ public class Screen {
 	 */
 	public void renderFilledRectangle(int x, int y, int width, int height,	Color color) {
 		setColor(color);
-		renderFilledRectangle(x, y, width, height);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.fillRect(x, y, width, height);
 	}
 	
 	/**
-	 * Draws filled rectangle with specified position and size. Uses current color set in Graphics object.<br>
+	 * Draws filled rectangle with specified position and size. Uses current color set in Graphics object.
+	 * <p>
 	 * Uses {@link java.awt.Graphics#fillRect(int, int, int, int) g.fillRect(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
 	 * @param width width of rectangle
-	 * @param height height of rectangle<br><br>
-	 * 
+	 * @param height height of rectangle
+	 * <p>
 	 * @see #setColor(Color)
 	 */
 	public void renderFilledRectangle(int x, int y, int width, int height) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.fillRect(x, y, width, height);
 	}
 	
 	/**
-	 * Draws rectangle with specified position, size and color. <br>
-	 * Uses {@link #renderRectangle(int, int, int, int) renderRectangle(x,y,width,height)} method.
+	 * Draws rectangle with specified position, size and color.
+	 * <p>
+	 * Uses {@link java.awt.Graphics#drawRectangle(int, int, int, int) g.drawRectangle(x,y,width,height)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
@@ -210,122 +246,197 @@ public class Screen {
 	 */
 	public void renderRectangle(int x, int y, int width, int height, Color color) {
 		setColor(color);
-		renderRectangle(x, y, width, height);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawRect(x, y, width, height);
 	}
 	
 	/**
-	 * Draws rectangle with specified position and size. Uses current color set in Graphics object.<br>
+	 * Draws rectangle with specified position and size. Uses current color set in Graphics object.
+	 * <p>
 	 * Uses {@link java.awt.Graphics#drawRect(int, int, int, int) g.drawRect(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
 	 * @param width width of rectangle
-	 * @param height height of rectangle<br><br>
-	 * 
+	 * @param height height of rectangle
+	 * <p>
 	 * @see #setColor(Color)
 	 */
 	public void renderRectangle(int x, int y, int width, int height) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.drawRect(x, y, width, height);
 	}
 
 	/**
-	 * Draws BufferedImage with specified position and size. <br>
+	 * Draws BufferedImage with specified position and size.
+	 * <p>
 	 * Uses {@link java.awt.Graphics#drawImage(java.awt.Image, int, int,int,int, java.awt.image.ImageObserver) g.drawImage(img, x, y, width, height,null)} method.
 	 * 
 	 * @param img image which will be drawn
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
 	 * @param width width of image
-	 * @param height height of image<br><br>
-	 * 
+	 * @param height height of image
+	 * <p>
 	 * @see java.awt.image.BufferedImage
 	 */
 	public void renderImage(BufferedImage img, int x, int y, int width, int height) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.drawImage(img, x, y, width, height, null);
 	}
 	
 	/**
-	 * Draws BufferedImage with specified position and default size of image. <br>
+	 * Draws BufferedImage with specified position and default size of image.
+	 * <p>
 	 * Uses {@link java.awt.Graphics#drawImage(java.awt.Image, int, int,int,int, java.awt.image.ImageObserver) g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null)} method.
 	 * 
 	 * @param img image which will be drawn
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate<br><br>
-	 *
+	 * <p>
 	 * @see java.awt.image.BufferedImage
 	 */
 	public void renderImage(BufferedImage img, int x, int y) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset; 
+			y -= yOffset;
 		}
+		
 		g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
 	}
 	
 	/**
-	 * Draws String with specified position, font and color.<br>
-	 * Uses {@link #renderString(String, int, int, Font) renderString(text, x, y, font)} method.
+	 * Draws String with specified position, font and color.
+	 * <p>
+	 * Uses {@link java.awt.Graphics#drawString(String, int, int) g.drawString(text, x, y)} method.
 	 * 
 	 * @param text text which will be drawn
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
 	 * @param font font of text
-	 * @param color color of text <br>
-	 * 
-	 *@see java.awt.Font
+	 * @param color color of text 
+	 * <p>
+	 * @see java.awt.Font
 	 */
 	public void renderString(String text, int x, int y, Font font, Color color) {
+		setFont(font);
 		setColor(color);
-		renderString(text, x, y, font);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawString(text, x, y);
 	}
 	
 	/**
-	 * Draws String with specified position and font. Uses current color set in Graphics object.<br>
-	 * Uses {@link #renderString(String, int, int) renderString(text, x, y)} method.
+	 * Draws String with specified position and font. Uses current color set in Graphics object.
+	 * <p>
+	 * Uses {@link java.awt.Graphics#drawString(String, int, int) g.drawString(text, x, y)} method.
 	 * 
 	 * @param text text which will be drawn
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
 	 * @param font font of text<br><br>
-	 * 
+	 * <p>
 	 * @see #setColor(Color)
 	 * @see java.awt.Font
 	 */
 	public void renderString(String text, int x, int y, Font font) {
 		setFont(font);
-		renderString(text,x,y);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawString(text, x, y);
 	}
 	
 	/**
-	 * Draws String with specified position. Uses current color and font set in Graphics object.<br>
-	 * Uses {@link java.awt.Graphics2D#drawString(String, int, int) g.drawString(text, x, y)} method.
+	 * Draws String with specified position. Uses current color and font set in Graphics object.
+	 * <p>
+	 * Uses {@link java.awt.Graphics#drawString(String, int, int) g.drawString(text, x, y)} method.
 	 * 
 	 * @param text text which will be drawn
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate<br><br>
-	 * 
+	 * <p>
 	 * @see #setColor(Color)
 	 * @see #setFont(Font)
 	 */
 	public void renderString(String text, int x, int y) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
-		g.drawString(text, x,y);
+		
+		g.drawString(text, x, y);
 	}
 	
 	/**
-	 * Draws oval of specified position, size and color.<br>
-	 * Uses {@link #renderOval(int, int, int, int) renderOval(x, y, width, height)} method.
+	 * Draws filled oval with specified position and size. Uses current color set in Graphics object.
+	 * <p>
+	 * Uses {@link #renderFilledOval(int, int, int, int) renderOval(x, y, width, height)} method.
+	 * 
+	 * @param x horizontal coordinate
+	 * @param y vertical coordinate
+	 * @param width width of oval
+	 * @param height height of oval
+	 * @param color color of filled oval<br><br>
+	 * <p>
+	 * @see #setColor(Color)
+	 */
+	public void renderFilledOval(int x, int y, int width, int height, Color color) {
+		setColor(color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.fillOval(x, y, width, height);
+	}
+	
+	/**
+	 * Draws filled oval with specified position and size. Uses current color set in Graphics object.
+	 * <p>
+	 * Uses {@link java.awt.Graphics#fillOval(int, int, int, int) g.fillOval(x, y, width, height)} method.
+	 * 
+	 * @param x horizontal coordinate
+	 * @param y vertical coordinate
+	 * @param width width of oval
+	 * @param height height of oval<br><br>
+	 * <p>
+	 * @see #setColor(Color)
+	 */
+	public void renderFilledOval(int x, int y, int width, int height) {
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.fillOval(x, y, width, height);
+	}
+	
+	/**
+	 * Draws oval of specified position, size and color.
+	 * <p>
+	 * Uses {@link java.awt.Graphics.#drawOval(int, int, int, int) g.drawOval(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
@@ -335,67 +446,40 @@ public class Screen {
 	 */
 	public void renderOval(int x, int y, int width, int height, Color color) {
 		setColor(color);
-		renderOval(x, y, width, height);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawOval(x, y, width, height);
 	}
 	
 	/**
-	 * Draws oval with specified position and size. Uses current color set in Graphics object<br>
+	 * Draws oval with specified position and size. Uses current color set in Graphics object.
+	 * <p>
 	 * Uses {@link java.awt.Graphics#drawOval(int, int, int, int) g.drawOval(x, y, width, height)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
 	 * @param width width of oval
 	 * @param height height of oval
-	 * 
+	 * <p>
 	 * @see #setColor(Color)
 	 */
 	public void renderOval(int x, int y, int width, int height) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
-		g.drawOval(x,y, width, height);
-	}
-	
-	/**
-	 * Draws filled oval with specified position and size. Uses current color set in Graphics object<br>
-	 * Uses {@link #renderFilledOval(int, int, int, int) renderOval(x, y, width, height)} method.
-	 * 
-	 * @param x horizontal coordinate
-	 * @param y vertical coordinate
-	 * @param width width of oval
-	 * @param height height of oval
-	 * @param color color of filled oval<br><br>
-	 * 
-	 * @see #setColor(Color)
-	 */
-	public void renderFilledOval(int x, int y, int width, int height, Color color) {
-		setColor(color);
-		renderFilledOval(x, y, width, height);
-	}
-	
-	/**
-	 * Draws filled oval with specified position and size. Uses current color set in Graphics object<br>
-	 * Uses {@link java.awt.Graphics#fillOval(int, int, int, int) g.fillOval(x, y, width, height)} method.
-	 * 
-	 * @param x horizontal coordinate
-	 * @param y vertical coordinate
-	 * @param width width of oval
-	 * @param height height of oval<br><br>
-	 * 
-	 * @see #setColor(Color)
-	 */
-	public void renderFilledOval(int x, int y, int width, int height) {
-		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
-		}
-		g.fillOval(x, y, width, height);
+		
+		g.drawOval(x, y, width, height);
 	}
 
 	/**
-	 * Draws line from specified starting point to specified ending point with specified color.<br>
-	 * Uses {@link #renderLine(int, int, int, int) renderLine(x, y, xa, ya)} method.
+	 * Draws line from specified starting point to specified ending point with specified color.
+	 * <p>
+	 * Uses {@link java.awt.Graphics#drawLine(int, int, int, int) g.drawLine(x, y, xa, ya)} method.
 	 * 
 	 * @param x horizontal coordinate of starting point
 	 * @param y vertical coordinate of starting point
@@ -405,33 +489,44 @@ public class Screen {
 	 */
 	public void renderLine(int x, int y, int xa, int ya, Color color) {
 		setColor(color);
-		renderLine(x, y, xa, ya);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+			xa -= xOffset;
+			ya -= yOffset;
+		}
+		
+		g.drawLine(x, y, xa, ya);
 	}
 	
 	/**
-	 * Draws line from specified starting point to specified ending point. Uses current color set in Graphics object.<br>
+	 * Draws line from specified starting point to specified ending point. Uses current color set in Graphics object.
+	 * <p>
 	 * Uses {@link java.awt.Graphics#drawLine(int, int, int, int) g.drawLine(x, y, xa, ya)} method.
 	 * 
 	 * @param x horizontal coordinate of starting point
 	 * @param y vertical coordinate of starting point
 	 * @param xa horizontal coordinate of ending point
-	 * @param ya vertical coordinate of ending point <br><br>
-	 * 
+	 * @param ya vertical coordinate of ending point
+	 * <p>
 	 * @see #setColor(Color)
 	 */
 	public void renderLine(int x, int y, int xa, int ya) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
-			xa = offsetCoordinate(xa,xOffset);
-			ya = offsetCoordinate(ya,yOffset);
+			x -= xOffset;
+			y -= yOffset;
+			xa -= xOffset;
+			ya -= yOffset;
 		}
+		
 		g.drawLine(x, y, xa, ya);
 	}
 	
 	/**
-	 * Draws filled arc with specified position, size, angles and color.<br>
-	 * Uses {@link #renderFilledArc(int, int, int, int, int, int) rendeFilledrArc(x, y, width, height, startAngle, arcAngle)} method.
+	 * Draws filled arc with specified position, size, angles and color.
+	 * <p>
+	 * Uses {@link java.awt.Graphics#drawFilledArc(int, int, int, int, int, int) g.drawFilledrArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
 	 * @param x horizontal coordinate
 	 * @param y vertical coordinate
@@ -439,17 +534,22 @@ public class Screen {
 	 * @param height height offilled arc
 	 * @param startAngle arc begins on this angle
 	 * @param arcAngle arc finishes on this angle
-	 * @param color color of filled  arc <br><br>
-	 * 
-	 * @see java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)
+	 * @param color color of filled  arc
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
 		setColor(color);
-		renderFilledArc(x, y, width, height, startAngle, arcAngle, color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.fillArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
 	/**
-	 * Draws filled arc with specified position, size and angles. Uses current color set in Graphics object.<br>
+	 * Draws filled arc with specified position, size and angles. Uses current color set in Graphics object.
+	 * <p>
 	 * Uses {@link java.awt.Graphics#fillArc(int, int, int, int, int, int) g.fillArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -457,40 +557,24 @@ public class Screen {
 	 * @param width width of arc
 	 * @param height height of arc
 	 * @param startAngle arc begins on this angle
-	 * @param arcAngle arc finishes on this angle<br><br>
+	 * @param arcAngle arc finishes on this angle
+	 * <p>
 	 * 
 	 * @see #setColor(Color)
 	 * @see java.awt.Graphics#fillArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderFilledArc(int x, int y, int width, int height, int startAngle, int arcAngle){
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.fillArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
 	/**
-	 * Draws arc with specified position, size, angles and color.<br>
-	 * Uses {@link #renderArc(int, int, int, int, int, int) renderArc(x, y, width, height, startAngle, arcAngle)} method.
-	 * 
-	 * @param x horizontal coordinate
-	 * @param y vertical coordinate
-	 * @param width width of arc
-	 * @param height height of arc
-	 * @param startAngle arc begins on this angle
-	 * @param arcAngle arc finishes on this angle
-	 * @param color color of arc<br><br>
-	 * 
-	 * @see java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)
-	 */
-	public void renderArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
-		setColor(color);
-		renderArc(x, y, width, height, startAngle, arcAngle);
-	}
-	
-	/**
-	 * Draws arc with specified position, size and angles. Uses current color set in Graphics object.<br>
+	 * Draws arc with specified position, size, angles and color.
+	 * <p>
 	 * Uses {@link java.awt.Graphics#drawArc(int, int, int, int, int, int) g.drawArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
 	 * @param x horizontal coordinate
@@ -498,28 +582,56 @@ public class Screen {
 	 * @param width width of arc
 	 * @param height height of arc
 	 * @param startAngle arc begins on this angle
-	 * @param arcAngle arc finishes on this angle<br><br>
+	 * @param arcAngle arc finishes on this angle
+	 * @param color color of arc
+	 * <p>
+	 * @see java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)
+	 */
+	public void renderArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color){
+		setColor(color);
+		
+		if(!ignoreOffset){
+			x -= xOffset;
+			y -= yOffset;
+		}
+		
+		g.drawArc(x, y, width, height, startAngle, arcAngle);
+	}
+	
+	/**
+	 * Draws arc with specified position, size and angles. Uses current color set in Graphics object.
+	 * <p>
+	 * Uses {@link java.awt.Graphics#drawArc(int, int, int, int, int, int) g.drawArc(x, y, width, height, startAngle, arcAngle)} method.
 	 * 
+	 * @param x horizontal coordinate
+	 * @param y vertical coordinate
+	 * @param width width of arc
+	 * @param height height of arc
+	 * @param startAngle arc begins on this angle
+	 * @param arcAngle arc finishes on this angle
+	 * <p>
 	 * @see #setColor(Color)
 	 * @see java.awt.Graphics#drawArc(int x, int y, int width, int height, int startAngle, int arcAngle)
 	 */
 	public void renderArc(int x, int y, int width, int height, int startAngle,	int arcAngle) {
 		if(!ignoreOffset){
-			x = offsetCoordinate(x,xOffset);
-			y = offsetCoordinate(y,yOffset);
+			x -= xOffset;
+			y -= yOffset;
 		}
+		
 		g.drawArc(x, y, width, height, startAngle, arcAngle);
 	}
 	
 	/**
-	 * Draws specified {@link svk.sglubos.engine.gfx.sprite.Sprite sprite} at specifiied position.<br>
+	 * Draws specified {@link svk.sglubos.engine.gfx.sprite.Sprite sprite} at specifiied position.
+	 * <p>
 	 * Sprites are rendered by changing {@link #pixels pixels} at specified position to pixels from {@link svk.sglubos.engine.gfx.sprite.Sprite} object.
 	 * To render scaled up sprite use {@link #renderSprite(Sprite, int, int, int)} method. 
 	 * 
 	 * @param sprite sprite object containing pixels which will be drawn
 	 * @param xCoord horizontal coordinate where sprite will be drawn
 	 * @param yCoord vertical coordinate where sprite will be drawn<br><br>
-	 * 
+	 * <p>
 	 * @see #renderSprite(Sprite, int, int, int)
 	 * @see svk.sglubos.engine.gfx.sprite.Sprite
 	 * @see #pixels
@@ -528,9 +640,12 @@ public class Screen {
 		int[] spritePixels = sprite.getPixels();
 		
 		if(!ignoreOffset){
-			xCoord = offsetCoordinate(xCoord,xOffset);
-			yCoord = offsetCoordinate(yCoord,yOffset);
+			xCoord -= xOffset;
+			yCoord -= yOffset;
 		}
+		
+		xCoord--;
+		yCoord--;
 		
 		int spriteWidth = sprite.getWidth();
 		int spriteHeight = sprite.getHeight();
@@ -547,7 +662,7 @@ public class Screen {
 					continue;
 				}
 				
-				if(pixelY > 0 && pixelY < this.height && pixelX > 0 && pixelX < this.width){
+				if(pixelY >= 0 && pixelY < this.height && pixelX >= 0 && pixelX < this.width){
 					this.pixels[pixelX + pixelY * this.width] = spritePixels[x + y * spriteWidth];
 				}
 			}
@@ -555,7 +670,8 @@ public class Screen {
 	}
 	
 	/**
-	 * Draws specified {@link svk.sglubos.engine.gfx.sprite.Sprite sprite} at specifiied position, with specified scale.<br>
+	 * Draws specified {@link svk.sglubos.engine.gfx.sprite.Sprite sprite} at specifiied position, with specified scale.
+	 * <p>
 	 * Sprites are rendered by changing {@link #pixels pixels} at specified position to pixels from {@link svk.sglubos.engine.gfx.sprite.Sprite} object.
 	 * To render non scaled sprite use {@link #renderSprite(Sprite, int, int)}.<br>
 	 * 
@@ -563,7 +679,7 @@ public class Screen {
 	 * @param xCoord horizontal coordinate where sprite will be drawn
 	 * @param yCoord vertical coordinate where sprite will be drawn
 	 * @param scale scale with sprite will be drawn<br><br>
-	 * 
+	 * <p>
 	 * @see #renderSprite(Sprite, int, int)
 	 * @see svk.sglubos.engine.gfx.sprite.Sprite
 	 * @see #pixels
@@ -572,8 +688,8 @@ public class Screen {
 		int[] spritePixels = sprite.getPixels();
 		
 		if(!ignoreOffset){
-			xCoord = offsetCoordinate(xCoord,xOffset);
-			yCoord = offsetCoordinate(yCoord,yOffset);
+			xCoord -= xOffset;
+			yCoord -= yOffset;
 		}
 		
 		int spriteWidth = sprite.getWidth();
@@ -586,7 +702,7 @@ public class Screen {
 		int scaledPixelY;
 		
 		for(int y = 0; y < spriteHeight; y++){
-			pixelY = y *scale + yCoord;
+			pixelY = y * scale + yCoord;
 			for(int x = 0; x < spriteWidth; x++){
 				pixelX = x * scale + xCoord;
 				
@@ -617,28 +733,40 @@ public class Screen {
 	}
 	
 	/**
-	 * Prepares screen before rendering any content.<br>
-	 * Initializes <code>Graphics</code> object with Graphics object returned by this method: <code>renderLayer.getGraphics()</code>. <br> 
+	 * Prepares screen before rendering any content.
+	 * <p>
+	 * Initializes {@link #g Graphics object} with {@link java.awt.Graphics} object returned by method: {@link java.awt.image.BufferedImage#getGraphics() renderlayer.getGraphics()}.<br> 
 	 * Also fills entire screen with  {@link #defaultScreenColor defaultScreenColor}. This method should be called every frame.
 	 * 
 	 * @see #g Graphics object
 	 * @see #defaultScreenColor
-	 * 
+	 * @see java.awt.image.BufferedImage#getGraphics()
 	 */
-	public void prepare(){
-		g = renderLayer.getGraphics();
-		g.setColor(defaultScreenColor);
-		g.fillRect(0, 0, width, height);
+	public void clear(){
+		int colorValue = defaultScreenColor.getRGB();
+		clear(defaultScreenColor);
+		for(int i = 0; i < pixels.length; i++) {
+			pixels[i] = colorValue;
+		}
+	}
+	
+	public void clear(Color color) {
+		int colorValue = color.getRGB();
+		Arrays.fill(pixels, 0, pixels.length, colorValue);
 	}
 	
 	/**
-	 * Adds specified object which extends {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} to <code>ArrayList</code> {@link #components} 
-	 * and prepares it to use by calling it`s {@link svk.sglubos.engine.gfx.ScreenComponent#bind(Graphics, int[]) bind(g, pixels)} method with arguments:{@link Screen this}, {@link #g screen graphics object} and {@link #pixels screen pixels}.<br>
-	 * The <code>ScreenComponent</code> object can be removed by {@link #removeScreenComponent(ScreenComponent)} method.
+	 * Adds specified object which extends {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} to {@link java.util.ArrayList ArrayList} {@link #components}
+	 * and prepares it to use by calling it's {@link svk.sglubos.engine.gfx.ScreenComponent#bind(Graphics, int[]) bind(g, pixels)} method with arguments:{@link Screen this},
+	 * {@link #g screen graphics object} and {@link #pixels screen pixels}.
+	 * The {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} object can be removed by {@link #removeScreenComponent(ScreenComponent)} method.
 	 * 
-	 * @param component component which will be added to list and prepared to be used <br><br>
-	 * 
+	 * @param component component which will be added to list and prepared to be used
+	 * <p>
 	 * @see svk.sglubos.engine.gfx.ScreenComponent
+	 * @see #addScreenComponent(ScreenComponent)
+	 * @see #removeScreenComponent(ScreenComponent)
+	 * @see #components
 	 */
 	public void addScreenComponent(ScreenComponent component) {
 		components.add(component);
@@ -647,58 +775,48 @@ public class Screen {
 	}
 	
 	/**
-	 * Removes specified object which extends {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} from <code>ArrayList</code> {@link #components} 
-	 * and removes its functionality by calling it`s {@link svk.sglubos.engine.gfx.ScreenComponent#unbind() unbind()} method.<br>
+	 * Removes specified object which extends {@link svk.sglubos.engine.gfx.ScreenComponent ScreenComponent} from {@link java.util.ArrayList ArrayList} {@link #components} 
+	 * and removes its functionality by calling it`s {@link svk.sglubos.engine.gfx.ScreenComponent#unbind() unbind()} method.
 	 * 
-	 * @param component component which will be removed from list and his ability to draw on screen will be removed<br><br>
-	 * 
+	 * @param component component which will be removed from list and his ability to draw on screen will be removed
+	 * <p>
 	 * @see svk.sglubos.engine.gfx.ScreenComponent
+	 * @see #addScreenComponent(ScreenComponent)
+	 * @see #components
 	 */
 	public void removeScreenComponent(ScreenComponent component) {
 		components.remove(component);
 		component.unbind();
 	}
 	
+	//TODO exception
 	/**
-	 * Offsets specified coordinate by specified value. <br>
-	 * Offseting coordinate means that coordinate is subtracted by offset.
-	 * 
-	 * @param coord coordinate which will be offset
-	 * @param offset value which is coordinate offset<br><br>
-	 * 
-	 * @return coord - offset <br><br>
-	 * 
-	 * @see #xOffset
-	 * @see #yOffset
-	 * @see #ignoreOffset
-	 */
-	protected int offsetCoordinate(int coord, int offset){
-		return coord - offset;
-	}
-	
-	/**
-	 * Sets color in {@link  #g Graphics object} to specified color.<br>
+	 * Sets color in {@link  #g Graphics object} to specified color.
+	 * <p>
 	 * <strong> If parameter color is null, message is printed and color in {@link  #g Graphics object} keeps the same. </strong>
 	 * 
-	 * @param color color which will be set to {@link  #g Graphics object}<br><br>
-	 * 
+	 * @param color color which will be set to {@link  #g Graphics object}
+	 * <p>
 	 * @see java.awt.Color
 	 * @see java.awt.Graphics
 	 */
 	public void setColor(Color color) {
 		if (color == null) {
-			MessageHandler.printMessage(MessageHandler.ERROR, "Screen color cannot be set to null, color stays seto to current color");
-			return;
+			MessageHandler.printMessage(MessageHandler.ERROR, "Screen color cannot be set to null");
+			throw new IllegalArgumentException("Screen color cannot be set to null");
 		}
+		
 		g.setColor(color);
 	}
 	
+	//TODO Exception
 	/**
-	 * Sets font in {@link  #g Graphics object} to specified font.<br>
+	 * Sets font in {@link  #g Graphics object} to specified font.
+	 * <p>
 	 * <strong> If parameter font is null, is printed and font in {@link  #g Graphics object} keeps the same. </strong>
 	 * 
-	 * @param font font which will be set to {@link  #g Graphics object}<br><br>
-	 * 
+	 * @param font font which will be set to {@link  #g Graphics object}
+	 * <p>
 	 * @see java.awt.Font
 	 * @see java.awt.Graphics
 	 */
@@ -711,12 +829,13 @@ public class Screen {
 	}
 	
 	/**
-	 * Sets horizontal and vertical offset of screen to specified values. <br>
-	 * Offseting means subtracting offsets from rendered content`s coordinates <br>
+	 * Sets horizontal and vertical offset of screen to specified values.
+	 * <p>
+	 * Offseting means subtracting offsets from rendered content`s coordinates
 	 * 
 	 * @param xOffset Horizontal offset of screen (offset on x axis)
 	 * @param yOffset Vertical offset of screen (offset on y axis)<br><br>
-	 * 
+	 * <p>
 	 * @see #xOffset
 	 * @see #yOffset
 	 * @see #ignoreOffset
@@ -727,11 +846,12 @@ public class Screen {
 	}
 	
 	/**
-	 * Sets {@link #ignoreOffset} to specified value. <br>
+	 * Sets {@link #ignoreOffset} to specified value.
+	 * <p>
 	 * Sets if screen offset is ignored while rendering content.
 	 * 
-	 * @param ignore if true offset of screen is ignored else position of rendered content is recalculated with screen offset<br><br>
-	 * 
+	 * @param ignore if true offset of screen is ignored else position of rendered content is recalculated with screen offset
+	 * <p>
 	 * @see #xOffset
 	 * @see #yOffset
 	 * @see #setOffset(int,int) setOffset(xOffset, yOffset)
@@ -742,7 +862,7 @@ public class Screen {
 	
 	/**
 	 * @return returns {@link #g Graphics object} which is used to draw on {@link #renderLayer}
-	 * 
+	 * <p>
 	 * @see java.awt.Graphics
 	 */
 	public Graphics getGraphics() {
@@ -751,12 +871,12 @@ public class Screen {
 	
 	/**
 	 * Disposes {@link #g Graphics object} which is used to draw on {@link #renderLayer}.
-	 * This method should be called at the end of rendering content for better performance.<br><br>
-	 * 
+	 * This method should be called at the end of rendering content for better performance.
+	 * <p>
 	 * @see java.awt.Graphics
 	 */
 	public void disposeGraphics() {
-		g.dispose();
+//		g.dispose();
 	}
 	
 	/**
@@ -788,11 +908,33 @@ public class Screen {
 	}
 	
 	/**
-	 * @return <code>BufferedImage</code>{@link #renderLayer} which contains all rendered graphics.<br><br>
-	 * 
+	 * @return <code>BufferedImage</code>{@link #renderLayer} which contains all rendered graphics.
+	 * <p>
 	 * @see java.awt.image.BufferedImage
 	 */
 	public BufferedImage getRenderLayer() {
 		return renderLayer;
+	}
+	
+	//TODO ducumment
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.appendClassDataBracket(getClass(), hashCode());
+		ret.appendTab();
+		ret.append("width = " + width);
+		ret.append(" height = " + height);
+		ret.append(" ignoreOffset = " + ignoreOffset);
+		ret.append(" xOffset = " + xOffset);
+		ret.append(" yOffset = " + yOffset);
+		ret.appendLineSeparator();
+		
+		ret.appendObjectToStringTabln("defaultScreenColor = ", defaultScreenColor);
+		ret.appendObjectToStringTabln("g = ",g);
+		ret.appendObjectToStringTabln("renderLayer = ", renderLayer);
+		ret.appendObjectToStringTabln("pixels = ", pixels);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }
