@@ -37,9 +37,10 @@ public class Game extends BasicCore {
 	 * Initializes game content before starting game loop 
 	 */
 	public void init(){
-		window = new GameWindow(500, 500, "game", 1.0, Color.black);
+		window = new GameWindow(100, 100, "game", 2.0, Color.black);
+		window.setResizable(true);
 		mainScreen = window.getScreen();
-		mainScreen.setFont(new Font("null", Font.BOLD, 15));
+		mainScreen.setFont(new Font("Arial", Font.BOLD, 15));
 		
 		Mouse.bind(window.getRenderCanvas());
 		Keyboard.bind(window.getRenderCanvas());
@@ -67,15 +68,17 @@ public class Game extends BasicCore {
 	 * Renders game content. 
 	 */
 	public void render(){
-		mainScreen.prepare();
+//		mainScreen.clear();
 		
-		mainScreen.disposeGraphics();
+//		mainScreen.setColor(Color.white);
+//		mainScreen.renderRectangle(0, 0, 10, 10);
+		
 		window.showRenderedContent();
 	}
 
 	@Override
 	protected void stopped() {
-		
+		System.exit(0);
 	}
 
 }

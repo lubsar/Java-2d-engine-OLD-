@@ -41,7 +41,7 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
  * After calling the {@link #getRotation()} method the rotation is returned and then set to <code>0</code> and the {@link #mouseWheelRotated} is set to <code>false</code>.<br>
  * 
  * <h1>Binding</h1>
- * If a {@link java.awt.Component Component is bound to the <code>Mouse</code>,
+ * If a {@link java.awt.Component Component} is bound to the <code>Mouse</code>,
  * the <code>Mouse</code> gets ability to listen for the various mouse events ({@link java.awt.event.MouseEvent MouseEvent}, {@link java.awt.event.MouseWheelEvent MouseWheelEvent}) performed on that {@link java.awt.Component Component} 
  * and if the {@link java.awt.Component Component} is unbind from the <code>Mouse</code>, the <code>Mouse</code> loses ability to listen for those events.<br>
  * <p>

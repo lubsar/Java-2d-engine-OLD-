@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import svk.sglubos.engine.gfx.sprite.Sprite;
@@ -34,7 +35,7 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
  * and this {@link java.awt.image.BufferedImage} is returned by method {@link #getRenderLayer()}.
  * A {@link java.awt.Graphics Graphics} {@link #g object} which can draw on renderLayer is returned by method {@link #getGraphics()}.
  * <p>
- * Before rendering game content every frame you need to call {@link #prepare()} method, which creates new {@link java.awt.Graphics Graphics} object
+ * Before rendering game content every frame you need to call {@link #clear()} method, which creates new {@link java.awt.Graphics Graphics} object
  * and fills entire screen with {@link #defaultScreenColor} passed in {@link #Screen(int, int, Color) constructor} of this class.  
  * After rendering game content you need to call {@link #disposeGraphics()} method which disposes Graphics object to release system resources.
  * 
@@ -61,7 +62,7 @@ import svk.sglubos.engine.utils.debug.MessageHandler;
  * @see java.awt.Graphics
  * @see svk.sglubos.engine.gfx.sprite.Sprite
  * @see #setOffset(int, int) offseting of screen
- * @see #prepare()
+ * @see #clear()
  * @see #disposeGraphics()
  * @see #addScreenComponent(ScreenComponent)
  */
@@ -107,7 +108,7 @@ public class Screen {
 	protected boolean ignoreOffset;
 	
 	/**
-	 * Color used in {@link #prepare()} method, entire screen is filled with this color when {@link #prepare()} is called.
+	 * Color used in {@link #clear()} method, entire screen is filled with this color when {@link #clear()} is called.
 	 * <p>
 	 * The value of this color is initialized in constructor and is last passed parameter in {@link #Screen(int, int, Color) constructor}.
 	 */
@@ -126,11 +127,11 @@ public class Screen {
 	/**
 	 * {@link java.awt.Graphics} object which provides ability to draw on {@link #renderLayer renderLayer}.
 	 * <p>
-	 * This object is initialized in method {@link #prepare()}.<br>
+	 * This object is initialized in method {@link #clear()}.<br>
 	 * It should be initialized every frame before rendering and disposed at the end of rendering for better performance.<br>
 	 * This object can be obtained by {@link #getGraphics()} method.
 	 * 
-	 * @see #prepare()
+	 * @see #clear()
 	 * @see #renderLayer
 	 * @see #disposeGraphics()
 	 * @see #getGraphics()
@@ -182,7 +183,7 @@ public class Screen {
 	public Screen(int width, int height, Color defaultColor) {
 		renderLayer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt)renderLayer.getRaster().getDataBuffer()).getData();
-		g = renderLayer.getGraphics();
+		g = renderLayer.createGraphics();
 		
 		this.width = width;
 		this.height = height;
@@ -741,10 +742,17 @@ public class Screen {
 	 * @see #defaultScreenColor
 	 * @see java.awt.image.BufferedImage#getGraphics()
 	 */
-	public void prepare(){
-		g = renderLayer.getGraphics();
-		g.setColor(defaultScreenColor);
-		g.fillRect(0, 0, width, height);
+	public void clear(){
+		int colorValue = defaultScreenColor.getRGB();
+		clear(defaultScreenColor);
+		for(int i = 0; i < pixels.length; i++) {
+			pixels[i] = colorValue;
+		}
+	}
+	
+	public void clear(Color color) {
+		int colorValue = color.getRGB();
+		Arrays.fill(pixels, 0, pixels.length, colorValue);
 	}
 	
 	/**
@@ -868,7 +876,7 @@ public class Screen {
 	 * @see java.awt.Graphics
 	 */
 	public void disposeGraphics() {
-		g.dispose();
+//		g.dispose();
 	}
 	
 	/**

@@ -69,7 +69,7 @@ public abstract class BasicCore extends Core implements Runnable {
 			}
 				
 			if(debug && (System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
-				System.out.println("[DEBUG] ticks: " + ticks + "fps: " + fps);
+				System.out.println("[DEBUG] ticks: " + ticks + " fps: " + fps);
 				lastTimeDebugOutput += 1000;
 				fps = 0;
 				ticks = 0;
@@ -84,8 +84,20 @@ public abstract class BasicCore extends Core implements Runnable {
 		this.sleep = (long) (Math.pow(10, 9) / fpsLimit);
 	}
 	
-	protected long getFPSLimit() {
+	protected int getFPSLimit() {
 		return fpsLimit;
+	}
+	
+	protected int getTPSLimit() {
+		return ticksPerSecond;
+	}
+	
+	protected boolean isDebug() {
+		return debug;
+	}
+	
+	protected void setDebug(boolean debug) {
+		this.debug = debug;
 	}
 	
 	@Override

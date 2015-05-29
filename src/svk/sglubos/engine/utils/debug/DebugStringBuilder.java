@@ -18,28 +18,63 @@ package svk.sglubos.engine.utils.debug;
 import svk.sglubos.engine.utils.Constants;
 
 //TODO document build fancy string formatter
-public class DebugStringBuilder implements Constants{
+public class DebugStringBuilder implements Constants {
 	private StringBuilder builder = new StringBuilder();
-	
+	public int layer;
 	
 	public void append(String string) {
-		builder.append(string);
-	}
-	
-	public void appendTab() {
-		builder.append(TABULATOR);
-	}
-	
-	public void appendln(String string) {
-		builder.append(string);
-		builder.append(LINE_SEPARATOR);
+		if(!string.contains("\r") && !string.contains("\n") && !string.contains(LINE_SEPARATOR)) {
+			appendTabs();
+			builder.append(string);
+			return;
+		}
+		
+		if(string.contains(LINE_SEPARATOR)) {
+			string = string.replaceAll(LINE_SEPARATOR, "\n");
+		}
+		
+		String[] strings = string.split("[\r\n]" );
+		
+		for(int i = 0; i < strings.length; i++) {
+			appendTabs();
+			builder.append(strings[i]);
+			if(i < strings.length -1 )
+				builder.append(LINE_SEPARATOR);
+		}
 	}
 	
 	public void append(String... strings) {
 		for(String s : strings) {
-			builder.append(s);
+			append(s);
 		}
 	}
+	
+	public void append(Class<?> clas, int hashcode) {
+		builder.append(clas.getName());
+		builder.append("@");
+		builder.append(Integer.toHexString(hashcode));
+	}
+	
+	public void append(String string, Object object) {
+		append(string);
+		try{
+			builder.append(object.toString());			
+		} catch (NullPointerException e) {
+			builder.append("null");
+		}
+	}
+	
+	public void appendTab() {
+		appendTabs();
+		builder.append(TABULATOR);
+	}
+	
+	public void appendln(String string) {
+		appendTabs();
+		builder.append(string);
+		builder.append(LINE_SEPARATOR);
+	}
+	
 	
 	public void appendln(String... strings) {
 		for(String s : strings) {
@@ -60,21 +95,6 @@ public class DebugStringBuilder implements Constants{
 		builder.append(TABULATOR);
 		builder.append(string);
 		builder.append(LINE_SEPARATOR);
-	}
-	
-	public void appendClassData(Class<?> clas, int hashcode) {
-		builder.append(clas.getName());
-		builder.append("@");
-		builder.append(Integer.toHexString(hashcode));
-	}
-	
-	public void appendObjectToString(String string, Object object) {
-		builder.append(string);
-		try{
-			builder.append(object.toString());			
-		} catch (NullPointerException e) {
-			builder.append("null");
-		}
 	}
 	
 	public void appendObjectToStringTab(String string, Object object) {
@@ -107,8 +127,23 @@ public class DebugStringBuilder implements Constants{
 		builder.append(LINE_SEPARATOR);
 	}
 	
+	private void appendTabs() {
+		if(layer == 0) {
+			return;
+		}
+		
+		for(int i = 0; i < layer; i++) {
+			builder.append(TABULATOR);
+		}
+	}
+	
+	
 	public void appendCloseBracket() {
 		builder.append("}");
+	}
+	
+	public void setLayer(int layer) {
+		this.layer = layer;
 	}
 	
 	public String getString() {
