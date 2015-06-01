@@ -29,7 +29,7 @@ public class Game extends BasicCore {
 	
 	//Constructor
 	public Game() {
-		super(20, FPS_UNLIMITED, true);
+		super(20, 30, true);
 		start();
 	}
 	
