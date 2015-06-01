@@ -29,6 +29,10 @@ public abstract class BasicCore extends Core implements Runnable {
 		this.ticksPerSecond = ticksPerSecond;
 		this.fpsLimit = fpsLimit;
 		this.debug = debug;
+		
+		if(fpsLimit != FPS_UNLIMITED) {
+			this.sleep = (long) (1000 / fpsLimit);
+		}
 	}
 	
 	@Override
@@ -81,7 +85,7 @@ public abstract class BasicCore extends Core implements Runnable {
 
 	protected void setFPSLimit(int fpsLimit) {
 		this.fpsLimit = fpsLimit;
-		this.sleep = (long) (Math.pow(10, 9) / fpsLimit);
+		this.sleep = (long) (1000 / fpsLimit);
 	}
 	
 	protected int getFPSLimit() {
