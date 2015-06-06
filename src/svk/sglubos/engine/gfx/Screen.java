@@ -138,6 +138,8 @@ public class Screen {
 	 */
 	protected Graphics g;
 	
+	protected int fontSize;
+	
 	/**
 	 * Array of screen pixels, changing values changes colors of screen pixels.
 	 * <p>
@@ -184,6 +186,7 @@ public class Screen {
 		renderLayer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt)renderLayer.getRaster().getDataBuffer()).getData();
 		g = renderLayer.createGraphics();
+		fontSize = g.getFont().getSize();
 		
 		this.width = width;
 		this.height = height;
@@ -335,6 +338,8 @@ public class Screen {
 		setFont(font);
 		setColor(color);
 		
+		y += fontSize;
+		
 		if(!ignoreOffset){
 			x -= xOffset;
 			y -= yOffset;
@@ -358,6 +363,7 @@ public class Screen {
 	 */
 	public void renderString(String text, int x, int y, Font font) {
 		setFont(font);
+		y += fontSize;
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -380,6 +386,8 @@ public class Screen {
 	 * @see #setFont(Font)
 	 */
 	public void renderString(String text, int x, int y) {
+		y += fontSize;
+		
 		if(!ignoreOffset){
 			x -= xOffset;
 			y -= yOffset;
@@ -825,7 +833,9 @@ public class Screen {
 			MessageHandler.printMessage(MessageHandler.ERROR, "Screen font cannot be set to null, font stays set to current font");
 			return;
 		}
+		
 		g.setFont(font);
+		fontSize = font.getSize();
 	}
 	
 	/**
