@@ -25,6 +25,7 @@ import java.awt.event.MouseWheelEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 import svk.sglubos.engine.utils.debug.MessageHandler;
 /**
  * <code>Mouse</code> class is extended by {@link java.awt.event.MouseAdapter}, 
@@ -280,5 +281,26 @@ public class Mouse extends MouseAdapter{
 	
 	public static boolean isBound() {
 		return boundTo > 0;
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		ret.append(getClass(), hashCode());
+		ret.setLayer(1);
+		ret.append(pressedButtons, "pressedButtons");
+		ret.append("x", x);
+		ret.append("y", y);
+		ret.append("inside", inside);
+		ret.append("mouseWheelRotated", mouseWheelRotated);
+		ret.append("mouseWheelRotation", mouseWheelRotation);
+		ret.append("boundTo", boundTo);
+		ret.setLayer(0);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
+	}
+	
+	public static String toDebug() {
+		return INSTANCE.toString();
 	}
 }

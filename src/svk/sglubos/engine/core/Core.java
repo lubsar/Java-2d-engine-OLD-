@@ -15,6 +15,8 @@
  */
 package svk.sglubos.engine.core;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+
 public abstract class Core {
 	protected volatile boolean running;
 	
@@ -27,5 +29,17 @@ public abstract class Core {
 	
 	public boolean isRunning() {
 		return running;
+	}
+	
+	@Override
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		ret.append(getClass(), hashCode());
+		ret.setLayer(1);
+		ret.append("running", running);
+		ret.setLayer(0);
+		ret.appendCloseBracket();
+		
+		return ret.toString();
 	}
 }

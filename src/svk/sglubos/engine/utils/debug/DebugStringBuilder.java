@@ -15,6 +15,11 @@
  */
 package svk.sglubos.engine.utils.debug;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
 import svk.sglubos.engine.utils.Constants;
 
 //TODO document build fancy string formatter
@@ -119,12 +124,78 @@ public class DebugStringBuilder implements Constants {
 		append(" = [");
 		  for(int i = 0; i < primitives.length; i++) {
 			  try{
-				  append(primitives[i].toString());			
+				  appendln(primitives[i].toString());			
 			  } catch (NullPointerException e) {
 				  builder.append("null");
 			  }
 			  
 			  if(i < primitives.length - 1) {
+				  builder.append(',');
+			  }
+			  
+			  builder.append(LINE_SEPARATOR);
+		  }
+		
+		append(" ]");
+		builder.append(LINE_SEPARATOR);
+	}
+	
+	public void append (Iterator<Object> iter, String name) {
+		appendTabs();
+		append(name);
+		builder.append('<');
+		builder.append(iter.getClass());
+		builder.append('>');
+		append(" = [");
+		  while(iter.hasNext()){
+			 Object o = iter.next();
+			  try{
+				  appendln(o.toString());			
+			  } catch (NullPointerException e) {
+				  builder.append("null");
+			  }
+			  
+			  if(iter.hasNext()) {
+				  builder.append(',');
+			  }
+			  
+			  builder.append(LINE_SEPARATOR);
+		  }
+		
+		append(" ]");
+		builder.append(LINE_SEPARATOR);
+	}
+	
+	public void append(HashMap<Object, Object> map, String name) {
+		appendTabs();
+		append(name);
+		Iterator<Object> keys = new ArrayList<Object>(map.keySet()).iterator();
+		Iterator<Object> values = new ArrayList<Object>(map.values()).iterator();
+		
+		append(" = [");
+		while(keys.hasNext()){
+			Object key = keys.next();
+			Object value = values.next();
+			builder.append('[');
+			
+			try{
+				appendln(key.toString());
+			} catch (NullPointerException e) {
+				builder.append("null");
+			}
+			
+			builder.append(',');
+			builder.append(LINE_SEPARATOR);
+			
+			try{
+				appendln(value.toString());
+			} catch (NullPointerException e) {
+				builder.append("null");
+			}
+
+			builder.append(']');
+			  
+			if(keys.hasNext()) {
 				  builder.append(',');
 			  }
 			  

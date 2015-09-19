@@ -22,6 +22,7 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 import svk.sglubos.engine.utils.debug.MessageHandler;
 
 //TODO document
@@ -121,5 +122,23 @@ public class Keyboard extends KeyAdapter {
 		recordedKeyChars = "";
 		
 		return temp;
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		ret.append(getClass(), hashCode());
+		ret.setLayer(1);
+		ret.append(pressedKeys, "pressedKeys");
+		ret.append((Object)recordedKeyChars, "recorderKeyChars");
+		ret.append("recordKeySequence", recordKeySequence);
+		ret.append("boundTo", boundTo);
+		ret.setLayer(0);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
+	}
+	
+	public static String toDebug() {
+		return INSTANCE.toString();
 	}
 }

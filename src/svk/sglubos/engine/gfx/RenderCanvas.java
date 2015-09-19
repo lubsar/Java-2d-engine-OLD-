@@ -154,10 +154,11 @@ public class RenderCanvas extends Canvas {
 		
 		ret.append(getClass(), hashCode());
 		ret.setLayer(1);
-		ret.append(super.toString());
+		ret.appendln(super.toString());
 		ret.append("scale", scale);
 		ret.append(renderLayer, "renderlayer");
 		ret.append(bs, "bs");
+		ret.setLayer(0);
 		ret.appendCloseBracket();
 		
 		return ret.getString();

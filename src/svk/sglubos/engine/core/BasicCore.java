@@ -15,6 +15,8 @@
  */
 package svk.sglubos.engine.core;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+
 public abstract class BasicCore extends Core implements Runnable {
 	public static final int FPS_UNLIMITED = -1;
 	
@@ -114,5 +116,21 @@ public abstract class BasicCore extends Core implements Runnable {
 	@Override
 	protected void stop() {
 	 running = false;
+	}
+	
+	@Override
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		ret.append(getClass(), hashCode());
+		ret.setLayer(1);
+		ret.appendln(super.toString());
+		ret.append("debug", debug);
+		ret.append("sleep", sleep);
+		ret.append("ticksPerSecond", ticksPerSecond);
+		ret.append("fpsLimit", fpsLimit);
+		ret.setLayer(0);
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }
