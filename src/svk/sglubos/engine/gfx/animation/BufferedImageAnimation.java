@@ -39,7 +39,7 @@ public class BufferedImageAnimation extends Animation {
 		
 		ret.append(getClass(), hashCode());
 		ret.setLayer(1);
-		ret.append(super.toString());
+		ret.appendln(super.toString());
 		ret.append(images, "images");
 		ret.setLayer(0);
 		ret.appendCloseBracket();

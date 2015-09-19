@@ -620,6 +620,7 @@ public abstract class Animation {
 		
 		ret.append(task, "task");
 		ret.append(frameSwitch, "frameSwitch");
+		ret.setLayer(0);
 		ret.appendCloseBracket();
 		
 		return ret.getString();
