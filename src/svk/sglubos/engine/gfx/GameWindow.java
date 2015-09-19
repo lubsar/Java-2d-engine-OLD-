@@ -16,6 +16,7 @@
 
 package svk.sglubos.engine.gfx;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
@@ -285,7 +286,7 @@ public class GameWindow extends JFrame {
 		screen = new Screen(screenWidth, screenHeight, defaultScreenColor);
 		canvas = new RenderCanvas(screen, screenScale);
 		
-		add(canvas);
+		add(canvas, BorderLayout.CENTER);
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -310,7 +311,8 @@ public class GameWindow extends JFrame {
 	}
 	
 	/**
-	 * Sets the
+	 * Sets the windows state to full screen mode or to windowed state.
+	 * <p>
 	 * 
 	 * @param fullScreen
 	 */
@@ -374,11 +376,13 @@ public class GameWindow extends JFrame {
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
-		ret.appendClassDataBracket(this.getClass(), hashCode());
-		ret.appendTabln(super.toString());
-		ret.appendObjectToStringTabln("screen = ", screen);
-		ret.appendObjectToStringTabln("canvas = ", canvas);
-		ret.appendObjectToStringTabln("device = ", device);
+		ret.append(this.getClass(), hashCode());
+		ret.setLayer(1);
+		ret.appendln(super.toString());
+		ret.append(screen, "screen");
+		ret.append(canvas, "canvas");
+		ret.append(device, "device");
+		ret.setLayer(0);
 		ret.appendCloseBracket();
 		
 		return ret.getString();

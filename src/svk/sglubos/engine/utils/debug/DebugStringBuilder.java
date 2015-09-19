@@ -45,23 +45,94 @@ public class DebugStringBuilder implements Constants {
 	
 	public void append(String... strings) {
 		for(String s : strings) {
-			append(s);
+			appendln(s);
 		}
 	}
 	
 	public void append(Class<?> clas, int hashcode) {
+		appendTabs();
 		builder.append(clas.getName());
 		builder.append("@");
 		builder.append(Integer.toHexString(hashcode));
+		builder.append(" {");
+		builder.append(LINE_SEPARATOR);
 	}
 	
-	public void append(String string, Object object) {
-		append(string);
+	public void append(Object object, String name) {
+		appendTabs();
+		builder.append('(');
+		builder.append(object.getClass());
+		builder.append(')');
+		append(name);
+		append(" = [");
 		try{
-			builder.append(object.toString());			
+			append(object.toString());			
 		} catch (NullPointerException e) {
 			builder.append("null");
 		}
+		
+		append(" ]");
+		builder.append(LINE_SEPARATOR);
+	}
+	
+	public void append(Object[] objects, String name) {
+		appendTabs();
+		builder.append('(');
+		builder.append(objects.getClass());
+		builder.append(')');
+		append(name);
+		append(" = [");
+		  for(int i = 0; i < objects.length; i++) {
+			  try{
+				  append(objects[i].toString());			
+			  } catch (NullPointerException e) {
+				  builder.append("null");
+			  }
+			  
+			  if(i < objects.length - 1) {
+				  builder.append(',');
+			  }
+			  
+			  builder.append(LINE_SEPARATOR);
+		  }
+		
+		append(" ]");
+		builder.append(LINE_SEPARATOR);
+	}
+	
+	public void append(String name, Object primitive) {
+		appendTabs();
+		append(name);
+		append(" = ");
+		try{
+			append(primitive.toString());			
+		} catch (NullPointerException e) {
+			builder.append("null");
+		}
+		
+		builder.append(LINE_SEPARATOR);
+	}
+	
+	public void append(String name, Object[] primitives) {
+		appendTabs();
+		append(name);
+		append(" = [");
+		  for(int i = 0; i < primitives.length; i++) {
+			  try{
+				  append(primitives[i].toString());			
+			  } catch (NullPointerException e) {
+				  builder.append("null");
+			  }
+			  
+			  if(i < primitives.length - 1) {
+				  builder.append(',');
+			  }
+			  
+			  builder.append(LINE_SEPARATOR);
+		  }
+		
+		append(" ]");
+		builder.append(LINE_SEPARATOR);
 	}
 	
 	public void appendTab() {
@@ -70,61 +141,13 @@ public class DebugStringBuilder implements Constants {
 	}
 	
 	public void appendln(String string) {
+		append(string);
+		builder.append(LINE_SEPARATOR);
+	}
+	
+	public void appendCloseBracket() {
 		appendTabs();
-		builder.append(string);
-		builder.append(LINE_SEPARATOR);
-	}
-	
-	
-	public void appendln(String... strings) {
-		for(String s : strings) {
-			builder.append(s);
-		}
-		builder.append(LINE_SEPARATOR);
-	}
-	
-	public void appendln() {
-		builder.append(LINE_SEPARATOR);
-	}
-	
-	public void appendLineSeparator() {
-		builder.append(LINE_SEPARATOR);
-	}
-	
-	public void appendTabln(String string) {
-		builder.append(TABULATOR);
-		builder.append(string);
-		builder.append(LINE_SEPARATOR);
-	}
-	
-	public void appendObjectToStringTab(String string, Object object) {
-		builder.append(TABULATOR);
-		appendObjectToString(string, object);
-	}
-	
-	public void appendObjectToStringTabln(String string, Object object) {
-		builder.append(TABULATOR);
-		appendObjectToStringln(string, object);
-	}
-	
-	public void appendObjectToStringln(String string, Object object) {
-		builder.append(string);
-		try{
-			builder.append(object.toString());			
-		} catch (NullPointerException e) {
-			builder.append("null");
-		}
-		builder.append(LINE_SEPARATOR);
-	}
-	
-	public void appendObjectArrayln(String string, Object[] object) {
-		
-	}
-	
-	public void appendClassDataBracket(Class<?> clas, int hashcode) {
-		appendClassData(clas, hashcode);
-		builder.append(" {");
-		builder.append(LINE_SEPARATOR);
+		builder.append("}");
 	}
 	
 	private void appendTabs() {
@@ -135,11 +158,6 @@ public class DebugStringBuilder implements Constants {
 		for(int i = 0; i < layer; i++) {
 			builder.append(TABULATOR);
 		}
-	}
-	
-	
-	public void appendCloseBracket() {
-		builder.append("}");
 	}
 	
 	public void setLayer(int layer) {

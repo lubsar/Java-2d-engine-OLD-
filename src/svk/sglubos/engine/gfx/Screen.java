@@ -21,7 +21,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import svk.sglubos.engine.gfx.sprite.Sprite;
@@ -191,8 +190,10 @@ public class Screen {
 		this.width = width;
 		this.height = height;
 		this.defaultScreenColor = defaultColor;
-	}
 		
+		g.setClip(0, 0, width, height);
+	}
+	
 	/**
 	 * Draws filled rectangle with specified position, size and color.
 	 * <p>
@@ -318,7 +319,7 @@ public class Screen {
 			y -= yOffset;
 		}
 		
-		g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
+		g.drawImage(img, x, y, null);
 	}
 	
 	/**
@@ -714,7 +715,6 @@ public class Screen {
 			for(int x = 0; x < spriteWidth; x++){
 				pixelX = x * scale + xCoord;
 				
-				System.out.println(spritePixels[x + y * spriteWidth]);
 				if(spritePixels[x + y * spriteWidth] == 0){
 					continue;
 				}
@@ -752,7 +752,6 @@ public class Screen {
 	 */
 	public void clear(){
 		int colorValue = defaultScreenColor.getRGB();
-		clear(defaultScreenColor);
 		for(int i = 0; i < pixels.length; i++) {
 			pixels[i] = colorValue;
 		}
@@ -760,7 +759,9 @@ public class Screen {
 	
 	public void clear(Color color) {
 		int colorValue = color.getRGB();
-		Arrays.fill(pixels, 0, pixels.length, colorValue);
+		for(int i = 0; i < pixels.length; i++) {
+			pixels[i] = colorValue;
+		}
 	}
 	
 	/**
@@ -930,19 +931,19 @@ public class Screen {
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
-		ret.appendClassDataBracket(getClass(), hashCode());
-		ret.appendTab();
-		ret.append("width = " + width);
-		ret.append(" height = " + height);
-		ret.append(" ignoreOffset = " + ignoreOffset);
-		ret.append(" xOffset = " + xOffset);
-		ret.append(" yOffset = " + yOffset);
-		ret.appendLineSeparator();
+		ret.append(getClass(), hashCode());
+		ret.setLayer(1);
+		ret.append("width", width);
+		ret.append("height", height);
+		ret.append("ignoreOffset", ignoreOffset);
+		ret.append("xOffset", xOffset);
+		ret.append("yOffset", yOffset);
 		
-		ret.appendObjectToStringTabln("defaultScreenColor = ", defaultScreenColor);
-		ret.appendObjectToStringTabln("g = ",g);
-		ret.appendObjectToStringTabln("renderLayer = ", renderLayer);
-		ret.appendObjectToStringTabln("pixels = ", pixels);
+		ret.append(defaultScreenColor, "defaultScreenColor");
+		ret.append(g, "g");
+		ret.append(renderLayer, "renderLayer");
+		ret.append(pixels, "pixels");
+		ret.setLayer(0);
 		ret.appendCloseBracket();
 		
 		return ret.getString();

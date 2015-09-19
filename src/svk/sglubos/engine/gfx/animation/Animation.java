@@ -606,14 +606,20 @@ public abstract class Animation {
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
-		ret.appendClassDataBracket(getClass(), hashCode());
-		ret.appendTab();
-		ret.append("frameDelay = " + frameDelay, " delayFormat = " + delayFormat, " frames = " + frames, " loop = " + loop, " running = " + running,
-				" reverse = " + reverse, " currentFrame = " + currentFrame, " startFrame = " + startFrame,
-				" endFrame = " + endFrame);
-		ret.appendLineSeparator();
-		ret.appendObjectToStringTabln("task = ", task);
-		ret.appendObjectToStringTabln("frameSwitch = ", frameSwitch);
+		ret.append(getClass(), hashCode());
+		ret.setLayer(1);
+		ret.append("frameDelay", frameDelay);
+		ret.append("delayFormat", delayFormat);
+		ret.append("frames", frames);
+		ret.append("loop", loop);
+		ret.append("running", running);
+		ret.append("reverse", reverse);
+		ret.append("currentFrame", currentFrame);
+		ret.append("startFrame", startFrame);
+		ret.append("endFrame", endFrame);
+		
+		ret.append(task, "task");
+		ret.append(frameSwitch, "frameSwitch");
 		ret.appendCloseBracket();
 		
 		return ret.getString();

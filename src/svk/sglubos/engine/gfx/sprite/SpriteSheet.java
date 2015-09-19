@@ -206,12 +206,13 @@ public class SpriteSheet {
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
-		ret.appendClassDataBracket(getClass(), hashCode());
-		ret.appendTab();
-		ret.append("width = " + width, " height = " + height);
-		ret.appendLineSeparator();
-		ret.appendObjectToStringTabln("image = ", image);
-		ret.appendObjectToStringTabln("sprites = ", sprites);
+		ret.append(getClass(), hashCode());
+		ret.setLayer(1);
+		ret.append("width", width);
+		ret.append("height", height);
+		ret.append(image, "image");
+		ret.append(sprites, "sprites");
+		ret.setLayer(0);
 		ret.appendCloseBracket();
 		
 		return ret.getString();

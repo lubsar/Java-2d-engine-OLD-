@@ -80,11 +80,12 @@ public class Sprite {
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
-		ret.appendClassDataBracket(getClass(), hashCode());
-		ret.appendTab();
-		ret.append("width = " + width, " height = " + height);
-		ret.appendLineSeparator();
-		ret.appendObjectToStringTabln("pixels = ", pixels);
+		ret.append(getClass(), hashCode());
+		ret.setLayer(1);
+		ret.append("width", width);
+		ret.append("height", height);
+		ret.append("pixels", pixels);
+		ret.setLayer(0);
 		ret.appendCloseBracket();
 		
 		return ret.getString();
