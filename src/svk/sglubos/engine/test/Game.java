@@ -80,6 +80,10 @@ public class Game extends BasicCore implements ImageObserver {
 		if(Keyboard.isKeyPressed(KeyEvent.VK_BACK_SPACE)) {
 			animation.stop();
 		}
+		
+		if(Keyboard.isClicked(KeyEvent.VK_E)) {
+			System.out.println("clicked");
+		}
 	}
 	
 	/**

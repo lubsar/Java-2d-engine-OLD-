@@ -47,10 +47,10 @@ public class SpriteAnimation extends Animation {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
 		ret.append(getClass(), hashCode());
-		ret.setLayer(1);
+		ret.addLayer();
 		ret.appendln(super.toString());
 		ret.append(sprites, "sprites");
-		ret.setLayer(0);
+		ret.removeLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

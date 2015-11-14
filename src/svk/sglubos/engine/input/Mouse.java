@@ -21,8 +21,12 @@ import java.awt.MouseInfo;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import svk.sglubos.engine.utils.debug.DebugStringBuilder;
@@ -136,6 +140,8 @@ public class Mouse extends MouseAdapter{
 	 */
 	private static Map<Integer, MouseEvent> pressedButtons = new HashMap<Integer, MouseEvent>((int) (MouseInfo.getNumberOfButtons() / 0.75) + 1);
 	
+	private static List<Integer> clickedButtons = new ArrayList<Integer>();
+	
 	/**
 	 * Horizontal mouse cursor coordinate of mouse cursor, relative to {@link java.awt.Component Component} to which is mouse bound and inside of which is the cursor.
 	 * The {@link java.awt.Component Component} inside of which is the mouse cursor is stored in {@link #inside inside} object.<br><br>
@@ -155,7 +161,10 @@ public class Mouse extends MouseAdapter{
 	private static byte boundTo;
 	public static final byte MAX_BOUND_COMPONENTS = Byte.MAX_VALUE;
 	
-	private Mouse() {
+	private Mouse() {}
+	
+	public static void initClickBufferSize(int size) {
+		clickedButtons = new ArrayList<Integer>(size);
 	}
 	
 	public static void bind(Component component) {
@@ -249,6 +258,22 @@ public class Mouse extends MouseAdapter{
 		return pressedButtons.get(button); 
 	}
 	
+	public static boolean isButtonClicked(int button) {
+		if(pressedButtons.containsKey(button) && !clickedButtons.contains((Integer) button)) {
+			return clickedButtons.add((Integer) button);
+		} else {
+			return false;
+		}
+	}
+	
+	public static MouseEvent getButtonClickEvent(int button) {
+		if(clickedButtons.contains((Integer) button)) {
+			return pressedButtons.get(button);			
+		} else {
+			return null;
+		}
+	}
+	
 	public static int getRotation() {
 		int rot = mouseWheelRotation;
 		mouseWheelRotation = 0;
@@ -286,7 +311,7 @@ public class Mouse extends MouseAdapter{
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		ret.append(getClass(), hashCode());
-		ret.setLayer(1);
+		ret.addLayer();
 		ret.append(pressedButtons, "pressedButtons");
 		ret.append("x", x);
 		ret.append("y", y);
@@ -294,7 +319,7 @@ public class Mouse extends MouseAdapter{
 		ret.append("mouseWheelRotated", mouseWheelRotated);
 		ret.append("mouseWheelRotation", mouseWheelRotation);
 		ret.append("boundTo", boundTo);
-		ret.setLayer(0);
+		ret.removeLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

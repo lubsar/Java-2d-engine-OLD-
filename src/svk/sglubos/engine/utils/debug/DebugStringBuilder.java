@@ -18,7 +18,6 @@ package svk.sglubos.engine.utils.debug;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import svk.sglubos.engine.utils.Constants;
 
@@ -64,64 +63,70 @@ public class DebugStringBuilder implements Constants {
 	}
 	
 	public void append(Object object, String name) {
-		appendTabs();
-		builder.append('(');
-		builder.append(object.getClass());
-		builder.append(')');
-		append(name);
-		append(" = [");
-		try{
-			append(object.toString());			
-		} catch (NullPointerException e) {
+		append("(");
+		if(object == null ) {
 			builder.append("null");
+		} else {
+			builder.append(object.getClass());
+		}
+		builder.append(')');
+		builder.append(name);
+		builder.append(" = [");
+		builder.append(LINE_SEPARATOR);
+		if(object == null) {
+			layer++;
+			appendln("null");
+			layer--;
+		} else {
+			layer++;
+			appendln(object.toString());
+			layer--;
 		}
 		
-		append(" ]");
-		builder.append(LINE_SEPARATOR);
+		appendln("]");
 	}
 	
 	public void append(Object[] objects, String name) {
-		appendTabs();
-		builder.append('(');
-		builder.append(objects.getClass());
-		builder.append(')');
-		append(name);
-		append(" = [");
-		  for(int i = 0; i < objects.length; i++) {
-			  try{
-				  append(objects[i].toString());			
-			  } catch (NullPointerException e) {
-				  builder.append("null");
-			  }
-			  
-			  if(i < objects.length - 1) {
-				  builder.append(',');
-			  }
-			  
-			  builder.append(LINE_SEPARATOR);
-		  }
+		append("(");
+		if(objects == null ) {
+			builder.append("null)");
+		} else {
+			builder.append(objects.getClass());						
+		}
 		
-		append(" ]");
-		builder.append(LINE_SEPARATOR);
+		builder.append(')');
+		builder.append(name);
+		builder.append(" = [" + LINE_SEPARATOR);
+		if(objects != null) {
+			addLayer();
+			for(int i = 0; i < objects.length; i++) {
+				if(objects[i] == null) {
+					appendln("null");
+				} else {
+					appendln(objects[i].toString());
+				}
+			}
+			removeLayer();
+		}
+		
+		appendln("]");
 	}
 	
 	public void append(String name, Object primitive) {
-		appendTabs();
 		append(name);
-		append(" = ");
-		try{
-			append(primitive.toString());			
-		} catch (NullPointerException e) {
+		builder.append(" = ");
+		if(primitive == null) {
 			builder.append("null");
+		}else {
+			builder.append(primitive.toString());						
 		}
 		
 		builder.append(LINE_SEPARATOR);
 	}
 	
 	public void append(String name, Object[] primitives) {
-		appendTabs();
 		append(name);
-		append(" = [");
+		builder.append(" = [");
 		  for(int i = 0; i < primitives.length; i++) {
 			  try{
 				  appendln(primitives[i].toString());			
@@ -136,12 +141,11 @@ public class DebugStringBuilder implements Constants {
 			  builder.append(LINE_SEPARATOR);
 		  }
 		
-		append(" ]");
+		append("]");
 		builder.append(LINE_SEPARATOR);
 	}
 	
 	public void append (Iterator<Object> iter, String name) {
-		appendTabs();
 		append(name);
 		builder.append('<');
 		builder.append(iter.getClass());
@@ -167,12 +171,11 @@ public class DebugStringBuilder implements Constants {
 	}
 	
 	public void append(HashMap<Object, Object> map, String name) {
-		appendTabs();
 		append(name);
 		Iterator<Object> keys = new ArrayList<Object>(map.keySet()).iterator();
 		Iterator<Object> values = new ArrayList<Object>(map.values()).iterator();
 		
-		append(" = [");
+		builder.append(" = [");
 		while(keys.hasNext()){
 			Object key = keys.next();
 			Object value = values.next();
@@ -187,10 +190,10 @@ public class DebugStringBuilder implements Constants {
 			builder.append(',');
 			builder.append(LINE_SEPARATOR);
 			
-			try{
-				appendln(value.toString());
-			} catch (NullPointerException e) {
-				builder.append("null");
+			if(value == null) {
+				builder.append("null");				
+			} else {
+				appendln(value.toString());				
 			}
 
 			builder.append(']');
@@ -233,6 +236,14 @@ public class DebugStringBuilder implements Constants {
 	
 	public void setLayer(int layer) {
 		this.layer = layer;
+	}
+	
+	public void addLayer() {
+		layer++;
+	}
+	
+	public void removeLayer() {
+		layer--;
 	}
 	
 	public String getString() {

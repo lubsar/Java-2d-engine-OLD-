@@ -122,13 +122,13 @@ public abstract class BasicCore extends Core implements Runnable {
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		ret.append(getClass(), hashCode());
-		ret.setLayer(1);
+		ret.addLayer();
 		ret.appendln(super.toString());
 		ret.append("debug", debug);
 		ret.append("sleep", sleep);
 		ret.append("ticksPerSecond", ticksPerSecond);
 		ret.append("fpsLimit", fpsLimit);
-		ret.setLayer(0);
+		ret.removeLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();
