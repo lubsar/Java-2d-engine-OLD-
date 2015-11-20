@@ -798,11 +798,10 @@ public class Screen {
 		component.unbind();
 	}
 	
-	//TODO exception
 	/**
 	 * Sets color in {@link  #g Graphics object} to specified color.
 	 * <p>
-	 * <strong> If parameter color is null, message is printed and color in {@link  #g Graphics object} keeps the same. </strong>
+	 * <strong> If parameter color is null, message is printed and the color is kept is kept the same. </strong>
 	 * 
 	 * @param color color which will be set to {@link  #g Graphics object}
 	 * <p>
@@ -812,17 +811,16 @@ public class Screen {
 	public void setColor(Color color) {
 		if (color == null) {
 			MessageHandler.printMessage(MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
+			return;
 		}
 		
 		g.setColor(color);
 	}
 	
-	//TODO Exception
 	/**
 	 * Sets font in {@link  #g Graphics object} to specified font.
 	 * <p>
-	 * <strong> If parameter font is null, is printed and font in {@link  #g Graphics object} keeps the same. </strong>
+	 * <strong> If parameter font is null, is printed and font is kept the same. </strong>
 	 * 
 	 * @param font font which will be set to {@link  #g Graphics object}
 	 * <p>
@@ -887,7 +885,7 @@ public class Screen {
 	 * @see java.awt.Graphics
 	 */
 	public void disposeGraphics() {
-//		g.dispose();
+		g.dispose();
 	}
 	
 	/**
