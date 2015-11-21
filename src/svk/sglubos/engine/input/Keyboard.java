@@ -155,12 +155,12 @@ public class Keyboard extends KeyAdapter {
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		ret.append(getClass(), hashCode());
-		ret.addLayer();
+		ret.increaseLayer();
 		ret.append(pressedKeys, "pressedKeys");
 		ret.append((Object)recordedKeyChars, "recorderKeyChars");
 		ret.append("recordKeySequence", recordKeySequence);
 		ret.append("boundTo", boundTo);
-		ret.removeLayer();
+		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

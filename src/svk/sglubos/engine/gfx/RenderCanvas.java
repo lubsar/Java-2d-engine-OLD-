@@ -153,12 +153,12 @@ public class RenderCanvas extends Canvas {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
 		ret.append(getClass(), hashCode());
-		ret.addLayer();
+		ret.increaseLayer();
 		ret.appendln(super.toString());
 		ret.append("scale", scale);
 		ret.append(renderLayer, "renderlayer");
 		ret.append(bs, "bs");
-		ret.removeLayer();
+		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

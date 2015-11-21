@@ -15,6 +15,7 @@
  */
 package svk.sglubos.engine.utils.log;
 
+//TODO documment
 public interface LogWriter {
 	public void write(String... strings);
 	public void close();

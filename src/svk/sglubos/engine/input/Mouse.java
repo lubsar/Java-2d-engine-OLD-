@@ -311,7 +311,7 @@ public class Mouse extends MouseAdapter{
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		ret.append(getClass(), hashCode());
-		ret.addLayer();
+		ret.increaseLayer();
 		ret.append(pressedButtons, "pressedButtons");
 		ret.append("x", x);
 		ret.append("y", y);
@@ -319,7 +319,7 @@ public class Mouse extends MouseAdapter{
 		ret.append("mouseWheelRotated", mouseWheelRotated);
 		ret.append("mouseWheelRotation", mouseWheelRotation);
 		ret.append("boundTo", boundTo);
-		ret.removeLayer();
+		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

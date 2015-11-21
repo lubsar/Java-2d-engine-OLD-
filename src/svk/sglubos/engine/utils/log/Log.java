@@ -15,12 +15,14 @@
  */
 package svk.sglubos.engine.utils.log;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+
+//TODO documment
 public abstract class Log {
 	String id;
 	protected LogWriter writer;
 	
-	public Log() {
-	}
+	public Log() {}
 	
 	public abstract void log(String... strings);
 	
@@ -30,5 +32,18 @@ public abstract class Log {
 	
 	public boolean isWritable() {
 		return writer.isWritable();
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.append(this.getClass(), hashCode());
+		ret.increaseLayer();
+		ret.append("id", (Object)id);
+		ret.append(writer, "writer");
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

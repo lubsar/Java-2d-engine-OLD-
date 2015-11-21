@@ -131,12 +131,12 @@ public abstract class ScreenComponent {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
 		ret.append(getClass(), hashCode());
-		ret.addLayer();
+		ret.increaseLayer();
 		ret.append("bound = " + bound);
 		ret.append(g, "g");
 		ret.append(screen, "screen");
 		ret.append(pixels, "pixels");
-		ret.removeLayer();
+		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

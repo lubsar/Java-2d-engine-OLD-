@@ -930,7 +930,7 @@ public class Screen {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
 		ret.append(getClass(), hashCode());
-		ret.addLayer();
+		ret.increaseLayer();
 		ret.append("width", width);
 		ret.append("height", height);
 		ret.append("ignoreOffset", ignoreOffset);
@@ -941,7 +941,7 @@ public class Screen {
 		ret.append(g, "g");
 		ret.append(renderLayer, "renderLayer");
 		ret.append(pixels, "pixels");
-		ret.removeLayer();
+		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

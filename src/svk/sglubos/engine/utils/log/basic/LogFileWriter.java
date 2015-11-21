@@ -20,8 +20,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 import svk.sglubos.engine.utils.log.LogWriter;
 
+//TODO documment
 public class LogFileWriter implements LogWriter{
 	private BufferedWriter writer;
 	private boolean writable;
@@ -60,5 +62,18 @@ public class LogFileWriter implements LogWriter{
 	@Override
 	public boolean isWritable() {
 		return writable;
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+			
+		ret.append(this.getClass(), hashCode());
+		ret.increaseLayer();
+		ret.append(writer, "writer");
+		ret.append("writable", writable);
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+			
+		return ret.getString();
 	}
 }

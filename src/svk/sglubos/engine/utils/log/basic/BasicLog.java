@@ -15,9 +15,12 @@
  */
 package svk.sglubos.engine.utils.log.basic;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.MessageHandler;
 import svk.sglubos.engine.utils.log.Log;
 import svk.sglubos.engine.utils.log.LoggingUtilities;
 
+//TODO documment
 public class BasicLog extends Log {
 	private boolean timeStamps;
 	
@@ -28,9 +31,26 @@ public class BasicLog extends Log {
 	
 	@Override
 	public void log(String... strings) {
-		if(timeStamps) {
-			writer.write("[" + LoggingUtilities.getTime() + "]");
+		if(writer.isWritable()) {
+			if(timeStamps) {
+				writer.write("[" + LoggingUtilities.getTime() + "]");
+			}
+			writer.write(strings);			
+		} else {
+			MessageHandler.printMessage(MessageHandler.ERROR, "Log is not writable");
 		}
-		writer.write(strings);
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+			
+		ret.append(this.getClass(), hashCode());
+		ret.increaseLayer();
+		ret.appendln(super.toString());
+		ret.append("timeStamps", timeStamps);
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+			
+		return ret.getString();
 	}
 }

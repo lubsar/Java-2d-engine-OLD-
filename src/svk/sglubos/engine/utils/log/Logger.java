@@ -18,36 +18,39 @@ package svk.sglubos.engine.utils.log;
 import java.util.HashMap;
 import java.util.Map;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+
+//TODO documment
 public class Logger {
 	static final Map<String, Log> globalLogs = new HashMap<String, Log>();
-	static Log master = null;
+	static Log masterLog = null;
 	
 	public static void setMasterLog(Log log) {
-		if(master != null) {
-			master.close();
+		if(masterLog != null) {
+			masterLog.close();
 		}
-		Logger.master = log;
+		Logger.masterLog = log;
 	}
 
 	//TODO exception
 	public static void log(String... strings) {
-		if(master != null) {
-			master.log(strings);			
+		if(masterLog != null) {
+			masterLog.log(strings);			
 		}
 	}
 	
 	//TODO exception
 	public static void close() {
-		if(master != null) {
-			master.close();
+		if(masterLog != null) {
+			masterLog.close();
 		}
 	}
 	
 	public static boolean isWritable() {
-		if(master == null) {
+		if(masterLog == null) {
 			return false;
 		}
-		return  master.isWritable(); 
+		return  masterLog.isWritable(); 
 	}
 	
 	public static Log addGlobalLog(String logID, Log log) {
@@ -61,5 +64,18 @@ public class Logger {
 			//TODO exception
 		}
 		return globalLogs.get(logID);
+	}
+	
+	public static String toDebug() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+			
+		ret.append(Logger.class, DebugStringBuilder.STATIC_CONTENT);
+		ret.increaseLayer();
+		ret.append(globalLogs, "globalLogs");
+		ret.append(masterLog, "masterLog");
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+			
+		return ret.getString();
 	}
 }

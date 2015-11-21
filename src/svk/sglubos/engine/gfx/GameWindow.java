@@ -377,12 +377,12 @@ public class GameWindow extends JFrame {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
 		ret.append(this.getClass(), hashCode());
-		ret.addLayer();
+		ret.increaseLayer();
 		ret.appendln(super.toString());
 		ret.append(screen, "screen");
 		ret.append(canvas, "canvas");
 		ret.append(device, "device");
-		ret.removeLayer();
+		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

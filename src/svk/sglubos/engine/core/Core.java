@@ -35,9 +35,9 @@ public abstract class Core {
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		ret.append(getClass(), hashCode());
-		ret.addLayer();
+		ret.increaseLayer();
 		ret.append("running", running);
-		ret.removeLayer();
+		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
 		return ret.toString();

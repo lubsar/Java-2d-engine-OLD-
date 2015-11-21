@@ -17,6 +17,7 @@ package svk.sglubos.engine.utils.log;
 
 import java.time.LocalDateTime;
 
+//TODO documment
 public class LoggingUtilities {
 	public static final String getTime() {
 		LocalDateTime dt = LocalDateTime.now();

@@ -207,12 +207,12 @@ public class SpriteSheet {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
 		ret.append(getClass(), hashCode());
-		ret.addLayer();
+		ret.increaseLayer();
 		ret.append("width", width);
 		ret.append("height", height);
 		ret.append(image, "image");
 		ret.append(sprites, "sprites");
-		ret.removeLayer();
+		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

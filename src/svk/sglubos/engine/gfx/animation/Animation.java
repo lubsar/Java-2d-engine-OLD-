@@ -607,7 +607,7 @@ public abstract class Animation {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
 		ret.append(getClass(), hashCode());
-		ret.addLayer();
+		ret.increaseLayer();
 		ret.append("frameDelay", frameDelay);
 		ret.append("delayFormat", delayFormat);
 		ret.append("frames", frames);
@@ -620,7 +620,7 @@ public abstract class Animation {
 		
 		ret.append(task, "task");
 		ret.append(frameSwitch, "frameSwitch");
-		ret.removeLayer();
+		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
 		return ret.getString();

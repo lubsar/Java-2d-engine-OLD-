@@ -35,6 +35,10 @@ public class Game extends BasicCore implements ImageObserver {
 //	private Sprite tile = new SpriteSheet(ImagePort.getImageAsResource("/isometric tile.bmp")).getSprite(0, 0, 45, 37);
 	private BufferedImage tile = toCompatibleImage(ImagePort.getImageAsResource("/isometric tile.png"));
 	
+	public static void main(String[] args) {
+		new Game();
+	}
+	
 	//Constructor
 	public Game() {
 		super(20, BasicCore.FPS_UNLIMITED, true);

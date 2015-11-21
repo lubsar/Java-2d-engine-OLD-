@@ -23,6 +23,8 @@ import svk.sglubos.engine.utils.Constants;
 
 //TODO document build fancy string formatter
 public class DebugStringBuilder implements Constants {
+	public static final int STATIC_CONTENT = -1;
+	
 	private StringBuilder builder = new StringBuilder();
 	public int layer;
 	
@@ -57,7 +59,11 @@ public class DebugStringBuilder implements Constants {
 		appendTabs();
 		builder.append(clas.getName());
 		builder.append("@");
-		builder.append(Integer.toHexString(hashcode));
+		if(hashcode == STATIC_CONTENT) {
+			builder.append("STATIC CONTENT");	
+		} else {
+			builder.append(Integer.toHexString(hashcode));			
+		}
 		builder.append(" {");
 		builder.append(LINE_SEPARATOR);
 	}
@@ -98,7 +104,7 @@ public class DebugStringBuilder implements Constants {
 		builder.append(name);
 		builder.append(" = [" + LINE_SEPARATOR);
 		if(objects != null) {
-			addLayer();
+			increaseLayer();
 			for(int i = 0; i < objects.length; i++) {
 				if(objects[i] == null) {
 					appendln("null");
@@ -106,7 +112,7 @@ public class DebugStringBuilder implements Constants {
 					appendln(objects[i].toString());
 				}
 			}
-			removeLayer();
+			decreaseLayer();
 		}
 		
 		appendln("]");
@@ -238,11 +244,11 @@ public class DebugStringBuilder implements Constants {
 		this.layer = layer;
 	}
 	
-	public void addLayer() {
+	public void increaseLayer() {
 		layer++;
 	}
 	
-	public void removeLayer() {
+	public void decreaseLayer() {
 		layer--;
 	}
 	
