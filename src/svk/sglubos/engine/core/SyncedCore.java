@@ -17,9 +17,7 @@ package svk.sglubos.engine.core;
 
 import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 
-public abstract class BasicCore extends Core implements Runnable {
-	public static final int FPS_UNLIMITED = -1;
-	
+public abstract class SyncedCore extends Core implements Runnable {
 	protected Thread thread;
 	
 	private boolean debug;
@@ -27,14 +25,11 @@ public abstract class BasicCore extends Core implements Runnable {
 	private int ticksPerSecond;
 	private int fpsLimit;
 	
-	public BasicCore(int ticksPerSecond, int fpsLimit, boolean debug) {
+	public SyncedCore (int ticksPerSecond, boolean debug) {
 		this.ticksPerSecond = ticksPerSecond;
-		this.fpsLimit = fpsLimit;
+		this.fpsLimit = ticksPerSecond;
 		this.debug = debug;
-		
-		if(fpsLimit != FPS_UNLIMITED) {
-			this.sleep = (long) (1000 / fpsLimit);
-		}
+		this.sleep = (long) (1000 / fpsLimit);
 	}
 	
 	@Override
@@ -56,22 +51,18 @@ public abstract class BasicCore extends Core implements Runnable {
 			while(delta >= 1){
 				delta--;
 				tick();
+				render();
 				
-				if (debug)
-				 ticks++;
+				if (debug) {
+					ticks++;
+					fps++;
+				}
 			}
 			
-			render();
-			
-			if (debug)
-				fps++;
-			
-			if(fpsLimit != FPS_UNLIMITED) {
-				try {
-					Thread.sleep(sleep);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			try {
+				Thread.sleep(sleep);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 				
 			if(debug && (System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
@@ -85,11 +76,6 @@ public abstract class BasicCore extends Core implements Runnable {
 		stopped();	
 	}
 
-	protected void setFPSLimit(int fpsLimit) {
-		this.fpsLimit = fpsLimit;
-		this.sleep = (long) (1000 / fpsLimit);
-	}
-	
 	protected int getFPSLimit() {
 		return fpsLimit;
 	}
@@ -134,3 +120,4 @@ public abstract class BasicCore extends Core implements Runnable {
 		return ret.getString();
 	}
 }
+

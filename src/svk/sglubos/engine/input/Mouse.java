@@ -152,6 +152,10 @@ public class Mouse extends MouseAdapter{
 	
 	private static int y;
 	
+	private static double scaleX;
+	
+	private static double scaleY;
+	
 	private static Component inside;
 	
 	private static boolean mouseWheelRotated;
@@ -279,6 +283,27 @@ public class Mouse extends MouseAdapter{
 		mouseWheelRotation = 0;
 		mouseWheelRotated = false;
 		return rot;
+	}
+	
+	public static void setScaleX(double scaleX) {
+		Mouse.scaleX = scaleX;
+	}
+	
+	public static void setScaleY(double scaleY) {
+		Mouse.scaleY = scaleY;
+	}
+	
+	public static void setScale(double scaleX, double scaleY) {
+		Mouse.scaleX = scaleX;
+		Mouse.scaleY = scaleY;
+	}
+	
+	public static int getScaledX() {
+		return (int) (x / scaleX);
+	}
+	
+	public static int getScaledY() {
+		return (int) (y / scaleY);
 	}
 	
 	public static int getX() {
