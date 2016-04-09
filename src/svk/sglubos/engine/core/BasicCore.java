@@ -81,7 +81,7 @@ public abstract class BasicCore extends Core implements Runnable {
 
 	protected void setFPSLimit(int fpsLimit) {
 		this.fpsLimit = fpsLimit;
-		this.sleep = (long) (1000 / fpsLimit);
+		this.sleep = (long) (Math.pow(10, 9) / fpsLimit);
 	}
 	
 	protected int getFPSLimit() {
