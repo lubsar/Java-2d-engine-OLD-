@@ -1,5 +1,5 @@
 /*
- *	Copyright 2015 ¼ubomír Hlavko
+ *	Copyright 2015 Ä½ubomÃ­r Hlavko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
