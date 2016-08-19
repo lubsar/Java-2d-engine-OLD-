@@ -18,12 +18,13 @@ package svk.sglubos.engine.gfx.sprite;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+
 public class SpriteSheet {
 	private int width;
 	private int height;
-	
+
 	private BufferedImage image; 
-	
 	private Sprite[] sprites = null;
 	
 	public SpriteSheet(BufferedImage image) {
@@ -76,5 +77,20 @@ public class SpriteSheet {
 		}
 		
 		this.sprites = sprites;
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.append(getClass(), hashCode());
+		ret.increaseLayer();
+		ret.append("width", width);
+		ret.append("height", height);
+		ret.append(image, "image");
+		ret.append(sprites, "sprites");
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

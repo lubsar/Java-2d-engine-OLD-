@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 import svk.sglubos.engine.utils.debug.MessageHandler;
 
 @SuppressWarnings("serial")
@@ -32,7 +33,7 @@ public class RenderCanvas extends Canvas {
 	
 	public RenderCanvas(Screen screen,double scale){
 		renderLayer = screen.getRenderLayer();
-		setPreferredSize(new Dimension((int)(screen.getWidth()*scale), (int)(screen.getHeight()*scale)));
+		setPreferredSize(new Dimension((int)(screen.getWidth() + 10 * scale), (int)(screen.getHeight() + 10 * scale)));
 		
 		this.scale = scale;
 	}
@@ -44,6 +45,7 @@ public class RenderCanvas extends Canvas {
 			MessageHandler.printMessage("RENDER_CANVAS", MessageHandler.ERROR, "Exception while creating BufferStrategy ! printing stack trace\n");
 			e.printStackTrace();
 		}
+		
 		bs = getBufferStrategy();
 	}
 	
@@ -58,13 +60,28 @@ public class RenderCanvas extends Canvas {
 		do {
 		    try{
 		    	g = bs.getDrawGraphics();
-		    	g.drawImage(renderLayer, 0, 0,getWidth(),getHeight(), null);
+		    	g.drawImage(renderLayer, 0, 0, getWidth(),getHeight(), null);
 		    } finally {
 		    	if(g != null)
 		    		g.dispose();
 		    }
+		    
 		    bs.show();
 		} while (bs.contentsLost());
 	}
 	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.append(getClass(), hashCode());
+		ret.increaseLayer();
+		ret.appendln(super.toString());
+		ret.append("scale", scale);
+		ret.append(renderLayer, "renderlayer");
+		ret.append(bs, "bs");
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+		
+		return ret.getString();
+	}
 }

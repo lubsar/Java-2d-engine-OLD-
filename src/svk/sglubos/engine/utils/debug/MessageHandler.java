@@ -17,36 +17,65 @@ package svk.sglubos.engine.utils.debug;
 
 import java.io.PrintStream;
 
+import svk.sglubos.engine.utils.log.Log;
+
 public class MessageHandler {
 	public static final String WARNING = "WARNING";
 	public static final String INFO = "INFO";
 	public static final String ERROR = "ERROR";
 	
-	private static PrintStream printStream = System.out;
-	private static PrintStream errorStream = System.err;
+	private static boolean logPrint = false;
+	private static boolean logError = false;
+	
+	private static PrintStream printLog = null;
+	private static PrintStream errorLog = null;
+	
+	public static PrintStream printStream = System.out;
+	public static PrintStream errorStream = System.err;
 	
 	public static void printMessage(String tag, String message) {
-		if(tag.equals(ERROR)) {
-			errorStream.println("ENGINE" + ": [" +ERROR + "] " + message );
-			return;
-		}
-			
-		printStream.println("ENGINE" + ": [" +tag + "] " + message );
+		printMessage("ENGINE", tag, message);
 	}
-	
+
 	public static void printMessage(String prefix, String tag, String message) {
 		if(tag.equals(ERROR)){
-			errorStream.println(prefix + ": [" + ERROR + "] " + message );
+			String msg = prefix + ": [" + ERROR + "] " + message;
+			if(errorStream != null) {
+				errorStream.println(msg);
+			}
+			if(logError) {
+				errorLog.println(msg);
+			}
 			return;
 		}
-		System.out.println(prefix + ": [" +tag + "] " + message );
+		
+		String msg = prefix + ": [" +tag + "] " + message;
+		if(printStream != null){
+			printStream.println(msg);
+		}
+		if(logPrint) {
+			printLog.println(msg);
+		}
 	}
 	
-	public static void setPrintStream(PrintStream stream) {
-		printStream = stream;
+	public static void setPrintLogging(Log log, boolean enabled) {
+		if(log != null) {
+			printLog = log;
+		}
+		if(enabled && printLog == null) {
+			throw new RuntimeException("Print log is not initialized");
+		}
+		logPrint = enabled;
 	}
 	
-	public static void setErrorStream(PrintStream stream) {
-		errorStream = stream;
+	public static void setErrorLogging(Log log, boolean enabled) {
+		if(log != null) {
+			errorLog = log;
+		}
+		if(enabled && errorLog == null) {
+			throw new RuntimeException("Error log is not initialized");
+		}
+		
+		logError = enabled;
 	}
 }

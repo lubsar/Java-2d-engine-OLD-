@@ -15,10 +15,11 @@
  */
 package svk.sglubos.engine.gfx.sprite;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+
 public class Sprite {
 	protected int width;
 	protected int height;
-	
 	protected int[] pixels;
 	
 	public Sprite(int width, int height, int[] pixels) {
@@ -37,5 +38,18 @@ public class Sprite {
 
 	public int getHeight() {
 		return height;
+	}
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.append(getClass(), hashCode());
+		ret.increaseLayer();
+		ret.append("width", width);
+		ret.append("height", height);
+		ret.append("pixels", pixels);
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

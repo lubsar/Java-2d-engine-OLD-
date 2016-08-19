@@ -34,7 +34,7 @@ public class ImagePort {
 		}
 		return image;
 	}
-
+	
 	public static BufferedImage loadImage(String path) {
 		BufferedImage image = null;
 		try{

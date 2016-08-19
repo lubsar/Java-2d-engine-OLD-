@@ -22,25 +22,42 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 import svk.sglubos.engine.utils.debug.MessageHandler;
 
 public class Mouse extends MouseAdapter{
 	private static final Mouse INSTANCE = new Mouse();
 	
-	private static int x;
-	private static int y;
-	private static boolean mouseWheelRotated;
-	private static int mouseWheelRotation;
-	private static byte boundTo;
-	public static final byte MAX_BOUND_COMPONENTS = Byte.MAX_VALUE;
-
 	private static Map<Integer, MouseEvent> pressedButtons = new HashMap<Integer, MouseEvent>((int) (MouseInfo.getNumberOfButtons() / 0.75) + 1);
+	
+	private static List<Integer> clickedButtons = new ArrayList<Integer>();
+	
+	private static int x;
+	
+	private static int y;
+	
+	private static double scaleX;
+	
+	private static double scaleY;
+	
 	private static Component inside;
 	
-	private Mouse() {
+	private static boolean mouseWheelRotated;
+	
+	private static int mouseWheelRotation;
+	
+	private static byte boundTo;
+	public static final byte MAX_BOUND_COMPONENTS = Byte.MAX_VALUE;
+	
+	private Mouse() {}
+	
+	public static void initClickBufferSize(int size) {
+		clickedButtons = new ArrayList<Integer>(size);
 	}
 	
 	public static void bind(Component component) {
@@ -134,11 +151,48 @@ public class Mouse extends MouseAdapter{
 		return pressedButtons.get(button); 
 	}
 	
+	public static boolean isButtonClicked(int button) {
+		if(pressedButtons.containsKey(button) && !clickedButtons.contains((Integer) button)) {
+			return clickedButtons.add((Integer) button);
+		} else {
+			return false;
+		}
+	}
+	
+	public static MouseEvent getButtonClickEvent(int button) {
+		if(clickedButtons.contains((Integer) button)) {
+			return pressedButtons.get(button);			
+		} else {
+			return null;
+		}
+	}
+	
 	public static int getRotation() {
 		int rot = mouseWheelRotation;
 		mouseWheelRotation = 0;
 		mouseWheelRotated = false;
 		return rot;
+	}
+	
+	public static void setScaleX(double scaleX) {
+		Mouse.scaleX = scaleX;
+	}
+	
+	public static void setScaleY(double scaleY) {
+		Mouse.scaleY = scaleY;
+	}
+	
+	public static void setScale(double scaleX, double scaleY) {
+		Mouse.scaleX = scaleX;
+		Mouse.scaleY = scaleY;
+	}
+	
+	public static int getScaledX() {
+		return (int) (x / scaleX);
+	}
+	
+	public static int getScaledY() {
+		return (int) (y / scaleY);
 	}
 	
 	public static int getX() {
@@ -166,5 +220,26 @@ public class Mouse extends MouseAdapter{
 	
 	public static boolean isBound() {
 		return boundTo > 0;
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		ret.append(getClass(), hashCode());
+		ret.increaseLayer();
+		ret.append(pressedButtons, "pressedButtons");
+		ret.append("x", x);
+		ret.append("y", y);
+		ret.append("inside", inside);
+		ret.append("mouseWheelRotated", mouseWheelRotated);
+		ret.append("mouseWheelRotation", mouseWheelRotation);
+		ret.append("boundTo", boundTo);
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+		
+		return ret.getString();
+	}
+	
+	public static String toDebug() {
+		return INSTANCE.toString();
 	}
 }

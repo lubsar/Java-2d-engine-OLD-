@@ -17,37 +17,40 @@ package svk.sglubos.engine.gfx;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.util.Arrays;
 
 import svk.sglubos.engine.gfx.sprite.Sprite;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 import svk.sglubos.engine.utils.debug.MessageHandler;
-
 public class Screen {
 	protected int width;
 	protected int height;
 	protected int xOffset = 0;
 	protected int yOffset = 0;
 	protected boolean ignoreOffset;
-	
-	protected int[] pixels;
+	protected int fontSize;
 	
 	protected Color defaultScreenColor;
 	protected BufferedImage renderLayer;
 	protected Graphics g;
+	protected int[] pixels;
 	
 	public Screen(int width, int height, Color defaultColor) {
 		renderLayer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt)renderLayer.getRaster().getDataBuffer()).getData();
 		g = renderLayer.createGraphics();
+		fontSize = g.getFont().getSize();
 		
 		this.width = width;
 		this.height = height;
 		this.defaultScreenColor = defaultColor;
-	}
 		
+		g.setClip(0, 0, width, height);
+	}
+	
 	public void renderFilledRectangle(int x, int y, int width, int height,	Color color) {
 		setColor(color);
 		
@@ -103,12 +106,14 @@ public class Screen {
 			y -= yOffset;
 		}
 		
-		g.drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
+		g.drawImage(img, x, y, null);
 	}
 	
 	public void renderString(String text, int x, int y, Font font, Color color) {
 		setFont(font);
 		setColor(color);
+		
+		y += fontSize;
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -120,6 +125,7 @@ public class Screen {
 	
 	public void renderString(String text, int x, int y, Font font) {
 		setFont(font);
+		y += fontSize;
 		
 		if(!ignoreOffset){
 			x -= xOffset;
@@ -130,6 +136,8 @@ public class Screen {
 	}
 	
 	public void renderString(String text, int x, int y) {
+		y += fontSize;
+		
 		if(!ignoreOffset){
 			x -= xOffset;
 			y -= yOffset;
@@ -264,7 +272,7 @@ public class Screen {
 			for(int x = 0; x < spriteWidth; x++){
 				pixelX = x + xCoord;
 				
-				if(spritePixels[x + y * spriteWidth] == 0){
+				if(spritePixels[x + y * spriteWidth] >> 24 == 0){
 					continue;
 				}
 				
@@ -297,8 +305,7 @@ public class Screen {
 			for(int x = 0; x < spriteWidth; x++){
 				pixelX = x * scale + xCoord;
 				
-				System.out.println(spritePixels[x + y * spriteWidth]);
-				if(spritePixels[x + y * spriteWidth] == 0){
+				if(spritePixels[x + y * spriteWidth] >> 24 == 0){
 					continue;
 				}
 				
@@ -325,7 +332,6 @@ public class Screen {
 	
 	public void clear(){
 		int colorValue = defaultScreenColor.getRGB();
-		clear(defaultScreenColor);
 		for(int i = 0; i < pixels.length; i++) {
 			pixels[i] = colorValue;
 		}
@@ -333,13 +339,15 @@ public class Screen {
 	
 	public void clear(Color color) {
 		int colorValue = color.getRGB();
-		Arrays.fill(pixels, 0, pixels.length, colorValue);
+		for(int i = 0; i < pixels.length; i++) {
+			pixels[i] = colorValue;
+		}
 	}
 	
 	public void setColor(Color color) {
 		if (color == null) {
 			MessageHandler.printMessage(MessageHandler.ERROR, "Screen color cannot be set to null");
-			throw new IllegalArgumentException("Screen color cannot be set to null");
+			return;
 		}
 		
 		g.setColor(color);
@@ -350,7 +358,25 @@ public class Screen {
 			MessageHandler.printMessage(MessageHandler.ERROR, "Screen font cannot be set to null, font stays set to current font");
 			return;
 		}
+		
 		g.setFont(font);
+		fontSize = font.getSize();
+	}
+	
+	public void setFontSize(float size) {
+		Font old = g.getFont();
+		Font newFont = old.deriveFont(size);
+		this.fontSize = newFont.getSize();
+		g.setFont(newFont);
+	}
+	
+	public void setFontStyle(int style) {
+		Font old = g.getFont();
+		g.setFont(old.deriveFont(style, old.getSize2D()));
+	}
+	
+	public FontMetrics getFontMetrics() {
+		return g.getFontMetrics();
 	}
 	
 	public void setOffset(int xOffset, int yOffset){
@@ -361,15 +387,19 @@ public class Screen {
 	public void setIngoreOffset(boolean ignore){
 		this.ignoreOffset = ignore;
 	}
-	
+
 	public Graphics getGraphics() {
 		return g;
+	}
+	
+	public void disposeGraphics() {
+		g.dispose();
 	}
 	
 	public int getWidth() {
 		return width;
 	}
-	
+
 	public int getHeight() {
 		return height;
 	}
@@ -385,5 +415,25 @@ public class Screen {
 	public BufferedImage getRenderLayer() {
 		return renderLayer;
 	}
-
-}	
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.append(getClass(), hashCode());
+		ret.increaseLayer();
+		ret.append("width", width);
+		ret.append("height", height);
+		ret.append("ignoreOffset", ignoreOffset);
+		ret.append("xOffset", xOffset);
+		ret.append("yOffset", yOffset);
+		
+		ret.append(defaultScreenColor, "defaultScreenColor");
+		ret.append(g, "g");
+		ret.append(renderLayer, "renderLayer");
+		ret.append(pixels, "pixels");
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+		
+		return ret.getString();
+	}
+}

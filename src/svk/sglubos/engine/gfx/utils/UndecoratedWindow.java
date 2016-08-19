@@ -1,4 +1,4 @@
-package svk.sglubos.engine.utils;
+package svk.sglubos.engine.gfx.utils;
 
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -7,10 +7,9 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
-//TODO
+
 @SuppressWarnings("serial")
 public class UndecoratedWindow extends JFrame {
-
 	private BufferedImage renderLayer;
 	private BufferStrategy bs;
 	private Rectangle drawingArea;

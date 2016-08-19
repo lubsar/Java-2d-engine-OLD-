@@ -16,19 +16,26 @@
 
 package svk.sglubos.engine.gfx;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.JFrame;
 
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame {
+	protected double widthScale;
+	protected double heightScale;
+	
 	protected Screen screen;
 	protected RenderCanvas canvas;
 	protected GraphicsDevice device;
-
+	
 	public GameWindow(int screenWidth, int screenHeight, String title) {
 		this(screenWidth, screenHeight, title, 1.0, Color.black, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 	}
@@ -53,9 +60,23 @@ public class GameWindow extends JFrame {
 		screen = new Screen(screenWidth, screenHeight, defaultScreenColor);
 		canvas = new RenderCanvas(screen, screenScale);
 		
-		add(canvas);
+		add(canvas, BorderLayout.CENTER);
 		pack();
 		setLocationRelativeTo(null);
+		getContentPane().addComponentListener(new ComponentListener(){
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				 widthScale = (double)e.getComponent().getWidth() / screen.width;
+				 heightScale = (double)e.getComponent().getHeight() / screen.height;
+			}
+			@Override
+			public void componentMoved(ComponentEvent e) {}
+			@Override
+			public void componentShown(ComponentEvent e) {}
+			@Override
+			public void componentHidden(ComponentEvent e) {}
+		});
 		setVisible(true);
 		
 		canvas.init(2);
@@ -114,5 +135,38 @@ public class GameWindow extends JFrame {
 	
 	public RenderCanvas getRenderCanvas() {
 		return canvas;
+	}
+	
+	public double getWidthScale() {
+		return widthScale;
+	}
+	
+	public double getHeightScale() {
+		return heightScale;
+	}
+	
+	public int translateXToWindowCoords(int x) {
+		return (int) (x * widthScale);
+	}
+	
+	public int translateYToWindowCoords(int y) {
+		return (int) (y * heightScale);
+	}
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.append(this.getClass(), hashCode());
+		ret.increaseLayer();
+		ret.appendln(super.toString());
+		ret.append("widthScale", widthScale);
+		ret.append("heightScale", heightScale);
+		ret.append(screen, "screen");
+		ret.append(canvas, "canvas");
+		ret.append(device, "device");
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+		
+		return ret.getString();
 	}
 }

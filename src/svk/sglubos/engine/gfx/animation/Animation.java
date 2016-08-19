@@ -16,6 +16,7 @@
 package svk.sglubos.engine.gfx.animation;
 
 import svk.sglubos.engine.gfx.Screen;
+import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 import svk.sglubos.engine.utils.debug.MessageHandler;
 import svk.sglubos.engine.utils.timer.LoopTimerTask;
 import svk.sglubos.engine.utils.timer.Timer;
@@ -32,14 +33,14 @@ public abstract class Animation {
 	protected int currentFrame;
 	protected int startFrame;
 	protected int endFrame;
-
+	
 	protected TimerCallback frameSwitch  = () -> switchFrame();
 	protected TimerTask task;
-	
+
 	public Animation(double frameDelay, byte timeFormat, int frames) {
 		this(frameDelay, 0, frames - 1, frames, timeFormat);
 	}
-
+	
 	public Animation(double frameDelay, int startFrame, int endFrame, int frames, byte timeFormat) {
 		this.frameDelay = frameDelay;
 		this.delayFormat = timeFormat;
@@ -193,4 +194,28 @@ public abstract class Animation {
 	}
 	
 	public abstract void render(Screen screen, int x, int y);
+	
+	public String toString() {
+		DebugStringBuilder ret = new DebugStringBuilder();
+		
+		ret.append(getClass(), hashCode());
+		ret.increaseLayer();
+		ret.append("frameDelay", frameDelay);
+		ret.append("delayFormat", delayFormat);
+		ret.append("frames", frames);
+		ret.append("loop", loop);
+		ret.append("running", running);
+		ret.append("reverse", reverse);
+		ret.append("currentFrame", currentFrame);
+		ret.append("startFrame", startFrame);
+		ret.append("endFrame", endFrame);
+		
+		ret.append(task, "task");
+		ret.append(frameSwitch, "frameSwitch");
+		ret.decreaseLayer();
+		ret.appendCloseBracket();
+		
+		return ret.getString();
+	}
+	
 }
