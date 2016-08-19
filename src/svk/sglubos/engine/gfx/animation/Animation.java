@@ -262,6 +262,7 @@ public abstract class Animation {
 	public Animation(double frameDelay, byte timeFormat, int frames) {
 		this(frameDelay, 0, frames - 1, frames, timeFormat);
 	}
+	
 	//TODO document
 	/**
 	 * Constructs new animation with specified {@link #frameDelay delay between frame switches}, 

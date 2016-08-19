@@ -15,6 +15,7 @@
  */
 package svk.sglubos.engine.utils.log;
 
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +23,8 @@ import svk.sglubos.engine.utils.debug.DebugStringBuilder;
 
 //TODO documment
 public class Logger {
-	static final Map<String, Log> globalLogs = new HashMap<String, Log>();
-	static Log masterLog = null;
+	private static final Map<String, PrintStream> globalLogs = new HashMap<String, PrintStream>();
+	private static Log masterLog = null;
 	
 	public static void setMasterLog(Log log) {
 		if(masterLog != null) {
@@ -35,7 +36,9 @@ public class Logger {
 	//TODO exception
 	public static void log(String... strings) {
 		if(masterLog != null) {
-			masterLog.log(strings);			
+			for(String s : strings) {
+				masterLog.print(s);							
+			}
 		}
 	}
 	
@@ -46,24 +49,18 @@ public class Logger {
 		}
 	}
 	
-	public static boolean isWritable() {
-		if(masterLog == null) {
-			return false;
-		}
-		return  masterLog.isWritable(); 
-	}
-	
-	public static Log addGlobalLog(String logID, Log log) {
-		globalLogs.put(logID, log);
+	public static Log addGlobalLog(Log log) {
+		globalLogs.put(log.id, log);
 		return log;
 	}
 	
 	public static Log getGlobalLog(String logID) {
-		Log glob = globalLogs.get(logID);
+		Log glob = (Log) globalLogs.get(logID);
 		if(glob == null) {
 			//TODO exception
 		}
-		return globalLogs.get(logID);
+		
+		return (Log) globalLogs.get(logID);
 	}
 	
 	public static String toDebug() {

@@ -19,8 +19,12 @@ import java.time.LocalDateTime;
 
 //TODO documment
 public class LoggingUtilities {
-	public static final String getTime() {
+	public static String getTime() {
+		return getTime("%d-%d-%d %d-%d-%d");
+	}
+	
+	public static String getTime(String format) {
 		LocalDateTime dt = LocalDateTime.now();
-		return String.format("%d-%d-%d %d-%d-%d", dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth(), dt.getHour(), dt.getMinute(), dt.getSecond());
+		return String.format(format, dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth(), dt.getHour(), dt.getMinute(), dt.getSecond());
 	}
 }

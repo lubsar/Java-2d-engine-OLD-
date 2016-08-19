@@ -69,7 +69,6 @@ public class TextPort {
 				ret.append(line);
 				ret.append(separator);
 			} while (line != null);
-			
 			sreader.close();
 		} catch (IOException e ) {
 			e.printStackTrace();

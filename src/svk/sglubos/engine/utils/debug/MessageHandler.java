@@ -17,8 +17,10 @@ package svk.sglubos.engine.utils.debug;
 
 import java.io.PrintStream;
 
+import svk.sglubos.engine.utils.log.Log;
+
 /**
- * Handles printing of messages to console. <br>
+ * Handles printing of messages to specified {@link } (default ). <br>
  * Message has specified tag, which indicates if message is {@link #WARNING warning}, {@link #INFO information}, {@link #ERROR error} or you can specify own tag.<br>
  * Tag is displayed in square brackets. <br>
  * Messages start with prefix. Default tag is "ENGINE", but you can also specify prefix.<br>
@@ -49,11 +51,17 @@ public class MessageHandler {
 	 */
 	public static final String ERROR = "ERROR";
 	
+	private static boolean logPrint = false;
+	private static boolean logError = false;
+	
+	private static PrintStream printLog = null;
+	private static PrintStream errorLog = null;
+	
 	public static PrintStream printStream = System.out;
 	public static PrintStream errorStream = System.err;
 	
 	/**
-	 * Prints specified message with default prefix: "ENGINE" and specified tag. <br>
+	 * Prints specified message with default prefix: "ENGINE" and specified tag.<br>
 	 * Uses {@link #printMessage(String, String, String) printMessage("ENGINE", tag, message)} method.
 	 *  
 	 * @param tag message tag
@@ -62,17 +70,12 @@ public class MessageHandler {
 	 * @see #printMessage(String, String, String)
 	 */
 	public static void printMessage(String tag, String message) {
-		if(tag.equals(ERROR)) {
-			errorStream.println("ENGINE" + ": [" +ERROR + "] " + message );
-			return;
-		}
-			
-		printStream.println("ENGINE" + ": [" +tag + "] " + message );
+		printMessage("ENGINE", tag, message);
 	}
 	
 	/**
-	 * Prints specified message with specified prefix and tag. <br>
-	 * Uses {@link System#out}'s println(String) method and if you use {@link #ERROR} tag, message is printed by: {@link System#err}`s println(String)} method.<br>
+	 * Prints specified message with specified prefix and tag, adds newLine. <br>
+	 * Uses {@link java.io.PrintStream#println()}'s println(String) method and if you use {@link #ERROR} tag, message is printed by: {@link System#err}`s println(String)} method.<br>
 	 * 
 	 * <h1> Message structure:</h1>
 	 * prefix: [tag] message<br><br>
@@ -85,9 +88,43 @@ public class MessageHandler {
 	 */
 	public static void printMessage(String prefix, String tag, String message) {
 		if(tag.equals(ERROR)){
-			errorStream.println(prefix + ": [" + ERROR + "] " + message );
+			String msg = prefix + ": [" + ERROR + "] " + message;
+			if(errorStream != null) {
+				errorStream.println(msg);
+			}
+			if(logError) {
+				errorLog.println(msg);
+			}
 			return;
 		}
-		System.out.println(prefix + ": [" +tag + "] " + message );
+		
+		String msg = prefix + ": [" +tag + "] " + message;
+		if(printStream != null){
+			printStream.println(msg);
+		}
+		if(logPrint) {
+			printLog.println(msg);
+		}
+	}
+	
+	public static void setPrintLogging(Log log, boolean enabled) {
+		if(log != null) {
+			printLog = log;
+		}
+		if(enabled && printLog == null) {
+			//TODO Exception
+		}
+		logPrint = enabled;
+	}
+	
+	public static void setErrorLogging(Log log, boolean enabled) {
+		if(log != null) {
+			errorLog = log;
+		}
+		if(enabled && errorLog == null) {
+			//TODO Exception
+		}
+		
+		logError = enabled;
 	}
 }

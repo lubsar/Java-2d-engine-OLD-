@@ -109,6 +109,7 @@ public abstract class ScreenComponent {
 		this.pixels = pixels;
 		this.screen = screen;
 	}
+	
 	/**
 	 * This method removes components abilities to render into the specific {@link svk.sglubos.engine.gfx.Screen Screen} object.
 	 * <p>

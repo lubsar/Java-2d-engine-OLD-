@@ -16,6 +16,7 @@
 package svk.sglubos.engine.core;
 
 import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.MessageHandler;
 
 public abstract class SyncedCore extends Core implements Runnable {
 	protected Thread thread;
@@ -24,6 +25,8 @@ public abstract class SyncedCore extends Core implements Runnable {
 	private long sleep;
 	private int ticksPerSecond;
 	private int fpsLimit;
+	private int fps;
+	private int ticks;
 	
 	public SyncedCore (int ticksPerSecond, boolean debug) {
 		this.ticksPerSecond = ticksPerSecond;
@@ -40,8 +43,8 @@ public abstract class SyncedCore extends Core implements Runnable {
 		long lastTimeDebugOutput = System.currentTimeMillis();
 		double delta = 0;
 		double nanoSecPerTick = Math.pow(10, 9) / ticksPerSecond;
-		int fps = 0;
-		int ticks = 0;
+		fps = 0;
+		ticks = 0;
 		
 		while(running){
 			long now = System.nanoTime();
@@ -65,8 +68,11 @@ public abstract class SyncedCore extends Core implements Runnable {
 				e.printStackTrace();
 			}
 				
-			if(debug && (System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
-				System.out.println("[DEBUG] ticks: " + ticks + " fps: " + fps);
+			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
+				if(debug) {
+					MessageHandler.printMessage(MessageHandler.INFO, "ticks: " + ticks + " fps: " + fps);
+				}
+				
 				lastTimeDebugOutput += 1000;
 				fps = 0;
 				ticks = 0;
@@ -102,6 +108,16 @@ public abstract class SyncedCore extends Core implements Runnable {
 	@Override
 	protected void stop() {
 	 running = false;
+	}
+	
+	@Override
+	protected int getFPS() {
+		return fps;
+	}
+	
+	@Override
+	protected int getTPS() {
+		return ticks;
 	}
 	
 	@Override

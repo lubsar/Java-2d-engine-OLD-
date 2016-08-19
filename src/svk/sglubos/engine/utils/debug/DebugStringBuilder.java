@@ -16,8 +16,8 @@
 package svk.sglubos.engine.utils.debug;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import svk.sglubos.engine.utils.Constants;
 
@@ -176,7 +176,7 @@ public class DebugStringBuilder implements Constants {
 		builder.append(LINE_SEPARATOR);
 	}
 	
-	public void append(HashMap<Object, Object> map, String name) {
+	public void append(Map<?, ?> map, String name) {
 		append(name);
 		Iterator<Object> keys = new ArrayList<Object>(map.keySet()).iterator();
 		Iterator<Object> values = new ArrayList<Object>(map.values()).iterator();

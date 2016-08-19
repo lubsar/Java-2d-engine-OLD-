@@ -26,6 +26,8 @@ public abstract class Core {
 	protected abstract void tick();
 	protected abstract void render();
 	protected abstract void stopped();
+	protected abstract int getFPS();
+	protected abstract int getTPS();
 	
 	public boolean isRunning() {
 		return running;

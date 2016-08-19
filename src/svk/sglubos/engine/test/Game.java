@@ -32,8 +32,9 @@ public class Game extends BasicCore implements ImageObserver {
 	private SpriteSheet sheet = new SpriteSheet(ImagePort.getImageAsResource("/AnimationTestingNumberSheet.png"), 20, 20);
 	private Sprite[] sprites = sheet.getSprites();
 	private Animation animation = new SpriteAnimation(sprites, 10, Timer.TIME_FORMAT_TICKS);
-//	private Sprite tile = new SpriteSheet(ImagePort.getImageAsResource("/isometric tile.bmp")).getSprite(0, 0, 45, 37);
+//	private Sprite tile = new SpriteSheet(ImagePort.getImageAsResource("/isometric tile.png")).getSprite(0, 0, 45, 37);
 	private BufferedImage tile = toCompatibleImage(ImagePort.getImageAsResource("/isometric tile.png"));
+//	private BufferedImage tile = ImagePort.getImageAsResource("/isometric tile.png");
 	
 	public static void main(String[] args) {
 		new Game();

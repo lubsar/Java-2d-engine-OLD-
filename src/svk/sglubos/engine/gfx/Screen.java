@@ -17,6 +17,7 @@ package svk.sglubos.engine.gfx;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -667,7 +668,7 @@ public class Screen {
 			for(int x = 0; x < spriteWidth; x++){
 				pixelX = x + xCoord;
 				
-				if(spritePixels[x + y * spriteWidth] == 0){
+				if(spritePixels[x + y * spriteWidth] >> 24 == 0){
 					continue;
 				}
 				
@@ -715,7 +716,7 @@ public class Screen {
 			for(int x = 0; x < spriteWidth; x++){
 				pixelX = x * scale + xCoord;
 				
-				if(spritePixels[x + y * spriteWidth] == 0){
+				if(spritePixels[x + y * spriteWidth] >> 24 == 0){
 					continue;
 				}
 				
@@ -835,6 +836,20 @@ public class Screen {
 		
 		g.setFont(font);
 		fontSize = font.getSize();
+	}
+	
+	public void setFontSize(float size) {
+		Font old = g.getFont();
+		g.setFont(old.deriveFont(old.getStyle(), size));
+	}
+	
+	public void setFontStyle(int style) {
+		Font old = g.getFont();
+		g.setFont(old.deriveFont(style, old.getSize2D()));
+	}
+	
+	public FontMetrics getFontMetrics() {
+		return g.getFontMetrics();
 	}
 	
 	/**

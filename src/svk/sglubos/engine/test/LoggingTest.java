@@ -1,15 +1,20 @@
 package svk.sglubos.engine.test;
 
+import java.io.FileNotFoundException;
+
 import svk.sglubos.engine.utils.log.Logger;
 import svk.sglubos.engine.utils.log.LoggingUtilities;
 import svk.sglubos.engine.utils.log.basic.BasicLog;
 
 public class LoggingTest {
-	private BasicLog local = new BasicLog("local.log", false);
-	private BasicLog global = (BasicLog) Logger.addGlobalLog("globlog", new BasicLog("global.log", true));
+	private BasicLog local;
+	private BasicLog global;
 	
-	LoggingTest() {
-		Logger.setMasterLog(new BasicLog(LoggingUtilities.getTime() + ".log", false));
+	LoggingTest() throws FileNotFoundException {
+		local = new BasicLog("id", false, "local.log");
+		global = (BasicLog) Logger.addGlobalLog(new BasicLog("none", true, "global.log"));
+		Logger.setMasterLog(new BasicLog("log", false,LoggingUtilities.getTime() + ".log"));
+		
 		Logger.log("bash");
 		
 		local.log("1","2\n","3");
@@ -23,6 +28,10 @@ public class LoggingTest {
 	}
 	
 	public static void main(String[] args) {
-		new LoggingTest();
+		try {
+			new LoggingTest();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }

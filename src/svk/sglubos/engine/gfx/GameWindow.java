@@ -21,6 +21,8 @@ import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.JFrame;
 
@@ -72,6 +74,9 @@ import svk.sglubos.engine.utils.debug.DebugStringBuilder;
  */
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame {
+	protected double widthScale;
+	protected double heightScale;
+	
 	/**
 	 * {@link svk.sglubos.engine.gfx.Screen Screen} object which provides ability to render game content.
 	 * <p> 
@@ -289,6 +294,20 @@ public class GameWindow extends JFrame {
 		add(canvas, BorderLayout.CENTER);
 		pack();
 		setLocationRelativeTo(null);
+		getContentPane().addComponentListener(new ComponentListener(){
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				 widthScale = (double)e.getComponent().getWidth() / screen.width;
+				 heightScale = (double)e.getComponent().getHeight() / screen.height;
+			}
+			@Override
+			public void componentMoved(ComponentEvent e) {}
+			@Override
+			public void componentShown(ComponentEvent e) {}
+			@Override
+			public void componentHidden(ComponentEvent e) {}
+		});
 		setVisible(true);
 		
 		canvas.init(2);
@@ -373,12 +392,30 @@ public class GameWindow extends JFrame {
 		return canvas;
 	}
 	
+	public double getWidthScale() {
+		return widthScale;
+	}
+	
+	public double getHeightScale() {
+		return heightScale;
+	}
+	
+	public int translateXToWindowCoords(int x) {
+		return (int) (x * widthScale);
+	}
+	
+	public int translateYToWindowCoords(int y) {
+		return (int) (y * heightScale);
+	}
+	
 	public String toString() {
 		DebugStringBuilder ret = new DebugStringBuilder();
 		
 		ret.append(this.getClass(), hashCode());
 		ret.increaseLayer();
 		ret.appendln(super.toString());
+		ret.append("widthScale", widthScale);
+		ret.append("heightScale", heightScale);
 		ret.append(screen, "screen");
 		ret.append(canvas, "canvas");
 		ret.append(device, "device");

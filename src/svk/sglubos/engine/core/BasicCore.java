@@ -16,6 +16,7 @@
 package svk.sglubos.engine.core;
 
 import svk.sglubos.engine.utils.debug.DebugStringBuilder;
+import svk.sglubos.engine.utils.debug.MessageHandler;
 
 public abstract class BasicCore extends Core implements Runnable {
 	public static final int FPS_UNLIMITED = -1;
@@ -26,6 +27,8 @@ public abstract class BasicCore extends Core implements Runnable {
 	private long sleep;
 	private int ticksPerSecond;
 	private int fpsLimit;
+	private int fps;
+	private int ticks;
 	
 	public BasicCore(int ticksPerSecond, int fpsLimit, boolean debug) {
 		this.ticksPerSecond = ticksPerSecond;
@@ -45,8 +48,8 @@ public abstract class BasicCore extends Core implements Runnable {
 		long lastTimeDebugOutput = System.currentTimeMillis();
 		double delta = 0;
 		double nanoSecPerTick = Math.pow(10, 9) / ticksPerSecond;
-		int fps = 0;
-		int ticks = 0;
+		fps = 0;
+		ticks = 0;
 		
 		while(running){
 			long now = System.nanoTime();
@@ -74,8 +77,10 @@ public abstract class BasicCore extends Core implements Runnable {
 				}
 			}
 				
-			if(debug && (System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
-				System.out.println("[DEBUG] ticks: " + ticks + " fps: " + fps);
+			if((System.currentTimeMillis() - lastTimeDebugOutput) >= 1000){
+				if(debug) {
+					MessageHandler.printMessage(MessageHandler.INFO, "ticks: " + ticks + " fps: " + fps);
+				}
 				lastTimeDebugOutput += 1000;
 				fps = 0;
 				ticks = 0;
@@ -105,17 +110,27 @@ public abstract class BasicCore extends Core implements Runnable {
 	protected void setDebug(boolean debug) {
 		this.debug = debug;
 	}
-	
+		
 	@Override
 	protected void start() {
 		running = true;
 		thread = new Thread(this,"core");
 		thread.start();
 	}
-
+	
 	@Override
 	protected void stop() {
 	 running = false;
+	}
+	
+	@Override
+	protected int getFPS() {
+		return fps;
+	}
+	
+	@Override
+	protected int getTPS() {
+		return ticks;
 	}
 	
 	@Override
@@ -128,6 +143,8 @@ public abstract class BasicCore extends Core implements Runnable {
 		ret.append("sleep", sleep);
 		ret.append("ticksPerSecond", ticksPerSecond);
 		ret.append("fpsLimit", fpsLimit);
+		ret.append("tps", ticks);
+		ret.append("fps", fps);
 		ret.decreaseLayer();
 		ret.appendCloseBracket();
 		
