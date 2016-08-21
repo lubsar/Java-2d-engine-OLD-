@@ -840,12 +840,14 @@ public class Screen {
 	
 	public void setFontSize(float size) {
 		Font old = g.getFont();
-		g.setFont(old.deriveFont(old.getStyle(), size));
+		Font newFont = old.deriveFont(size);
+		this.fontSize = newFont.getSize();
+		g.setFont(newFont);
 	}
 	
 	public void setFontStyle(int style) {
 		Font old = g.getFont();
-		g.setFont(old.deriveFont(style, old.getSize2D()));
+		g.setFont(old.deriveFont(style));
 	}
 	
 	public FontMetrics getFontMetrics() {
@@ -893,6 +895,10 @@ public class Screen {
 		return g;
 	}
 	
+	public int[] getPixels() {
+		return pixels;
+	}
+	 
 	/**
 	 * Disposes {@link #g Graphics object} which is used to draw on {@link #renderLayer}.
 	 * This method should be called at the end of rendering content for better performance.

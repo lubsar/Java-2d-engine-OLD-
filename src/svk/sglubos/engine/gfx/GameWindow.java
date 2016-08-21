@@ -193,8 +193,8 @@ public class GameWindow extends JFrame {
 	 * @see java.awt.GraphicsEnvironment
 	 * @see java.awt.GraphicsEnvironment#getDefaultScreenDevice() GraphicsEnvironment.getDefaultScreenDevice()
 	 */
-	public GameWindow(int screenWidth,int screenHeight, String title, double screenScale){
-		this(screenWidth, screenHeight, title, 1.0, Color.black, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
+	public GameWindow(int screenWidth,int screenHeight, String title, double canvasScale){
+		this(screenWidth, screenHeight, title, canvasScale, Color.black, GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 	}
 	
 	/**

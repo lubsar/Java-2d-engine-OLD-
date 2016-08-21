@@ -90,7 +90,7 @@ public class RenderCanvas extends Canvas {
 	 */
 	public RenderCanvas(Screen screen,double scale){
 		renderLayer = screen.getRenderLayer();
-		setPreferredSize(new Dimension((int)(screen.getWidth() + 10 * scale), (int)(screen.getHeight() + 10 * scale)));
+		setPreferredSize(new Dimension((int)((screen.getWidth() + 10) * scale), (int)((screen.getHeight() + 10) * scale)));
 		
 		this.scale = scale;
 	}
